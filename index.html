@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ACTUALIZACION REGISTROS LA BENDICION</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#eef2f7,#f9fbff); padding:20px }
+h2 { text-align:center; color:#2b4a6f }
+form { background:#fff; padding:20px; border-radius:10px; max-width:900px; margin:auto; box-shadow:0 4px 12px rgba(0,0,0,.08) }
+label { display:block; margin-top:12px; font-weight:bold; color:#34495e }
+input, select { width:100%; padding:9px; margin-top:4px; border-radius:6px; border:1px solid #ccc }
+input:focus, select:focus { outline:none; border-color:#4a90e2 }
+button { margin-top:20px; padding:14px; width:100%; font-size:16px; background:#4a90e2; color:#fff; border:none; border-radius:8px; cursor:pointer }
+button:hover { background:#357ab8 }
+.hidden { display:none }
+.section { border-top:1px solid #dde3ec; margin-top:25px; padding-top:15px }
+h3 { color:#2b4a6f }
+</style>
+
+</head>
+<body>
+
+<h2>ACTUALIZACION REGISTROS LA BENDICION</h2>
+
+<form id="formulario">
+
+<!-- VALIDACIÓN -->
+<div class="section">
+  <select id="tipo_doc" required>
+  <option value="">SELECCIONE</option>
+  <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
+  <option value="CEDULA_VENEZOLANA">CEDULA VENEZOLANA</option>
+  <option value="DNI">DNI</option>
+  <option value="IDMEX">IDMEX</option>
+  <option value="INE">INE</option>
+  <option value="LICENCIA_CONDUCIR">LICENCIA DE CONDUCIR</option>
+</select>
+
+  <label>NUMERO DE DOCUMENTO</label>
+  <input id="numero_documento" required>
+
+  <label>CORREO ACTUAL (VALIDACION)</label>
+  <input id="correo_validacion" type="email" required>
+
+  <button type="button" onclick="validarRegistro()">VALIDAR DATOS</button>
+
+<!-- FORMULARIO PRINCIPAL -->
+<div id="bloque_formulario" class="hidden">
+
+<div class="section">
+  <label>CORREO NUEVO</label>
+  <select id="correo_nuevo" required>
+    <option value="N/A">N/A</option>
+    <option value="OTRO">ESCRIBIR</option>
+  </select>
+  <input id="correo_nuevo_text" placeholder="Ingrese su correo" style="display:none;">
+
+  <label>PRIMER NOMBRE</label>
+  <input id="primer_nombre" required>
+
+  <label>SEGUNDO NOMBRE</label>
+
+<select
+  id="segundo_nombre_sel"
+  class="na-select"
+  data-target="segundo_nombre_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+  
+</select>
+
+<input
+  placeholder="Ingrese su informacion"
+  id="segundo_nombre_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>APELLIDOS COMPLETOS</label>
+  <input id="apellidos" required>
+
+  <label>GENERO</label>
+<select id="genero" required>
+  <option value="MALE">MALE</option>
+  <option value="FEMALE">FEMALE</option>
+  <option value="PREFER NOT TO SAY">PREFER NOT TO SAY</option>
+</select>
+</div>
+
+<div class="section">
+  <label>PAIS DE CIUDADANIA</label>
+  <select id="pais_ciudadania" required></select>
+
+  <label>IDIOMA</label>
+  <select id="idioma" required>
+    <option value="">SELECCIONE IDIOMA</option>
+  </select>
+
+  <label>FECHA DE NACIMIENTO (DOCUMENTO)</label>
+  <input id="fecha_nacimiento_doc" placeholder="FORMATO SEGUN DOCUMENTO" required>
+</div>
+
+<div class="section">
+  <label>PAIS DE RESIDENCIA</label>
+  <select id="pais_residencia" required></select>
+
+  <label>DEPARTAMENTO / ESTADO</label>
+  <select id="estado" required></select>
+
+  <label>CIUDAD</label>
+  <select id="ciudad" required></select>
+
+  <label>DIRECCION DE RESIDENCIA</label>
+  <input id="direccion_residencia" required>
+
+  <div class="form-group">
+  <label>CODIGO POSTAL</label>
+
+  <select
+    id="codigo_postal_select"
+    class="na-select"
+    data-target="codigo_postal">
+    
+    <option value="N/A">N/A</option>
+    <option value="OTRO">ESCRIBIR</option>
+  </select>
+
+  <input
+    type="text"
+    id="codigo_postal"
+    name="codigo_postal"
+    pattern="[A-Za-z0-9 ]+"
+    placeholder="Código postal"
+    style="display:none">
+</div>
+
+<div class="section">
+  <label>INDICATIVO (SIN +)</label>
+  <input id="indicativo" readonly pattern="[0-9]+" required>
+
+  <label>NUMERO CELULAR</label>
+  <input id="celular" pattern="[0-9]+" required>
+
+  <label>USUARIO TELEGRAM</label>
+  <input id="telegram" required>
+</div>
+
+<div class="form-group">
+  <label>SOCIAL SECURITY</label>
+
+  <select
+    id="social_security_select"
+    class="na-select"
+    data-target="social_security">
+    
+    <option value="N/A">N/A</option>
+    <option value="OTRO">ESCRIBIR</option>
+  </select>
+
+  <input
+    type="text"
+    id="social_security"
+    name="social_security"
+    placeholder="Social Security"
+    style="display:none">
+</div>
+
+<!-- PASAPORTE -->
+<div class="section">
+  <label>NUMERO PASAPORTE</label>
+  <select id="pasaporte_num" required>
+    <option value="N/A">N/A</option>
+    <option value="OTRO">ESCRIBIR</option>
+  </select>
+  <input id="pasaporte_num_text" placeholder="Escriba igual como está en el pasaporte" style="font-size:13px; display:none;">
+
+  <label>PAIS EXPEDICION PASAPORTE</label>
+  <select id="pais_pasaporte" onchange="formatoPasaporte()" required>
+    <option value="N/A">N/A</option>
+  </select>
+
+  <label>FECHA NACIMIENTO PASAPORTE</label>
+
+<select
+  id="pas_nac_sel"
+  class="na-select"
+  data-target="pas_nac_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+  
+</select>
+
+<input
+  placeholder="Escriba igual como está en el pasaporte"
+  id="pas_nac_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>FECHA EXPEDICION PASAPORTE</label>
+
+<select
+  id="pas_exp_sel"
+  class="na-select"
+  data-target="pas_exp_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Escriba igual como está en el pasaporte"
+  id="pas_exp_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>FECHA VENCIMIENTO PASAPORTE</label>
+
+<select
+  id="pas_ven_sel"
+  class="na-select"
+  data-target="pas_ven_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Escriba igual como está en el pasaporte"
+  id="pas_ven_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>AUTORIDAD EMISORA</label>
+
+<select
+  id="autoridad_sel"
+  class="na-select"
+  data-target="autoridad_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Escriba igual como está en el pasaporte"
+  id="autoridad_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+<div class="section">
+  <h3>BENEFICIARIOS (OPCIONAL)</h3>
+
+  <!-- BENEFICIARIO 1 -->
+  <h4>Beneficiario 1</h4>
+  <label>BENEFICIARIO 1 - NOMBRE Y APELLIDOS COMPLETOS</label>
+
+<select
+  id="ben1_nombre_sel"
+  class="na-select"
+  data-target="ben1_nombre_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Ingrese información"
+  id="ben1_nombre_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>BENEFICIARIO 1 - TIPO DOCUMENTO</label>
+<select id="ben1_tipo_doc">
+  <option value="N/A">N/A</option>
+  <option>CEDULA DE CIUDADANIA</option>
+  <option>CEDULA VENEZOLANA</option>
+  <option>DNI</option>
+  <option>IDMEX</option>
+  <option>INE</option>
+  <option>LICENCIA DE CONDUCIR</option>
+</select>
+
+  <label>BENEFICIARIO 1 - NUMERO DOCUMENTO</label>
+
+<select
+  id="ben1_documento_sel"
+  class="na-select"
+  data-target="ben1_documento_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Ingrese información"
+  id="ben1_documento_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>BENEFICIARIO 1 - PARENTESCO</label>
+<select id="ben1_parentesco" required>
+  <option value="N/A">N/A</option>
+  <option>ESPOSO(A)</option>
+  <option>MADRE</option>
+  <option>PADRE</option>
+  <option>HIJO(A)</option>
+  <option>HERMANO(A)</option>
+</select>
+
+  <hr>
+  
+  <!-- BENEFICIARIO 2 -->
+  <h4>Beneficiario 2</h4>
+  <label>BENEFICIARIO 2 - NOMBRE Y APELLIDOS COMPLETOS</label>
+
+<select
+  id="ben2_nombre_sel"
+  class="na-select"
+  data-target="ben2_nombre_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Ingrese información"
+  id="ben2_nombre_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>BENEFICIARIO 2 - TIPO DOCUMENTO</label>
+<select id="ben2_tipo_doc">
+  <option value="N/A">N/A</option>
+  <option>CEDULA DE CIUDADANIA</option>
+  <option>CEDULA VENEZOLANA</option>
+  <option>DNI</option>
+  <option>IDMEX</option>
+  <option>INE</option>
+  <option>LICENCIA DE CONDUCIR</option>
+</select>
+
+  <label>BENEFICIARIO 2 - NUMERO DOCUMENTO</label>
+
+<select
+  id="ben2_documento_sel"
+  class="na-select"
+  data-target="ben2_documento_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Ingrese información"
+  id="ben2_documento_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>BENEFICIARIO 2 - PARENTESCO</label>
+<select id="ben2_parentesco" required>
+  <option value="N/A">N/A</option>
+  <option>ESPOSO(A)</option>
+  <option>MADRE</option>
+  <option>PADRE</option>
+  <option>HIJO(A)</option>
+  <option>HERMANO(A)</option>
+</select>
+
+  <hr>
+
+  <!-- BENEFICIARIO 3 -->
+  <h4>Beneficiario 3</h4>
+  <label>BENEFICIARIO 3 - NOMBRE Y APELLIDOS COMPLETOS</label>
+
+<select
+  id="ben3_nombre_sel"
+  class="na-select"
+  data-target="ben3_nombre_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Ingrese información"
+  id="ben3_nombre_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>BENEFICIARIO 3 - TIPO DOCUMENTO</label>
+<select id="ben3_tipo_doc">
+  <option value="N/A">N/A</option>
+  <option>CEDULA DE CIUDADANIA</option>
+  <option>CEDULA VENEZOLANA</option>
+  <option>DNI</option>
+  <option>IDMEX</option>
+  <option>INE</option>
+  <option>LICENCIA DE CONDUCIR</option>
+</select>
+
+  <label>BENEFICIARIO 3 - NUMERO DOCUMENTO</label>
+
+<select
+  id="ben3_documento_sel"
+  class="na-select"
+  data-target="ben3_documento_sel_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Ingrese información"
+  id="ben3_documento_sel_txt"
+  class="na-input mayusculas"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>BENEFICIARIO 3 - PARENTESCO</label>
+<select id="ben3_parentesco" required>
+  <option value="N/A">N/A</option>
+  <option>ESPOSO(A)</option>
+  <option>MADRE</option>
+  <option>PADRE</option>
+  <option>HIJO(A)</option>
+  <option>HERMANO(A)</option>
+</select>
+
+</div>
+
+<div class="section">
+  <label>BILLETERA USDT TRC20</label>
+
+<select
+  id="billetera_usdt"
+  class="na-select"
+  data-target="billetera_usdt_txt">
+  <option value="N/A">N/A</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input
+  placeholder="Ingrese información"
+  id="billetera_usdt_txt"
+  class="na-input"
+  type="text"
+  value="N/A"
+  style="display:none">
+
+  <label>LIDER AL QUE PERTENECE</label>
+  <input id="lider" required>
+
+  <label>AUTORIZA MANEJO DATOS PERSONALES</label>
+  <select id="autoriza_datos" required>
+    <option>SI</option>
+    <option>NO</option>
+  </select>
+
+  <label>COMPRO PAQUETE LA BENDICION</label>
+  <select id="paquete_bendicion" required>
+    <option>SI</option>
+    <option>NO</option>
+  </select>
+
+  <label>COMPRO PAQUETE COMERCIALIZADORA VENCER</label>
+  <select id="paquete_vencer" required>
+    <option>SI</option>
+    <option>NO</option>
+  </select>
+
+  <label>PERTENECE DIAMANTE 700</label>
+  <select id="diamante_700" required>
+    <option>SI</option>
+    <option>NO</option>
+  </select>
+</div>
+
+<button type="button" onclick="actualizarRegistro()">ACTUALIZAR DATOS</button>
+</div>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+
+/* =========================
+   FUNCIONES
+========================= */
+const aMayus = v =>
+  v.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const aMinus = v => v.toLowerCase();
+
+/* =========================
+   NORMALIZACIONES GENERALES
+========================= */
+document.querySelectorAll('input[type="text"], input:not([type])')
+.forEach(el=>{
+  if(
+    el.type === "email" || 
+    el.id === "billetera_usdt_txt"
+  ) return;
+
+  el.addEventListener("input", ()=> {
+    // 🔹 TELEGRAM: solo convertir letras minúsculas a mayúsculas, números y símbolos se mantienen
+    if(el.id === "telegram") {
+      el.value = el.value.replace(/[a-z]/g, c => c.toUpperCase());
+    } else {
+      // 🔹 RESTO DE INPUTS: todo a mayúscula normal
+      el.value = aMayus(el.value);
+    }
+  });
+});
+
+/* =========================
+   EMAILS — MINÚSCULAS + @
+========================= */
+["correo_validacion","correo_nuevo_text"].forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+
+  el.addEventListener("input",()=>{
+    el.value=aMinus(el.value);
+    el.setCustomValidity(
+      el.value.includes("@") ? "" : "Debe contener @"
+    );
+  });
+});
+
+/* =========================
+   SOLO NÚMEROS
+========================= */
+// SOLO NUMÉRICOS
+["celular","indicativo"].forEach(id=>{
+  const el = document.getElementById(id);
+  el && el.addEventListener("input",()=>{
+    el.value = el.value.replace(/\D/g,"");
+  });
+});
+
+// CÓDIGO POSTAL: letras + números + espacio
+const codigoPostal = document.getElementById("codigo_postal");
+codigoPostal && codigoPostal.addEventListener("input", ()=>{
+  codigoPostal.value = codigoPostal.value.replace(/[^A-Za-z0-9 ]/g,"");
+});
+
+const socialSecurity = document.getElementById("social_security");
+socialSecurity && socialSecurity.addEventListener("input", ()=>{
+  socialSecurity.value = socialSecurity.value.replace(/\D/g,"");
+});
+
+/* =========================
+   REFERENCIAS
+========================= */
+const paisResidencia=document.getElementById("pais_residencia");
+const estado=document.getElementById("estado");
+const ciudad=document.getElementById("ciudad");
+const indicativo=document.getElementById("indicativo");
+const paisCiudadania=document.getElementById("pais_ciudadania");
+const paisPasaporte=document.getElementById("pais_pasaporte");
+const idioma=document.getElementById("idioma");
+
+/* =========================
+   N/A / OTRO — GLOBAL
+========================= */
+document.querySelectorAll(".na-select").forEach(select=>{
+  const input=document.getElementById(select.dataset.target);
+  if(!input) return;
+
+  const sync=()=>{
+    if(select.value==="OTRO"){
+      input.style.display="inline-block";
+      input.value="";
+    }else{
+      input.style.display="none";
+      input.value="N/A";
+    }
+  };
+
+  select.addEventListener("change",sync);
+  sync();
+});
+
+/* =========================
+   FORZAR CAMPOS CLAVE
+========================= */
+[
+  ["correo_nuevo","correo_nuevo_text"],
+  ["pasaporte_num","pasaporte_num_text"],
+  ["billetera_usdt","billetera_usdt_txt"]
+].forEach(([s,t])=>{
+  const sel=document.getElementById(s);
+  const txt=document.getElementById(t);
+  if(!sel||!txt) return;
+
+  sel.addEventListener("change",()=>{
+    if(sel.value==="OTRO"){
+      txt.style.display="inline-block";
+      txt.value="";
+    }else{
+      txt.style.display="none";
+      txt.value="N/A";
+    }
+  });
+});
+
+/* =========================
+   PAÍSES
+========================= */
+fetch("https://countriesnow.space/api/v0.1/countries")
+.then(r=>r.json())
+.then(data=>{
+  data.data.forEach(p=>{
+    const pais=aMayus(p.country);
+    paisCiudadania.appendChild(new Option(pais,pais));
+    paisResidencia.appendChild(new Option(pais,pais));
+    paisPasaporte.appendChild(new Option(pais,pais));
+  });
+  paisPasaporte.insertBefore(new Option("N/A","N/A"), paisPasaporte.firstChild);
+  paisPasaporte.value="N/A";
+});
+
+/* =========================
+   PAÍS → ESTADO → CIUDAD
+========================= */
+paisResidencia.addEventListener("change",()=>{
+  estado.innerHTML='<option value="">SELECCIONE ESTADO</option>';
+  ciudad.innerHTML='<option value="">SELECCIONE CIUDAD</option>';
+  estado.disabled=true;
+  ciudad.disabled=true;
+  indicativo.value="";
+
+  // INDICATIVO
+  fetch("https://countriesnow.space/api/v0.1/countries/codes",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({country:paisResidencia.value})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d?.data?.dial_code)
+      indicativo.value=d.data.dial_code.replace("+","");
+  });
+
+  // ESTADOS
+  fetch("https://countriesnow.space/api/v0.1/countries/states",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({country:paisResidencia.value})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    d.data.states.forEach(s=>{
+
+      const apiState = s.name;
+
+      const limpio = aMayus(
+        s.name
+          .replace(/\s*DEPARTMENT$/i,"")
+          .replace(/\s*STATE$/i,"")
+          .replace(/\s*PROVINCE$/i,"")
+          .trim()
+      );
+
+      const opt=document.createElement("option");
+      opt.value = limpio;       // 👉 BD LIMPIA
+      opt.dataset.api = apiState; // 👉 API
+      opt.textContent = limpio; // 👉 UI
+
+      estado.appendChild(opt);
+    });
+    estado.disabled=false;
+  });
+});
+
+estado.addEventListener("change",()=>{
+  ciudad.innerHTML='<option value="">SELECCIONE CIUDAD</option>';
+  ciudad.disabled=true;
+
+  const apiState = estado.selectedOptions[0]?.dataset.api;
+  if(!apiState) return;
+
+  fetch("https://countriesnow.space/api/v0.1/countries/state/cities",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      country:paisResidencia.value,
+      state:apiState
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    d.data.forEach(c=>{
+      const limpioCiudad = aMayus(c);
+      ciudad.appendChild(new Option(limpioCiudad, limpioCiudad));
+    });
+    ciudad.disabled=false;
+  });
+});
+
+/* =========================
+   IDIOMAS
+========================= */
+["ESPAÑOL","INGLES","FRANCES","PORTUGUES","ALEMAN","ITALIANO","CHINO","JAPONES","RUSO"]
+.forEach(l=>idioma.appendChild(new Option(l,l)));
+
+});
+</script>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabase = createClient(
+  "https://hybozykbfehfjldhaxpp.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5Ym96eWtiZmVoZmpsZGhheHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMjU0OTMsImV4cCI6MjA3NDkwMTQ5M30.Bj1Jl3-g0gyp1UwsiK-cwjS8Cm2z7Il4_jZ-tCQhbwM"
+);
+
+/* =========================
+ REGISTRO ORIGINAL (CLAVE)
+========================= */
+let registroOriginal = {};
+
+/* =========================
+ AUXILIARES SEGUROS
+========================= */
+const setVal = (id, val) => {
+  const el = document.getElementById(id);
+  if (el) el.value = val ?? "";
+};
+
+const naValue = (selId, txtId, campoBD) => {
+  const sel = document.getElementById(selId);
+  const txt = document.getElementById(txtId);
+
+  if (!sel) return registroOriginal[campoBD] ?? "N/A";
+
+  if (sel.value === "OTRO") {
+    return txt?.value || registroOriginal[campoBD] || "N/A";
+  }
+
+  return registroOriginal[campoBD] ?? "N/A";
+};
+
+/* =========================
+ VALIDAR (SOLO VISUAL)
+========================= */
+window.validarRegistro = async () => {
+  const tipoDoc = document.getElementById("tipo_doc").value;
+  const numero  = document.getElementById("numero_documento").value.trim();
+  const correo  = document.getElementById("correo_validacion").value.trim().toLowerCase();
+
+  if (!tipoDoc || !numero || !correo) {
+    alert("Debe ingresar tipo de documento, número de documento y correo");
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from("actualizacion_registros_la_bendicion")
+    .select("*")
+    .eq("numero_documento", numero)
+    .eq("correo_validacion", correo)
+    .maybeSingle();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  if (!data) {
+    alert("Registro no encontrado");
+    return;
+  }
+
+  registroOriginal = data;
+  
+  // 🔹 CORREO NUEVO (visualización correcta)
+if (data.correo_nuevo && data.correo_nuevo !== "N/A") {
+  correo_nuevo.value = "OTRO";
+  correo_nuevo_text.style.display = "block";
+  correo_nuevo_text.value = data.correo_nuevo;
+} else {
+  correo_nuevo.value = "N/A";
+  correo_nuevo_text.style.display = "none";
+  correo_nuevo_text.value = "";
+}
+
+// 🔹 SEGUNDO NOMBRE
+if (data.segundo_nombre_sel && data.segundo_nombre_sel !== "N/A") {
+  segundo_nombre_sel.value = "OTRO";
+  segundo_nombre_sel_txt.style.display = "block";
+  segundo_nombre_sel_txt.value = data.segundo_nombre_sel;
+} else {
+  segundo_nombre_sel.value = "N/A";
+  segundo_nombre_sel_txt.style.display = "none";
+  segundo_nombre_sel_txt.value = "";
+}
+
+// 🌍 PAIS DE CIUDADANIA
+if (data.pais_ciudadania) {
+  pais_ciudadania.value = data.pais_ciudadania;
+} else {
+  pais_ciudadania.value = "";
+}
+
+// 🗣️ IDIOMA
+if (data.idioma) {
+  idioma.value = data.idioma;
+} else {
+  idioma.value = "";
+}
+
+// 🔹 ESTADO / DEPARTAMENTO (visualización)
+if (data.estado && data.estado !== "N/A") {
+  estado.innerHTML = ""; // limpia opciones previas
+
+  const opt = document.createElement("option");
+  opt.value = data.estado;
+  opt.textContent = data.estado;
+  opt.selected = true;
+
+  estado.appendChild(opt);
+} else {
+  estado.innerHTML = '<option value="N/A">N/A</option>';
+}
+
+// 🔹 CIUDAD (visualizacion)
+if (data.ciudad && data.ciudad !== "N/A") {
+  ciudad.innerHTML = ""; // limpia opciones previas
+
+  const opt = document.createElement("option");
+  opt.value = data.ciudad;
+  opt.textContent = data.ciudad;
+  opt.selected = true;
+
+  ciudad.appendChild(opt);
+} else {
+  ciudad.innerHTML = '<option value="N/A">N/A</option>';
+}
+
+// 🔹 CODIGO POSTAL (visualizacion)
+if (data.codigo_postal && data.codigo_postal !== "N/A") {
+  codigo_postal_select.value = "OTRO";
+  codigo_postal.style.display = "block";
+  codigo_postal.value = data.codigo_postal;
+} else {
+  codigo_postal_select.value = "N/A";
+  codigo_postal.style.display = "none";
+  codigo_postal.value = "N/A";
+}
+
+codigo_postal_select.dispatchEvent(new Event("change"));
+
+// 🔹 SOCIAL SECURITY (visualizacion en formulario)
+const social_security = document.getElementById("social_security");
+const social_security_select = document.getElementById("social_security_select");
+
+if (data.social_security && data.social_security !== "N/A") {
+  // Primero ajusta el select y dispara el evento
+  social_security_select.value = "OTRO";
+  social_security_select.dispatchEvent(new Event("change")); // ✅ Ahora antes
+  
+  // Despues muestra el input y pone el valor
+  social_security.style.display = "block";
+  social_security.value = data.social_security;
+} else {
+  social_security_select.value = "N/A";
+  social_security_select.dispatchEvent(new Event("change")); // ✅ También aquí
+  social_security.style.display = "none";
+  social_security.value = "N/A";
+}
+
+
+// 🔹 NUMERO PASAPORTE (visualizacion)
+if (data.pasaporte_num && data.pasaporte_num !== "N/A") {
+  pasaporte_num.value = "OTRO";
+  pasaporte_num_text.style.display = "block";
+  pasaporte_num_text.value = data.pasaporte_num;
+} else {
+  pasaporte_num.value = "N/A";
+  pasaporte_num_text.style.display = "none";
+  pasaporte_num_text.value = "N/A";
+}
+
+if (data.pas_nac_sel && data.pas_nac_sel !== "N/A") {
+  pas_nac_sel.value = "OTRO";
+  pas_nac_sel_txt.style.display = "block";
+  pas_nac_sel_txt.value = data.pas_nac_sel;
+} else {
+  pas_nac_sel.value = "N/A";
+  pas_nac_sel_txt.style.display = "none";
+  pas_nac_sel_txt.value = "N/A";
+}
+
+if (data.pas_exp_sel && data.pas_exp_sel !== "N/A") {
+  pas_exp_sel.value = "OTRO";
+  pas_exp_sel_txt.style.display = "block";
+  pas_exp_sel_txt.value = data.pas_exp_sel;
+} else {
+  pas_exp_sel.value = "N/A";
+  pas_exp_sel_txt.style.display = "none";
+  pas_exp_sel_txt.value = "N/A";
+}
+
+if (data.pas_ven_sel && data.pas_ven_sel !== "N/A") {
+  pas_ven_sel.value = "OTRO";
+  pas_ven_sel_txt.style.display = "block";
+  pas_ven_sel_txt.value = data.pas_ven_sel;
+} else {
+  pas_ven_sel.value = "N/A";
+  pas_ven_sel_txt.style.display = "none";
+  pas_ven_sel_txt.value = "N/A";
+}
+
+if (data.autoridad_sel && data.autoridad_sel !== "N/A") {
+  autoridad_sel.value = "OTRO";
+  autoridad_sel_txt.style.display = "block";
+  autoridad_sel_txt.value = data.autoridad_sel;
+} else {
+  autoridad_sel.value = "N/A";
+  autoridad_sel_txt.style.display = "none";
+  autoridad_sel_txt.value = "N/A";
+}
+
+// ===== BENEFICIARIOS 1, 2, 3 =====
+[1, 2, 3].forEach(i => {
+  const nombre = registroOriginal[`ben${i}_nombre_sel`];
+  const documento = registroOriginal[`ben${i}_documento_sel`];
+
+  const nombreSel = document.getElementById(`ben${i}_nombre_sel`);
+  const nombreTxt = document.getElementById(`ben${i}_nombre_sel_txt`);
+
+  const docSel = document.getElementById(`ben${i}_documento_sel`);
+  const docTxt = document.getElementById(`ben${i}_documento_sel_txt`);
+
+  // Nombre completo
+  if (nombre && nombre !== "N/A") {
+    nombreSel.value = "OTRO";
+    nombreTxt.style.display = "block";
+    nombreTxt.value = nombre;
+  } else {
+    nombreSel.value = "N/A";
+    nombreTxt.style.display = "none";
+    nombreTxt.value = "N/A";
+  }
+
+  // Numero documento
+  if (documento && documento !== "N/A") {
+    docSel.value = "OTRO";
+    docTxt.style.display = "block";
+    docTxt.value = documento;
+  } else {
+    docSel.value = "N/A";
+    docTxt.style.display = "none";
+    docTxt.value = "N/A";
+  }
+
+  // Tipo de documento y parentesco
+  const tipo = registroOriginal[`ben${i}_tipo_doc`] || "N/A";
+  const parentesco = registroOriginal[`ben${i}_parentesco`] || "N/A";
+
+  document.getElementById(`ben${i}_tipo_doc`).value = tipo;
+  document.getElementById(`ben${i}_parentesco`).value = parentesco;
+});
+
+// ===== BILLETERA USDT =====
+const billetera = registroOriginal.billetera_usdt;
+const billeteraSel = document.getElementById("billetera_usdt");
+const billeteraTxt = document.getElementById("billetera_usdt_txt");
+
+if (billetera && billetera !== "N/A") {
+  billeteraSel.value = "OTRO";
+  billeteraTxt.style.display = "block";
+  billeteraTxt.value = billetera;
+} else {
+  billeteraSel.value = "N/A";
+  billeteraTxt.style.display = "none";
+  billeteraTxt.value = "N/A";
+}
+
+  alert(
+    "Registro encontrado\n\n" +
+    (data.primer_nombre || "") + " " + (data.apellidos || "")
+  );
+
+  /* 🔹 CAMPOS DIRECTOS */
+  setVal("primer_nombre", data.primer_nombre);
+  setVal("apellidos", data.apellidos);
+  setVal("fecha_nacimiento_doc", data.fecha_nacimiento_doc);
+  setVal("direccion_residencia", data.direccion_residencia);
+  setVal("celular", data.celular);
+  setVal("codigo_postal", data.codigo_postal);
+  setVal("indicativo", data.indicativo);
+  setVal("telegram", data.telegram);
+  setVal("lider", data.lider);
+
+  setVal("pais_residencia", data.pais_residencia);
+  setVal("estado", data.estado);
+  setVal("ciudad", data.ciudad);
+  setVal("pais_pasaporte", data.pais_pasaporte);
+
+  /* 🔹 CAMPOS N/A */
+  const setNa = (sel, txt, val) => {
+    const s = document.getElementById(sel);
+    const t = document.getElementById(txt);
+    if (s && t && val && val !== "N/A") {
+      s.value = "OTRO";
+      t.value = val;
+    }
+  };
+
+  setNa("correo_nuevo","correo_nuevo_text",data.correo_nuevo);
+  setNa("segundo_nombre_sel","segundo_nombre_sel_txt",data.segundo_nombre_sel);
+  setNa("pasaporte_num","pasaporte_num_text",data.pasaporte_num);
+  setNa("pas_nac_sel","pas_nac_sel_txt",data.pas_nac_sel);
+  setNa("pas_exp_sel","pas_exp_sel_txt",data.pas_exp_sel);
+  setNa("pas_ven_sel","pas_ven_sel_txt",data.pas_ven_sel);
+  setNa("autoridad_sel","autoridad_sel_txt",data.autoridad_sel);
+  setNa("billetera_usdt","billetera_usdt_txt",data.billetera_usdt);
+
+  /* 🔹 BENEFICIARIOS 1–3 (SEGURO) */
+  for (let i = 1; i <= 3; i++) {
+    setNa(`ben${i}_nombre_sel`, `ben${i}_nombre_sel_txt`, data[`ben${i}_nombre_sel`]);
+    setNa(`ben${i}_documento_sel`, `ben${i}_documento_sel_txt`, data[`ben${i}_documento_sel`]);
+
+    setVal(`ben${i}_tipo_doc`, data[`ben${i}_tipo_doc`]);
+    setVal(`ben${i}_parentesco`, data[`ben${i}_parentesco`]);
+  }
+
+  document.getElementById("bloque_formulario")?.classList.remove("hidden");
+};
+
+/* =========================
+ ACTUALIZAR (BLINDADO – NO TOCAR)
+========================= */
+window.actualizarRegistro = async () => {
+  const numero = numero_documento.value.trim();
+  const correo = correo_validacion.value.trim().toLowerCase();
+  
+  /* =========================
+   SINCRONIZAR CORREO
+========================= */
+let correoParaValidar = correo;
+
+if (correo_nuevo.value === "OTRO") {
+  const nuevoCorreo = correo_nuevo_text.value.trim().toLowerCase();
+
+  if (!nuevoCorreo.includes("@")) {
+    alert("El correo nuevo debe contener @");
+    return;
+  }
+
+  correoParaValidar = nuevoCorreo;
+}
+
+  // 🔒 validar tratamiento de datos
+if (autoriza_datos.value !== "SI") {
+  alert("Debe aceptar el tratamiento de datos personales para poder enviar el formulario.");
+  return; // Detiene el envío
+}
+  
+  
+
+  const payload = {
+  primer_nombre: primer_nombre.value || registroOriginal.primer_nombre,
+  segundo_nombre_sel: naValue("segundo_nombre_sel","segundo_nombre_sel_txt","segundo_nombre_sel"),
+  apellidos: apellidos.value || registroOriginal.apellidos,
+  correo_nuevo: naValue("correo_nuevo","correo_nuevo_text","correo_nuevo"),
+  correo_validacion: correoParaValidar,
+  fecha_nacimiento_doc: fecha_nacimiento_doc.value || registroOriginal.fecha_nacimiento_doc,
+
+  pais_residencia: pais_residencia.value || registroOriginal.pais_residencia,
+  estado: estado.value || registroOriginal.estado,
+  ciudad: ciudad.value || registroOriginal.ciudad,
+  direccion_residencia: direccion_residencia.value || registroOriginal.direccion_residencia,
+  celular: celular.value || registroOriginal.celular,
+  codigo_postal: codigo_postal.value || registroOriginal.codigo_postal,
+  indicativo: indicativo.value || registroOriginal.indicativo,
+  telegram: telegram.value || registroOriginal.telegram,
+    
+  social_security: (social_security_select.value === "OTRO" && social_security.value)
+    ? social_security.value.replace(/\D/g, '')
+    : "N/A",
+
+  genero: genero.value || registroOriginal.genero,
+  pais_ciudadania: pais_ciudadania.value || registroOriginal.pais_ciudadania,
+  idioma: idioma.value || registroOriginal.idioma,
+
+  pasaporte_num: naValue("pasaporte_num","pasaporte_num_text","pasaporte_num"),
+  pais_pasaporte: pais_pasaporte.value || registroOriginal.pais_pasaporte,
+  pas_nac_sel: naValue("pas_nac_sel","pas_nac_sel_txt","pas_nac_sel"),
+  pas_exp_sel: naValue("pas_exp_sel","pas_exp_sel_txt","pas_exp_sel"),
+  pas_ven_sel: naValue("pas_ven_sel","pas_ven_sel_txt","pas_ven_sel"),
+  autoridad_sel: naValue("autoridad_sel","autoridad_sel_txt","autoridad_sel"),
+
+  ben1_nombre_sel: naValue("ben1_nombre_sel","ben1_nombre_sel_txt","ben1_nombre_sel"),
+  ben1_tipo_doc: ben1_tipo_doc.value || registroOriginal.ben1_tipo_doc,
+  ben1_documento_sel: naValue("ben1_documento_sel","ben1_documento_sel_txt","ben1_documento_sel"),
+  ben1_parentesco: ben1_parentesco.value || registroOriginal.ben1_parentesco,
+
+  ben2_nombre_sel: naValue("ben2_nombre_sel","ben2_nombre_sel_txt","ben2_nombre_sel"),
+  ben2_tipo_doc: ben2_tipo_doc.value || registroOriginal.ben2_tipo_doc,
+  ben2_documento_sel: naValue("ben2_documento_sel","ben2_documento_sel_txt","ben2_documento_sel"),
+  ben2_parentesco: ben2_parentesco.value || registroOriginal.ben2_parentesco,
+
+  ben3_nombre_sel: naValue("ben3_nombre_sel","ben3_nombre_sel_txt","ben3_nombre_sel"),
+  ben3_tipo_doc: ben3_tipo_doc.value || registroOriginal.ben3_tipo_doc,
+  ben3_documento_sel: naValue("ben3_documento_sel","ben3_documento_sel_txt","ben3_documento_sel"),
+  ben3_parentesco: ben3_parentesco.value || registroOriginal.ben3_parentesco,
+
+  billetera_usdt: naValue("billetera_usdt","billetera_usdt_txt","billetera_usdt"),
+  lider: lider.value || registroOriginal.lider,
+  autoriza_datos: autoriza_datos.value,
+  paquete_bendicion: paquete_bendicion.value,
+  paquete_vencer: paquete_vencer.value,
+  diamante_700: diamante_700.value
+};
+
+  // 🔹 Ejecutar actualización en Supabase
+  const { error } = await supabase
+    .from("actualizacion_registros_la_bendicion")
+    .update(payload)
+    .eq("numero_documento", numero)
+    .eq("correo_validacion", registroOriginal.correo_validacion);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // Actualizamos la referencia interna
+  registroOriginal.correo_validacion = payload.correo_validacion;
+
+  // ✅ Mostrar mensaje y cerrar formulario
+  alert("Datos actualizados correctamente ✅");
+  document.getElementById("bloque_formulario")?.classList.add("hidden");
+};
+
+/* =========================
+ VISUAL N/A (AUTOMÁTICO)
+========================= */
+document.querySelectorAll(".na-select").forEach(select => {
+  const targetId = select.dataset.target;
+  const target = document.getElementById(targetId);
+
+  if (!target) return;
+
+  const toggle = () => {
+    if (select.value === "OTRO") {
+      target.style.display = "inline-block";
+    } else {
+      target.style.display = "none";
+    }
+  };
+
+  select.addEventListener("change", toggle);
+
+  // 🔥 ejecuta al cargar datos desde BD
+  toggle();
+});
+</script>
+</body>  
+</html>
