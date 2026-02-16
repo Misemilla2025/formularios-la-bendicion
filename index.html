@@ -53,75 +53,81 @@
         <select id="tipo_doc" required>
             <option value="">SELECCIONE TIPO DE DOCUMENTO</option>
             <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
-            <option value="CEDULA_VENEZOLANA">CEDULA VENEZOLANA</option>
         </select>
-
         <label>NUMERO DE DOCUMENTO</label>
         <input id="numero_documento" required>
-
         <label>CORREO ACTUAL</label>
         <input id="correo_validacion" type="email" required>
-
-        <button type="button" onclick="enviarCodigo()">VALIDAR Y ENVIAR CÓDIGO</button>
+        <button type="button" onclick="probarEnvio()">VALIDAR Y ENVIAR CÓDIGO</button>
     </div>
 
     <div class="section" id="seccion-codigo">
-        <h2>INGRESA EL CÓDIGO RECIBIDO</h2>
-        <input id="codigo_recibido" maxlength="6" placeholder="Ej: 123456" required>
-        <button type="button" onclick="verificarCodigo()">VERIFICAR CÓDIGO</button>
+        <h2>INGRESA EL CÓDIGO</h2>
+        <input id="codigo" maxlength="6" required>
+        <button type="button" onclick="verificar()">VERIFICAR CÓDIGO</button>
     </div>
 
     <div class="section" id="contenedor-campos">
         <h2>✅ ACCESO PERMITIDO</h2>
-        <p>Datos de prueba cargados correctamente</p>
-        <p><strong>Correo:</strong> haralcan16@gmail.com</p>
     </div>
 
     <script>
-        // DATOS CONFIGURADOS
-        const SENDGRID_API_KEY = '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';
-        const CORREO_EMISOR = 'administracion@misemilla.org';
-        const CORREO_PRUEBA = 'haralcan16@gmail.com';
-        let CODIGO_GENERADO = '123456';
+        const API_KEY = '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';
+        const EMISOR = 'administracion@misemilla.org';
+        const RECEPTOR = 'haralcan16@gmail.com';
+        let codigoGenerado = '123456';
 
-        async function enviarCodigo() {
-            const correo = document.getElementById('correo_validacion').value.trim();
-            
-            if (correo !== CORREO_PRUEBA) {
-                alert('⚠️ Solo se permite haralcan16@gmail.com para prueba');
-                return;
+        async function probarEnvio() {
+            try {
+                // Mostramos alerta para confirmar que la función se ejecuta
+                alert('🔍 Función iniciada - Verificando datos...');
+                
+                const correo = document.getElementById('correo_validacion').value;
+                if (correo !== RECEPTOR) {
+                    alert('⚠️ Correo no válido');
+                    return;
+                }
+
+                alert('📧 Enviando código a tu correo...');
+                const respuesta = await fetch('https://api.sendgrid.com/v3/mail/send', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        personalizations: [{ to: [{ email: RECEPTOR }] }],
+                        from: { email: EMISOR },
+                        subject: 'Código de Acceso',
+                        content: [{ type: 'text/plain', value: `Tu código: ${codigoGenerado}` }]
+                    })
+                });
+
+                if (respuesta.ok) {
+                    alert('✅ Código enviado exitosamente!');
+                    document.getElementById('seccion-validacion').style.display = 'none';
+                    document.getElementById('seccion-codigo').style.display = 'block';
+                } else {
+                    const error = await respuesta.json();
+                    alert(`❌ Error: ${error.errors[0].message}`);
+                    console.log(error); // Para ver detalles en la consola del navegador
+                }
+            } catch (error) {
+                alert(`❌ Fallo en el proceso: ${error.message}`);
+                console.log(error);
             }
-
-            await fetch('https://api.sendgrid.com/v3/mail/send', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${SENDGRID_API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    personalizations: [{ to: [{ email: CORREO_PRUEBA }] }],
-                    from: { email: CORREO_EMISOR },
-                    subject: 'Código de Acceso',
-                    content: [{ type: 'text/plain', value: `Tu código es: ${CODIGO_GENERADO}` }]
-                })
-            });
-
-            alert('✅ Código enviado a haralcan16@gmail.com');
-            document.getElementById('seccion-validacion').style.display = 'none';
-            document.getElementById('seccion-codigo').style.display = 'block';
         }
 
-        function verificarCodigo() {
-            const codigo = document.getElementById('codigo_recibido').value;
-            if (codigo === CODIGO_GENERADO) {
+        function verificar() {
+            const codigo = document.getElementById('codigo').value;
+            if (codigo === codigoGenerado) {
                 alert('✅ Código correcto!');
                 document.getElementById('seccion-codigo').style.display = 'none';
                 document.getElementById('contenedor-campos').style.display = 'block';
             } else {
-                alert('⚠️ Código incorrecto');
+                alert('❌ Código incorrecto');
             }
         }
     </script>
 </body>
 </html>
-
