@@ -50,12 +50,15 @@
         async function enviarCodigo() {
             try {
                 alert('🔍 Iniciando proceso - revisa tu correo en unos minutos');
-                // URL corregida con el usuario real Misemilla2025
+                
+                // Token agregado (recuerda no compartirlo públicamente en producción)
+                const token = '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';
                 const respuesta = await fetch('https://api.github.com/repos/Misemilla2025/formularios-la-bendicion/dispatches', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `token ${token}`
                     },
                     body: JSON.stringify({
                         event_type: 'send-code'
@@ -65,7 +68,7 @@
                 if (respuesta.ok) {
                     alert('✅ Proceso completado - revisa tu bandeja de entrada o spam');
                 } else {
-                    alert('❌ Error en el proceso - revisa el workflow en GitHub');
+                    alert(`❌ Error ${respuesta.status}: ${respuesta.statusText} - verifica el workflow en GitHub`);
                 }
             } catch (e) {
                 alert(`❌ Fallo: ${e.message}`);
