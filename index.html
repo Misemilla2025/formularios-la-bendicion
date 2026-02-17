@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actualización Registros</title>
+    <title>Actualización Registros - Misemilla</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,60 +21,120 @@
         input, select, button {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 8px 0;
             box-sizing: border-box;
             border-radius: 5px;
             border: 1px solid #ddd;
+            font-size: 16px;
         }
         button {
-            background-color: #007bff;
+            background-color: #28a745; 
             color: white;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
+        button:hover {
+            background-color: #218838;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .alert.success { background-color: #d4edda; color: #155724; }
+        .alert.error { background-color: #f8d7da; color: #721c24; }
+        .alert.loading { background-color: #d1ecf1; color: #0c5460; }
+        .alert.empty { background-color: #fff3cd; color: #856404; }
     </style>
 </head>
 <body>
     <div class="section">
         <h2>VALIDACIÓN DE ACCESO</h2>
+        
+        <div id="alertSuccess" class="alert success">✅ Proceso completado - revisa tu bandeja de entrada o spam</div>
+        <div id="alertError" class="alert error">❌ Error en el proceso - intenta nuevamente</div>
+        <div id="alertLoading" class="alert loading">🔍 Iniciando proceso - por favor espera</div>
+        <div id="alertEmpty" class="alert empty">⚠️ Completa todos los campos antes de continuar</div>
+
         <select id="tipo_doc" required>
-            <option value="">SELECCIONE</option>
+            <option value="">SELECCIONE TIPO DE DOCUMENTO</option>
             <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
         </select>
-        <input type="text" id="num_doc" required placeholder="NÚMERO DE DOCUMENTO">
-        <input type="email" id="correo" required placeholder="CORREO ACTUAL">
-        <button onclick="enviarCodigo()">VALIDAR Y ENVIAR CÓDIGO</button>
+        <input type="text" id="num_doc" required placeholder="NÚMERO DE DOCUMENTO" maxlength="10">
+        <input type="email" id="correo" required placeholder="CORREO ELECTRÓNICO ACTUAL" >
+        <button id="btnEnviar" onclick="enviarCodigo()">VALIDAR Y ENVIAR CÓDIGO</button>
     </div>
 
     <script>
+        const btnEnviar = document.getElementById('btnEnviar');
+        const alertSuccess = document.getElementById('alertSuccess');
+        const alertError = document.getElementById('alertError');
+        const alertLoading = document.getElementById('alertLoading');
+        const alertEmpty = document.getElementById('alertEmpty');
+
         async function enviarCodigo() {
-    try {
-        alert('🔍 Iniciando proceso - revisa tu correo en unos minutos');
-        
-        const token = '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';
-        const respuesta = await fetch('https://api.github.com/repos/Misemilla2025/formularios-la-bendicion/dispatches', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json',
-                'Authorization': `token ${token}`
-            },
-            body: JSON.stringify({
-                event_type: 'send-code'
-            })
-        });
+            ocultarAlertas();
 
-        const respuestaTexto = await respuesta.text();
-        if (respuesta.ok) {
-            alert('✅ Proceso completado - revisa tu bandeja de entrada o spam');
-        } else {
-            alert(`❌ Error ${respuesta.status}: ${respuestaTexto}`);
+            const tipoDoc = document.getElementById('tipo_doc').value;
+            const numDoc = document.getElementById('num_doc').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+
+            if (!tipoDoc || !numDoc || !correo) {
+                alertEmpty.style.display = 'block';
+                return;
+            }
+
+            alertLoading.style.display = 'block';
+            btnEnviar.disabled = true;
+
+            try {
+                const codigoValidacion = Math.floor(100000 + Math.random() * 900000).toString();
+                
+                // Enviamos los datos al workflow a través de un formulario oculto o una petición a un archivo de acción
+                const formData = new FormData();
+                formData.append('tipo_doc', tipoDoc);
+                formData.append('num_doc', numDoc);
+                formData.append('correo', correo);
+                formData.append('codigo', codigoValidacion);
+
+                // Llamamos a un archivo PHP o a un servicio de proxy, pero como usamos GitHub, mejor ajustamos el workflow para que se active con un formulario web
+                // SOLUCIÓN SIMPLE Y SEGURA: Usar GitHub Forms o un servicio como Formspree (gratuito) para ocultar la key
+                const respuesta = await fetch('https://formspree.io/f/[TU_ID_DE_FORMSPREE]', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (respuesta.ok) {
+                    alertSuccess.style.display = 'block';
+                } else {
+                    const errorDetalles = await respuesta.json().catch(() => ({ message: 'Error al enviar datos' }));
+                    alertError.textContent = `❌ Error: ${errorDetalles.message}`;
+                    alertError.style.display = 'block';
+                }
+            } catch (e) {
+                alertError.textContent = `❌ Fallo: ${e.message}`;
+                alertError.style.display = 'block';
+            } finally {
+                alertLoading.style.display = 'none';
+                btnEnviar.disabled = false;
+            }
         }
-    } catch (e) {
-        alert(`❌ Fallo: ${e.message}`);
-    }
-}
 
+        function ocultarAlertas() {
+            alertSuccess.style.display = 'none';
+            alertError.style.display = 'none';
+            alertLoading.style.display = 'none';
+            alertEmpty.style.display = 'none';
+        }
     </script>
 </body>
 </html>
