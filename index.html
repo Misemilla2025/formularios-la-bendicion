@@ -68,9 +68,6 @@
     </style>
 </head>
 <body>
-    <!-- Cargar variables de GitHub desde env.js -->
-    <script src="env.js"></script>
-
     <!-- Sección 1: Validación de acceso inicial -->
     <div id="seccionValidacion" class="section">
         <h2>VALIDACIÓN DE ACCESO</h2>
@@ -165,7 +162,7 @@
             alertEmptyFormulario.style.display = 'none';
         }
 
-        // Función 1: Enviar solicitud para obtener código
+        // Función 1: Enviar solicitud para obtener código (usamos workflow manual temporalmente)
         async function enviarSolicitud() {
             ocultarTodasAlertas();
             const tipoDoc = document.getElementById('tipo_doc').value;
@@ -182,62 +179,66 @@
             alertSuccessValidacion.style.display = 'block';
 
             try {
-                // Llamada a GitHub API usando variables de env.js
-                const respuesta = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/dispatches`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `token ${GITHUB_TOKEN}`
-                    },
-                    body: JSON.stringify({
-                        event_type: "send-code",
-                        client_payload: {
-                            tipo_doc: tipoDoc,
-                            num_doc: numDoc,
-                            correo: correo
-                        }
-                    })
-                });
-
-                if (respuesta.ok) {
-                    alertSuccessValidacion.textContent = "✅ Código enviado - Revisa tu correo";
-                    setTimeout(() => {
-                        seccionValidacion.classList.add('oculto');
-                        seccionCodigo.classList.remove('oculto');
-                    }, 1500);
-                } else {
-                    const errorData = await respuesta.json();
-                    alertErrorValidacion.textContent = `❌ Error: ${errorData.message || 'No se pudo enviar el código'}`;
-                    alertErrorValidacion.style.display = 'block';
-                }
+                // Mensaje informativo: el código se enviará manualmente por ahora
+                alertSuccessValidacion.textContent = "✅ Solicitud registrada - Revisa tu correo";
+                // Guardar datos del usuario para la verificación
+                localStorage.setItem('datosUsuario', JSON.stringify({ tipoDoc, numDoc }));
+                // Mostrar sección de código
+                setTimeout(() => {
+                    seccionValidacion.classList.add('oculto');
+                    seccionCodigo.classList.remove('oculto');
+                }, 1500);
             } catch (e) {
-                alertErrorValidacion.textContent = `❌ Fallo de conexión: ${e.message}`;
+                alertErrorValidacion.textContent = `❌ Fallo: ${e.message}`;
                 alertErrorValidacion.style.display = 'block';
             } finally {
                 btnEnviarCodigo.disabled = false;
             }
         }
 
-        // Función 2: Verificar código ingresado
-        function verificarCodigo() {
+        // Función 2: Verificar código ingresado (lee el archivo del repositorio)
+        async function verificarCodigo() {
             ocultarTodasAlertas();
             const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
+            const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
 
-            if (!codigoIngresado || codigoIngresado.length !== 6) {
+            if (!codigoIngresado || codigoIngresado.length !== 6 || !datosUsuario) {
                 alertEmptyCodigo.style.display = 'block';
                 return;
             }
 
             btnVerificarCodigo.disabled = true;
-            alertSuccessCodigo.textContent = "✅ Código válido - Abriendo formulario...";
+            alertSuccessCodigo.textContent = "✅ Verificando código...";
             alertSuccessCodigo.style.display = 'block';
 
-            // Simulación temporal (se actualizará después)
-            setTimeout(() => {
-                seccionCodigo.classList.add('oculto');
-                seccionFormulario.classList.remove('oculto');
+            try {
+                // Leer el archivo de códigos desde GitHub
+                const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt');
+                const contenido = await respuesta.text();
+                const lineas = contenido.split('\n');
+
+                // Buscar coincidencia de datos y código
+                const codigoEsValido = lineas.some(linea => {
+                    const datosLinea = linea.split(',');
+                    return datosLinea[0] === datosUsuario.tipoDoc && datosLinea[1] === datosUsuario.numDoc && datosLinea[2] === codigoIngresado;
+                });
+
+                if (codigoEsValido) {
+                    alertSuccessCodigo.textContent = "✅ Código válido - Abriendo formulario...";
+                    setTimeout(() => {
+                        seccionCodigo.classList.add('oculto');
+                        seccionFormulario.classList.remove('oculto');
+                    }, 1500);
+                } else {
+                    alertErrorCodigo.textContent = "❌ Código incorrecto o expirado";
+                    alertErrorCodigo.style.display = 'block';
+                }
+            } catch (e) {
+                alertErrorCodigo.textContent = `❌ Error al verificar: ${e.message}`;
+                alertErrorCodigo.style.display = 'block';
+            } finally {
                 btnVerificarCodigo.disabled = false;
-            }, 1500);
+            }
         }
 
         // Función 3: Guardar cambios del formulario
@@ -256,7 +257,7 @@
             alertSuccessFormulario.textContent = "✅ Guardando cambios...";
             alertSuccessFormulario.style.display = 'block';
 
-            // Simulación temporal (se actualizará después)
+            // Simulación de guardado exitoso
             setTimeout(() => {
                 alertSuccessFormulario.textContent = "✅ Cambios guardados exitosamente";
                 btnGuardarCambios.disabled = false;
