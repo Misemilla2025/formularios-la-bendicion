@@ -18,9 +18,24 @@ jobs:
   enviar-correo:
     runs-on: ubuntu-latest
     steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
       - name: Generar código de validación
         id: generar-codigo
         run: echo "codigo=$(printf "%06d" $RANDOM)" >> $GITHUB_OUTPUT
+
+      - name: Guardar código y datos
+        run: |
+          echo "${{ github.event.inputs.tipo_doc || github.event.client_payload.tipo_doc }},${{ github.event.inputs.num_doc || github.event.client_payload.num_doc }},${{ steps.generar-codigo.outputs.codigo }},${{ github.event.inputs.correo || github.event.client_payload.correo }}" >> codigos-validacion.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Commit y push de los datos
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Agregar código de validación"
+          file_pattern: codigos-validacion.txt
 
       - name: Enviar con SendGrid
         uses: fjogeleit/http-request-action@v1
