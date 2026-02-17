@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualización Registros - Misemilla</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h2, h3 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .alert.success { background-color: #d4edda; color: #155724; }
+        .alert.error { background-color: #f8d7da; color: #721c24; }
+        .alert.empty { background-color: #fff3cd; color: #856404; }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .oculto {
+            display: none;
+        }
+        .campo-formulario {
+            background-color: #f9f9f9;
+            border-left: 3px solid #28a745;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cargar variables de GitHub desde env.js -->
+    <script src="env.js"></script>
+
+    <!-- Sección 1: Validación de acceso inicial -->
+    <div id="seccionValidacion" class="section">
+        <h2>VALIDACIÓN DE ACCESO</h2>
+        
+        <div id="alertSuccessValidacion" class="alert success">🔍 Procesando solicitud...</div>
+        <div id="alertErrorValidacion" class="alert error">❌ Error en el proceso</div>
+        <div id="alertEmptyValidacion" class="alert empty">⚠️ Completa todos los campos</div>
+
+        <select id="tipo_doc" required>
+            <option value="">SELECCIONE TIPO DE DOCUMENTO</option>
+            <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
+        </select>
+        <input type="text" id="num_doc" placeholder="NÚMERO DE DOCUMENTO" maxlength="10" required>
+        <input type="email" id="correo" placeholder="CORREO ELECTRÓNICO" required>
+        <button id="btnEnviarCodigo">VALIDAR Y ENVIAR CÓDIGO</button>
+    </div>
+
+    <!-- Sección 2: Ingreso del código recibido -->
+    <div id="seccionCodigo" class="section oculto">
+        <h3>INGRESA EL CÓDIGO RECIBIDO</h3>
+        
+        <div id="alertSuccessCodigo" class="alert success">✅ Código válido - Abriendo formulario...</div>
+        <div id="alertErrorCodigo" class="alert error">❌ Código incorrecto o expirado</div>
+        <div id="alertEmptyCodigo" class="alert empty">⚠️ Ingresa el código de 6 dígitos</div>
+
+        <input type="text" id="codigoIngresado" placeholder="CÓDIGO DE VERIFICACIÓN" maxlength="6" required>
+        <button id="btnVerificarCodigo">VERIFICAR CÓDIGO</button>
+    </div>
+
+    <!-- Sección 3: Formulario principal de actualización -->
+    <div id="seccionFormulario" class="section oculto">
+        <h2>ACTUALIZACIÓN DE REGISTROS</h2>
+        
+        <div id="alertSuccessFormulario" class="alert success">✅ Cambios guardados exitosamente</div>
+        <div id="alertErrorFormulario" class="alert error">❌ Error al guardar los cambios</div>
+        <div id="alertEmptyFormulario" class="alert empty">⚠️ Completa todos los campos obligatorios</div>
+
+        <div class="campo-formulario">
+            <label>NOMBRE COMPLETO *</label>
+            <input type="text" id="nombreCompleto" placeholder="Escribe tu nombre completo" required>
+        </div>
+        <div class="campo-formulario">
+            <label>CORREO ELECTRÓNICO *</label>
+            <input type="email" id="correoActualizado" placeholder="Escribe tu correo actualizado" required>
+        </div>
+        <div class="campo-formulario">
+            <label>TELÉFONO DE CONTACTO *</label>
+            <input type="tel" id="telefono" placeholder="Escribe tu número de teléfono" required>
+        </div>
+        <div class="campo-formulario">
+            <label>DIRECCIÓN</label>
+            <input type="text" id="direccion" placeholder="Escribe tu dirección">
+        </div>
+
+        <button id="btnGuardarCambios">GUARDAR CAMBIOS</button>
+    </div>
+
+    <script>
+        // Elementos del DOM
+        const seccionValidacion = document.getElementById('seccionValidacion');
+        const seccionCodigo = document.getElementById('seccionCodigo');
+        const seccionFormulario = document.getElementById('seccionFormulario');
+        
+        const btnEnviarCodigo = document.getElementById('btnEnviarCodigo');
+        const btnVerificarCodigo = document.getElementById('btnVerificarCodigo');
+        const btnGuardarCambios = document.getElementById('btnGuardarCambios');
+        
+        const alertSuccessValidacion = document.getElementById('alertSuccessValidacion');
+        const alertErrorValidacion = document.getElementById('alertErrorValidacion');
+        const alertEmptyValidacion = document.getElementById('alertEmptyValidacion');
+        
+        const alertSuccessCodigo = document.getElementById('alertSuccessCodigo');
+        const alertErrorCodigo = document.getElementById('alertErrorCodigo');
+        const alertEmptyCodigo = document.getElementById('alertEmptyCodigo');
+        
+        const alertSuccessFormulario = document.getElementById('alertSuccessFormulario');
+        const alertErrorFormulario = document.getElementById('alertErrorFormulario');
+        const alertEmptyFormulario = document.getElementById('alertEmptyFormulario');
+
+        // Función para ocultar todas las alertas
+        function ocultarTodasAlertas() {
+            alertSuccessValidacion.style.display = 'none';
+            alertErrorValidacion.style.display = 'none';
+            alertEmptyValidacion.style.display = 'none';
+            
+            alertSuccessCodigo.style.display = 'none';
+            alertErrorCodigo.style.display = 'none';
+            alertEmptyCodigo.style.display = 'none';
+            
+            alertSuccessFormulario.style.display = 'none';
+            alertErrorFormulario.style.display = 'none';
+            alertEmptyFormulario.style.display = 'none';
+        }
+
+        // Función 1: Enviar solicitud para obtener código
+        async function enviarSolicitud() {
+            ocultarTodasAlertas();
+            const tipoDoc = document.getElementById('tipo_doc').value;
+            const numDoc = document.getElementById('num_doc').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+
+            if (!tipoDoc || !numDoc || !correo) {
+                alertEmptyValidacion.style.display = 'block';
+                return;
+            }
+
+            btnEnviarCodigo.disabled = true;
+            alertSuccessValidacion.textContent = "🔍 Procesando solicitud...";
+            alertSuccessValidacion.style.display = 'block';
+
+            try {
+                // Llamada a GitHub API usando variables de env.js
+                const respuesta = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/dispatches`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `token ${GITHUB_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        event_type: "send-code",
+                        client_payload: {
+                            tipo_doc: tipoDoc,
+                            num_doc: numDoc,
+                            correo: correo
+                        }
+                    })
+                });
+
+                if (respuesta.ok) {
+                    alertSuccessValidacion.textContent = "✅ Código enviado - Revisa tu correo";
+                    setTimeout(() => {
+                        seccionValidacion.classList.add('oculto');
+                        seccionCodigo.classList.remove('oculto');
+                    }, 1500);
+                } else {
+                    const errorData = await respuesta.json();
+                    alertErrorValidacion.textContent = `❌ Error: ${errorData.message || 'No se pudo enviar el código'}`;
+                    alertErrorValidacion.style.display = 'block';
+                }
+            } catch (e) {
+                alertErrorValidacion.textContent = `❌ Fallo de conexión: ${e.message}`;
+                alertErrorValidacion.style.display = 'block';
+            } finally {
+                btnEnviarCodigo.disabled = false;
+            }
+        }
+
+        // Función 2: Verificar código ingresado
+        function verificarCodigo() {
+            ocultarTodasAlertas();
+            const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
+
+            if (!codigoIngresado || codigoIngresado.length !== 6) {
+                alertEmptyCodigo.style.display = 'block';
+                return;
+            }
+
+            btnVerificarCodigo.disabled = true;
+            alertSuccessCodigo.textContent = "✅ Código válido - Abriendo formulario...";
+            alertSuccessCodigo.style.display = 'block';
+
+            // Simulación temporal (se actualizará después)
+            setTimeout(() => {
+                seccionCodigo.classList.add('oculto');
+                seccionFormulario.classList.remove('oculto');
+                btnVerificarCodigo.disabled = false;
+            }, 1500);
+        }
+
+        // Función 3: Guardar cambios del formulario
+        function guardarCambios() {
+            ocultarTodasAlertas();
+            const nombre = document.getElementById('nombreCompleto').value.trim();
+            const correo = document.getElementById('correoActualizado').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+
+            if (!nombre || !correo || !telefono) {
+                alertEmptyFormulario.style.display = 'block';
+                return;
+            }
+
+            btnGuardarCambios.disabled = true;
+            alertSuccessFormulario.textContent = "✅ Guardando cambios...";
+            alertSuccessFormulario.style.display = 'block';
+
+            // Simulación temporal (se actualizará después)
+            setTimeout(() => {
+                alertSuccessFormulario.textContent = "✅ Cambios guardados exitosamente";
+                btnGuardarCambios.disabled = false;
+            }, 1500);
+        }
+
+        // Asignar eventos a botones
+        btnEnviarCodigo.addEventListener('click', enviarSolicitud);
+        btnVerificarCodigo.addEventListener('click', verificarCodigo);
+        btnGuardarCambios.addEventListener('click', guardarCambios);
+    </script>
+</body>
+</html>
