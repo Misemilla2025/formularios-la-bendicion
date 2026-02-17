@@ -1,0 +1,41 @@
+name: Enviar código por correo y activar desde formulario
+on:
+  repository_dispatch:
+    types: [send-code]
+  workflow_dispatch:
+  http:
+    path: /trigger-workflow
+    method: POST
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ejecutar script de activación
+        run: node .github/scripts/trigger-workflow.js
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+
+      - name: Enviar correo
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://api.sendgrid.com/v3/mail/send'
+          method: 'POST'
+          customHeaders: '{"Authorization":"Bearer ${{ secrets.SENDGRID_API_KEY }}", "Content-Type":"application/json"}'
+          data: >
+            {
+              "personalizations": [{"to": [{"email": "${{ github.event.client_payload.correo }}"}]}],
+              "from": {"email": "administracion@misemilla.org"},
+              "subject": "Código de Acceso - Actualización Registros",
+              "content": [{"type": "text/plain", "value": "¡Hola!\nTu código de validación es: ${{ github.event.client_payload.codigo }}"}]
+            }
+            
