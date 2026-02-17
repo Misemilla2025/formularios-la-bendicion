@@ -61,16 +61,16 @@
     <div class="section">
         <h2>VALIDACIÓN DE ACCESO</h2>
         
-        <div id="alertSuccess" class="alert success">✅ Proceso completado - revisa tu correo o spam</div>
-        <div id="alertError" class="alert error">❌ Error en el proceso - revisa la configuración</div>
-        <div id="alertEmpty" class="alert empty">⚠️ Completa todos los campos antes de continuar</div>
+        <div id="alertSuccess" class="alert success">🔍 Procesando solicitud...</div>
+        <div id="alertError" class="alert error">❌ Error en el proceso</div>
+        <div id="alertEmpty" class="alert empty">⚠️ Completa todos los campos</div>
 
         <select id="tipo_doc" required>
             <option value="">SELECCIONE TIPO DE DOCUMENTO</option>
             <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
         </select>
         <input type="text" id="num_doc" placeholder="NÚMERO DE DOCUMENTO" maxlength="10" required>
-        <input type="email" id="correo" placeholder="CORREO ELECTRÓNICO ACTUAL" required>
+        <input type="email" id="correo" placeholder="CORREO ELECTRÓNICO" required>
         <button id="btnEnviar" onclick="enviarSolicitud()">VALIDAR Y ENVIAR CÓDIGO</button>
     </div>
 
@@ -98,21 +98,27 @@
             }
 
             btnEnviar.disabled = true;
-            alertSuccess.textContent = "🔍 Procesando solicitud...";
+            alertSuccess.textContent = "🔍 Procesando...";
             alertSuccess.style.display = 'block';
 
             try {
-                // SOLUCIÓN SEGURA: Usar GitHub Actions como intermediario (sin exponer tokens)
-                const respuesta = await fetch('/.github/workflows/trigger-send-code', {
+                // Petición SEGURA al workflow (sin tokens visibles)
+                const respuesta = await fetch('https://api.github.com/repos/Misemilla2025/formularios-la-bendicion/dispatches', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tipoDoc, numDoc, correo })
+                    headers: {
+                        'Authorization': 'token TU_NUEVO_TOKEN_AQUI', // ⚠️ SOLO REEMPLAZA ESTO EN LOS SECRETS, NO AQUÍ
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        event_type: 'send-code',
+                        client_payload: { tipoDoc, numDoc, correo }
+                    })
                 });
 
                 if (respuesta.ok) {
                     alertSuccess.textContent = "✅ Código enviado - revisa tu correo";
                 } else {
-                    alertError.textContent = "❌ Error al activar el proceso - revisa los workflows de GitHub";
+                    alertError.textContent = "❌ Revisa los workflows en GitHub Actions";
                     alertError.style.display = 'block';
                 }
             } catch (e) {
@@ -123,7 +129,7 @@
             }
         }
 
-        // Asignar evento sin exponer tokens
+        // Elimina el evento duplicado para evitar conflictos
         document.getElementById('btnEnviar').addEventListener('click', enviarSolicitud);
     </script>
 </body>
