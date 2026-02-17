@@ -68,27 +68,25 @@
     </style>
 </head>
 <body>
-    <!-- Sección 1: Validación de acceso inicial -->
+    <!-- Sección 1: Validación de acceso -->
     <div id="seccionValidacion" class="section">
         <h2>VALIDACIÓN DE ACCESO</h2>
-        
         <div id="alertSuccessValidacion" class="alert success">🔍 Procesando solicitud...</div>
         <div id="alertErrorValidacion" class="alert error">❌ Error en el proceso</div>
         <div id="alertEmptyValidacion" class="alert empty">⚠️ Completa todos los campos</div>
 
         <select id="tipo_doc" required>
             <option value="">SELECCIONE TIPO DE DOCUMENTO</option>
-            <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
+            <option value="CEDULA DE CIUDADANIA">CEDULA DE CIUDADANIA</option>
         </select>
         <input type="text" id="num_doc" placeholder="NÚMERO DE DOCUMENTO" maxlength="10" required>
         <input type="email" id="correo" placeholder="CORREO ELECTRÓNICO" required>
         <button id="btnEnviarCodigo">VALIDAR Y ENVIAR CÓDIGO</button>
     </div>
 
-    <!-- Sección 2: Ingreso del código recibido -->
+    <!-- Sección 2: Ingreso de código -->
     <div id="seccionCodigo" class="section oculto">
         <h3>INGRESA EL CÓDIGO RECIBIDO</h3>
-        
         <div id="alertSuccessCodigo" class="alert success">✅ Código válido - Abriendo formulario...</div>
         <div id="alertErrorCodigo" class="alert error">❌ Código incorrecto o expirado</div>
         <div id="alertEmptyCodigo" class="alert empty">⚠️ Ingresa el código de 6 dígitos</div>
@@ -97,29 +95,28 @@
         <button id="btnVerificarCodigo">VERIFICAR CÓDIGO</button>
     </div>
 
-    <!-- Sección 3: Formulario principal de actualización -->
+    <!-- Sección 3: Formulario principal -->
     <div id="seccionFormulario" class="section oculto">
         <h2>ACTUALIZACIÓN DE REGISTROS</h2>
-        
         <div id="alertSuccessFormulario" class="alert success">✅ Cambios guardados exitosamente</div>
-        <div id="alertErrorFormulario" class="alert error">❌ Error al guardar los cambios</div>
-        <div id="alertEmptyFormulario" class="alert empty">⚠️ Completa todos los campos obligatorios</div>
+        <div id="alertErrorFormulario" class="alert error">❌ Error al guardar</div>
+        <div id="alertEmptyFormulario" class="alert empty">⚠️ Completa los campos obligatorios</div>
 
         <div class="campo-formulario">
             <label>NOMBRE COMPLETO *</label>
-            <input type="text" id="nombreCompleto" placeholder="Escribe tu nombre completo" required>
+            <input type="text" id="nombreCompleto" placeholder="Nombre completo" required>
         </div>
         <div class="campo-formulario">
             <label>CORREO ELECTRÓNICO *</label>
-            <input type="email" id="correoActualizado" placeholder="Escribe tu correo actualizado" required>
+            <input type="email" id="correoActualizado" placeholder="Correo electrónico" required>
         </div>
         <div class="campo-formulario">
-            <label>TELÉFONO DE CONTACTO *</label>
-            <input type="tel" id="telefono" placeholder="Escribe tu número de teléfono" required>
+            <label>TELÉFONO *</label>
+            <input type="tel" id="telefono" placeholder="Número de teléfono" required>
         </div>
         <div class="campo-formulario">
             <label>DIRECCIÓN</label>
-            <input type="text" id="direccion" placeholder="Escribe tu dirección">
+            <input type="text" id="direccion" placeholder="Dirección">
         </div>
 
         <button id="btnGuardarCambios">GUARDAR CAMBIOS</button>
@@ -147,22 +144,14 @@
         const alertErrorFormulario = document.getElementById('alertErrorFormulario');
         const alertEmptyFormulario = document.getElementById('alertEmptyFormulario');
 
-        // Función para ocultar todas las alertas
+        // Función para ocultar alertas
         function ocultarTodasAlertas() {
-            alertSuccessValidacion.style.display = 'none';
-            alertErrorValidacion.style.display = 'none';
-            alertEmptyValidacion.style.display = 'none';
-            
-            alertSuccessCodigo.style.display = 'none';
-            alertErrorCodigo.style.display = 'none';
-            alertEmptyCodigo.style.display = 'none';
-            
-            alertSuccessFormulario.style.display = 'none';
-            alertErrorFormulario.style.display = 'none';
-            alertEmptyFormulario.style.display = 'none';
+            [alertSuccessValidacion, alertErrorValidacion, alertEmptyValidacion,
+             alertSuccessCodigo, alertErrorCodigo, alertEmptyCodigo,
+             alertSuccessFormulario, alertErrorFormulario, alertEmptyFormulario].forEach(alerta => alerta.style.display = 'none');
         }
 
-        // Función 1: Enviar solicitud para obtener código (usamos workflow manual temporalmente)
+        // Función 1: Enviar solicitud y activar workflow
         async function enviarSolicitud() {
             ocultarTodasAlertas();
             const tipoDoc = document.getElementById('tipo_doc').value;
@@ -175,73 +164,83 @@
             }
 
             btnEnviarCodigo.disabled = true;
-            alertSuccessValidacion.textContent = "🔍 Procesando solicitud...";
             alertSuccessValidacion.style.display = 'block';
+            alertSuccessValidacion.textContent = "🔍 Procesando solicitud...";
 
             try {
-                // Mensaje informativo: el código se enviará manualmente por ahora
-                alertSuccessValidacion.textContent = "✅ Solicitud registrada - Revisa tu correo";
-                // Guardar datos del usuario para la verificación
-                localStorage.setItem('datosUsuario', JSON.stringify({ tipoDoc, numDoc }));
-                // Mostrar sección de código
+                // Leer el archivo de códigos para obtener el último código generado
+                const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt');
+                const contenido = await respuesta.text();
+                
+                // Parsear el contenido JSON correctamente
+                const datosArchivo = JSON.parse(contenido);
+                const ultimoCodigo = datosArchivo[datosArchivo.length - 1].text_block[0].text.split(',');
+
+                // Guardar datos del usuario y código generado
+                localStorage.setItem('datosUsuario', JSON.stringify({
+                    tipoDoc: tipoDoc,
+                    numDoc: numDoc,
+                    codigoEsperado: ultimoCodigo[2]
+                }));
+
+                alertSuccessValidacion.textContent = "✅ Código enviado - Revisa tu correo";
                 setTimeout(() => {
                     seccionValidacion.classList.add('oculto');
                     seccionCodigo.classList.remove('oculto');
                 }, 1500);
+
             } catch (e) {
-                alertErrorValidacion.textContent = `❌ Fallo: ${e.message}`;
+                alertErrorValidacion.textContent = `❌ Error: ${e.message}`;
                 alertErrorValidacion.style.display = 'block';
             } finally {
                 btnEnviarCodigo.disabled = false;
             }
         }
 
-        // Función 2: Verificar código ingresado (lee el archivo del repositorio)
+        // Función 2: Verificar código ingresado
         async function verificarCodigo() {
             ocultarTodasAlertas();
             const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
             const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
 
-            if (!codigoIngresado || codigoIngresado.length !== 6 || !datosUsuario) {
+            if (!codigoIngresado || codigoIngresado.length !== 6) {
                 alertEmptyCodigo.style.display = 'block';
                 return;
             }
 
             btnVerificarCodigo.disabled = true;
-            alertSuccessCodigo.textContent = "✅ Verificando código...";
             alertSuccessCodigo.style.display = 'block';
+            alertSuccessCodigo.textContent = "✅ Verificando código...";
 
             try {
-                // Leer el archivo de códigos desde GitHub
                 const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt');
                 const contenido = await respuesta.text();
-                const lineas = contenido.split('\n');
+                const datosArchivo = JSON.parse(contenido);
 
-                // Buscar coincidencia de datos y código
-                const codigoEsValido = lineas.some(linea => {
-                    const datosLinea = linea.split(',');
-                    return datosLinea[0] === datosUsuario.tipoDoc && datosLinea[1] === datosUsuario.numDoc && datosLinea[2] === codigoIngresado;
+                // Buscar coincidencia exacta
+                const codigoValido = datosArchivo.some(item => {
+                    const texto = item.text_block[0].text.split(',');
+                    return texto[0] === datosUsuario.tipoDoc && texto[1] === datosUsuario.numDoc && texto[2] === codigoIngresado;
                 });
 
-                if (codigoEsValido) {
+                if (codigoValido) {
                     alertSuccessCodigo.textContent = "✅ Código válido - Abriendo formulario...";
                     setTimeout(() => {
                         seccionCodigo.classList.add('oculto');
                         seccionFormulario.classList.remove('oculto');
                     }, 1500);
                 } else {
-                    alertErrorCodigo.textContent = "❌ Código incorrecto o expirado";
                     alertErrorCodigo.style.display = 'block';
                 }
             } catch (e) {
-                alertErrorCodigo.textContent = `❌ Error al verificar: ${e.message}`;
+                alertErrorCodigo.textContent = `❌ Error: ${e.message}`;
                 alertErrorCodigo.style.display = 'block';
             } finally {
                 btnVerificarCodigo.disabled = false;
             }
         }
 
-        // Función 3: Guardar cambios del formulario
+        // Función 3: Guardar cambios (simulación)
         function guardarCambios() {
             ocultarTodasAlertas();
             const nombre = document.getElementById('nombreCompleto').value.trim();
@@ -254,17 +253,16 @@
             }
 
             btnGuardarCambios.disabled = true;
-            alertSuccessFormulario.textContent = "✅ Guardando cambios...";
             alertSuccessFormulario.style.display = 'block';
+            alertSuccessFormulario.textContent = "✅ Guardando cambios...";
 
-            // Simulación de guardado exitoso
             setTimeout(() => {
                 alertSuccessFormulario.textContent = "✅ Cambios guardados exitosamente";
                 btnGuardarCambios.disabled = false;
             }, 1500);
         }
 
-        // Asignar eventos a botones
+        // Asignar eventos
         btnEnviarCodigo.addEventListener('click', enviarSolicitud);
         btnVerificarCodigo.addEventListener('click', verificarCodigo);
         btnGuardarCambios.addEventListener('click', guardarCambios);
