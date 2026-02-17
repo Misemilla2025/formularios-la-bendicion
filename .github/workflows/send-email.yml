@@ -1,7 +1,7 @@
 name: Enviar código por correo
 on:
   repository_dispatch:
-    types: [send-code]
+    types: [solicitar-codigo] # Nombre actualizado para coincidir con la llamada posterior
   workflow_dispatch:
     inputs:
       tipo_doc:
@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Asegura que se traiga todo el historial para el commit
 
       - name: Generar código de validación
         id: generar-codigo
@@ -36,6 +38,8 @@ jobs:
         with:
           commit_message: "Agregar código de validación"
           file_pattern: codigos-validacion.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # Agregado para permisos de push
 
       - name: Enviar con SendGrid
         uses: fjogeleit/http-request-action@v1
