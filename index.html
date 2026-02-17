@@ -151,7 +151,7 @@
              alertSuccessFormulario, alertErrorFormulario, alertEmptyFormulario].forEach(alerta => alerta.style.display = 'none');
         }
 
-        // Función 1: Enviar solicitud y activar workflow
+        // Función 1: Enviar solicitud (guarda datos del usuario)
         async function enviarSolicitud() {
             ocultarTodasAlertas();
             const tipoDoc = document.getElementById('tipo_doc').value;
@@ -168,22 +168,13 @@
             alertSuccessValidacion.textContent = "🔍 Procesando solicitud...";
 
             try {
-                // Leer el archivo de códigos para obtener el último código generado
-                const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt');
-                const contenido = await respuesta.text();
-                
-                // Parsear el contenido JSON correctamente
-                const datosArchivo = JSON.parse(contenido);
-                const ultimoCodigo = datosArchivo[datosArchivo.length - 1].text_block[0].text.split(',');
-
-                // Guardar datos del usuario y código generado
+                // Guardar datos del usuario para la verificación
                 localStorage.setItem('datosUsuario', JSON.stringify({
                     tipoDoc: tipoDoc,
-                    numDoc: numDoc,
-                    codigoEsperado: ultimoCodigo[2]
+                    numDoc: numDoc
                 }));
 
-                alertSuccessValidacion.textContent = "✅ Código enviado - Revisa tu correo";
+                alertSuccessValidacion.textContent = "✅ Solicitud registrada - Revisa tu correo";
                 setTimeout(() => {
                     seccionValidacion.classList.add('oculto');
                     seccionCodigo.classList.remove('oculto');
@@ -197,13 +188,13 @@
             }
         }
 
-        // Función 2: Verificar código ingresado
+        // Función 2: Verificar código (lee archivo de texto plano)
         async function verificarCodigo() {
             ocultarTodasAlertas();
             const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
             const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
 
-            if (!codigoIngresado || codigoIngresado.length !== 6) {
+            if (!codigoIngresado || codigoIngresado.length !== 6 || !datosUsuario) {
                 alertEmptyCodigo.style.display = 'block';
                 return;
             }
@@ -213,14 +204,17 @@
             alertSuccessCodigo.textContent = "✅ Verificando código...";
 
             try {
+                // Leer archivo como texto plano
                 const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt');
                 const contenido = await respuesta.text();
-                const datosArchivo = JSON.parse(contenido);
+                const lineas = contenido.split('\n').filter(linea => linea.trim() !== ''); // Separar líneas y limpiar vacías
 
                 // Buscar coincidencia exacta
-                const codigoValido = datosArchivo.some(item => {
-                    const texto = item.text_block[0].text.split(',');
-                    return texto[0] === datosUsuario.tipoDoc && texto[1] === datosUsuario.numDoc && texto[2] === codigoIngresado;
+                const codigoValido = lineas.some(linea => {
+                    const datosLinea = linea.split(',');
+                    return datosLinea[0] === datosUsuario.tipoDoc && 
+                           datosLinea[1] === datosUsuario.numDoc && 
+                           datosLinea[2] === codigoIngresado;
                 });
 
                 if (codigoValido) {
