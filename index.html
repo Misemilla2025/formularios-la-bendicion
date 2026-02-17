@@ -184,57 +184,66 @@
             }
         }
 
-        // Función 2: Verificar código (y marcarlo como usado)
         async function verificarCodigo() {
-            ocultarTodasAlertas();
-            const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
-            const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
+    ocultarTodasAlertas();
+    const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
+    const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
+    const correoValidacion = document.getElementById('correo').value.trim(); // Correo ingresado en validación
+    const codigosUsados = JSON.parse(localStorage.getItem('codigosUsados')) || [];
 
-            if (!codigoIngresado || codigoIngresado.length !== 6 || !datosUsuario) {
-                alertEmptyCodigo.style.display = 'block';
-                return;
+    if (!codigoIngresado || codigoIngresado.length !== 6 || !datosUsuario || !correoValidacion) {
+        alertEmptyCodigo.style.display = 'block';
+        return;
+    }
+
+    // Evitar códigos ya usados
+    if (codigosUsados.includes(codigoIngresado)) {
+        alertErrorCodigo.textContent = "❌ Código ya fue utilizado";
+        alertErrorCodigo.style.display = 'block';
+        return;
+    }
+
+    btnVerificarCodigo.disabled = true;
+    alertSuccessCodigo.style.display = 'block';
+    alertSuccessCodigo.textContent = "✅ Verificando código...";
+
+    try {
+        // Forzar carga sin caché
+        const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt', { cache: 'no-store' });
+        const contenido = await respuesta.text();
+        const lineas = contenido.split('\n').filter(l => l.trim() !== '');
+
+        let codigoValido = false;
+        lineas.forEach(linea => {
+            const datos = linea.split(',').map(item => item.trim()); // Eliminar espacios en cada campo
+            // Ahora comparamos los 4 campos: tipo doc, num doc, código y correo
+            if (datos[0] === datosUsuario.tipoDoc && datos[1] === datosUsuario.numDoc && datos[2] === codigoIngresado && datos[3] === correoValidacion) {
+                codigoValido = true;
             }
+        });
 
-            btnVerificarCodigo.disabled = true;
-            alertSuccessCodigo.style.display = 'block';
-            alertSuccessCodigo.textContent = "✅ Verificando código...";
-
-            try {
-                // Leer archivo de códigos
-                const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt');
-                const contenido = await respuesta.text();
-                const lineas = contenido.split('\n').filter(l => l.trim() !== '');
-
-                let codigoValido = false;
-                let lineasActualizadas = [];
-
-                // Recorrer líneas: si el código coincide, NO lo agregamos de nuevo (ya usado)
-                lineas.forEach(linea => {
-                    const datos = linea.split(',');
-                    if (datos[0] === datosUsuario.tipoDoc && datos[1] === datosUsuario.numDoc && datos[2] === codigoIngresado) {
-                        codigoValido = true; // Código encontrado, no lo guardamos de nuevo
-                    } else {
-                        lineasActualizadas.push(linea); // Mantener otros códigos
-                    }
-                });
-
-                if (codigoValido) {
-                    alertSuccessCodigo.textContent = "✅ Código válido - Abriendo formulario...";
-                    setTimeout(() => {
-                        seccionCodigo.classList.add('oculto');
-                        seccionFormulario.classList.remove('oculto');
-                    }, 1500);
-                } else {
-                    alertErrorCodigo.style.display = 'block';
-                }
-
-            } catch (e) {
-                alertErrorCodigo.textContent = `❌ Error: ${e.message}`;
-                alertErrorCodigo.style.display = 'block';
-            } finally {
-                btnVerificarCodigo.disabled = false;
-            }
+        if (codigoValido) {
+            codigosUsados.push(codigoIngresado);
+            localStorage.setItem('codigosUsados', JSON.stringify(codigosUsados));
+            
+            alertSuccessCodigo.textContent = "✅ Código válido - Abriendo formulario...";
+            setTimeout(() => {
+                seccionCodigo.classList.add('oculto');
+                seccionFormulario.classList.remove('oculto');
+            }, 1500);
+        } else {
+            alertErrorCodigo.textContent = "❌ Código incorrecto, o no coincide con los datos ingresados";
+            alertErrorCodigo.style.display = 'block';
         }
+
+    } catch (e) {
+        alertErrorCodigo.textContent = `❌ Error: ${e.message}`;
+        alertErrorCodigo.style.display = 'block';
+    } finally {
+        btnVerificarCodigo.disabled = false;
+    }
+}
+
 
         // Función 3: Guardar cambios
         function guardarCambios() {
