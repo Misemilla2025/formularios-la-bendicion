@@ -114,11 +114,13 @@
                 });
 
                 if (respuesta.ok) {
-                    alertSuccess.style.display = 'block';
-                } else {
-                    const errorDetalles = await respuesta.json().catch(() => ({ message: 'Error al enviar datos' }));
-                    alertError.textContent = `❌ Error: ${errorDetalles.message}`;
-                    alertError.style.display = 'block';
+    alertSuccess.style.display = 'block';
+} else {
+    const errorDetalles = await respuesta.json().catch(() => ({ message: 'Error en el workflow de GitHub' }));
+    alertError.textContent = `❌ Error: ${errorDetalles.message || 'No se pudo obtener detalles del error'}`;
+    alertError.style.display = 'block';
+}
+
                 }
             } catch (e) {
                 alertError.textContent = `❌ Fallo: ${e.message}`;
