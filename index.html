@@ -87,47 +87,40 @@
         }
 
         async function enviarSolicitud() {
-            ocultarAlertas();
-            const tipoDoc = document.getElementById('tipo_doc').value;
-            const numDoc = document.getElementById('num_doc').value.trim();
-            const correo = document.getElementById('correo').value.trim();
+    ocultarAlertas();
+    const tipoDoc = document.getElementById('tipo_doc').value;
+    const numDoc = document.getElementById('num_doc').value.trim();
+    const correo = document.getElementById('correo').value.trim();
 
-            if (!tipoDoc || !numDoc || !correo) {
-                alertEmpty.style.display = 'block';
-                return;
-            }
+    if (!tipoDoc || !numDoc || !correo) {
+        alertEmpty.style.display = 'block';
+        return;
+    }
 
-            btnEnviar.disabled = true;
-            alertSuccess.textContent = "🔍 Procesando...";
-            alertSuccess.style.display = 'block';
+    btnEnviar.disabled = true;
+    alertSuccess.textContent = "🔍 Procesando...";
+    alertSuccess.style.display = 'block';
 
-            try {
-                // Petición SEGURA al workflow (sin tokens visibles)
-                const respuesta = await fetch('https://api.github.com/repos/Misemilla2025/formularios-la-bendicion/dispatches', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'token TU_NUEVO_TOKEN_AQUI', // ⚠️ SOLO REEMPLAZA ESTO EN LOS SECRETS, NO AQUÍ
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        event_type: 'send-code',
-                        client_payload: { tipoDoc, numDoc, correo }
-                    })
-                });
+    try {
+        const respuesta = await fetch('/.netlify/functions/enviar-codigo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tipoDoc, numDoc, correo })
+        });
 
-                if (respuesta.ok) {
-                    alertSuccess.textContent = "✅ Código enviado - revisa tu correo";
-                } else {
-                    alertError.textContent = "❌ Revisa los workflows en GitHub Actions";
-                    alertError.style.display = 'block';
-                }
-            } catch (e) {
-                alertError.textContent = `❌ Fallo: ${e.message}`;
-                alertError.style.display = 'block';
-            } finally {
-                btnEnviar.disabled = false;
-            }
+        if (respuesta.ok) {
+            alertSuccess.textContent = "✅ Código enviado - revisa tu correo";
+        } else {
+            alertError.style.display = 'block';
         }
+    } catch (e) {
+        alertError.textContent = `❌ Fallo: ${e.message}`;
+        alertError.style.display = 'block';
+    } finally {
+        btnEnviar.disabled = false;
+    }
+}
+
 
         // Elimina el evento duplicado para evitar conflictos
         document.getElementById('btnEnviar').addEventListener('click', enviarSolicitud);
