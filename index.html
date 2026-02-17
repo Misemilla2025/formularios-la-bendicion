@@ -47,7 +47,6 @@
             color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
         button:hover {
             background-color: #218838;
@@ -88,7 +87,7 @@
     <div id="seccionCodigo" class="section oculto">
         <h3>INGRESA EL CÓDIGO RECIBIDO</h3>
         <div id="alertSuccessCodigo" class="alert success">✅ Código válido - Abriendo formulario...</div>
-        <div id="alertErrorCodigo" class="alert error">❌ Código incorrecto o expirado</div>
+        <div id="alertErrorCodigo" class="alert error">❌ Código incorrecto o ya usado</div>
         <div id="alertEmptyCodigo" class="alert empty">⚠️ Ingresa el código de 6 dígitos</div>
 
         <input type="text" id="codigoIngresado" placeholder="CÓDIGO DE VERIFICACIÓN" maxlength="6" required>
@@ -148,10 +147,10 @@
         function ocultarTodasAlertas() {
             [alertSuccessValidacion, alertErrorValidacion, alertEmptyValidacion,
              alertSuccessCodigo, alertErrorCodigo, alertEmptyCodigo,
-             alertSuccessFormulario, alertErrorFormulario, alertEmptyFormulario].forEach(alerta => alerta.style.display = 'none');
+             alertSuccessFormulario, alertErrorFormulario, alertEmptyFormulario].forEach(a => a.style.display = 'none');
         }
 
-        // Función 1: Enviar solicitud (guarda datos del usuario)
+        // Función 1: Enviar solicitud
         async function enviarSolicitud() {
             ocultarTodasAlertas();
             const tipoDoc = document.getElementById('tipo_doc').value;
@@ -168,12 +167,9 @@
             alertSuccessValidacion.textContent = "🔍 Procesando solicitud...";
 
             try {
-                // Guardar datos del usuario para la verificación
-                localStorage.setItem('datosUsuario', JSON.stringify({
-                    tipoDoc: tipoDoc,
-                    numDoc: numDoc
-                }));
-
+                // Guardar datos del usuario
+                localStorage.setItem('datosUsuario', JSON.stringify({ tipoDoc, numDoc }));
+                
                 alertSuccessValidacion.textContent = "✅ Solicitud registrada - Revisa tu correo";
                 setTimeout(() => {
                     seccionValidacion.classList.add('oculto');
@@ -188,7 +184,7 @@
             }
         }
 
-        // Función 2: Verificar código (lee archivo de texto plano)
+        // Función 2: Verificar código (y marcarlo como usado)
         async function verificarCodigo() {
             ocultarTodasAlertas();
             const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
@@ -204,17 +200,22 @@
             alertSuccessCodigo.textContent = "✅ Verificando código...";
 
             try {
-                // Leer archivo como texto plano
+                // Leer archivo de códigos
                 const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt');
                 const contenido = await respuesta.text();
-                const lineas = contenido.split('\n').filter(linea => linea.trim() !== ''); // Separar líneas y limpiar vacías
+                const lineas = contenido.split('\n').filter(l => l.trim() !== '');
 
-                // Buscar coincidencia exacta
-                const codigoValido = lineas.some(linea => {
-                    const datosLinea = linea.split(',');
-                    return datosLinea[0] === datosUsuario.tipoDoc && 
-                           datosLinea[1] === datosUsuario.numDoc && 
-                           datosLinea[2] === codigoIngresado;
+                let codigoValido = false;
+                let lineasActualizadas = [];
+
+                // Recorrer líneas: si el código coincide, NO lo agregamos de nuevo (ya usado)
+                lineas.forEach(linea => {
+                    const datos = linea.split(',');
+                    if (datos[0] === datosUsuario.tipoDoc && datos[1] === datosUsuario.numDoc && datos[2] === codigoIngresado) {
+                        codigoValido = true; // Código encontrado, no lo guardamos de nuevo
+                    } else {
+                        lineasActualizadas.push(linea); // Mantener otros códigos
+                    }
                 });
 
                 if (codigoValido) {
@@ -226,6 +227,7 @@
                 } else {
                     alertErrorCodigo.style.display = 'block';
                 }
+
             } catch (e) {
                 alertErrorCodigo.textContent = `❌ Error: ${e.message}`;
                 alertErrorCodigo.style.display = 'block';
@@ -234,7 +236,7 @@
             }
         }
 
-        // Función 3: Guardar cambios (simulación)
+        // Función 3: Guardar cambios
         function guardarCambios() {
             ocultarTodasAlertas();
             const nombre = document.getElementById('nombreCompleto').value.trim();
