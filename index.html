@@ -122,7 +122,8 @@
     </div>
 
     <script>
-        // Elementos del DOM
+        const backendURL = 'https://servidor-misemilla-formulario-production.up.railway.app';
+
         const seccionValidacion = document.getElementById('seccionValidacion');
         const seccionCodigo = document.getElementById('seccionCodigo');
         const seccionFormulario = document.getElementById('seccionFormulario');
@@ -143,14 +144,12 @@
         const alertErrorFormulario = document.getElementById('alertErrorFormulario');
         const alertEmptyFormulario = document.getElementById('alertEmptyFormulario');
 
-        // Función para ocultar alertas
         function ocultarTodasAlertas() {
             [alertSuccessValidacion, alertErrorValidacion, alertEmptyValidacion,
              alertSuccessCodigo, alertErrorCodigo, alertEmptyCodigo,
              alertSuccessFormulario, alertErrorFormulario, alertEmptyFormulario].forEach(a => a.style.display = 'none');
         }
 
-        // Función 1: Enviar solicitud
         async function enviarSolicitud() {
             ocultarTodasAlertas();
             const tipoDoc = document.getElementById('tipo_doc').value;
@@ -167,14 +166,25 @@
             alertSuccessValidacion.textContent = "🔍 Procesando solicitud...";
 
             try {
-                // Guardar datos del usuario
-                localStorage.setItem('datosUsuario', JSON.stringify({ tipoDoc, numDoc }));
-                
-                alertSuccessValidacion.textContent = "✅ Solicitud registrada - Revisa tu correo";
-                setTimeout(() => {
-                    seccionValidacion.classList.add('oculto');
-                    seccionCodigo.classList.remove('oculto');
-                }, 1500);
+                const response = await fetch(`${backendURL}/enviar-codigo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipoDoc, numDoc, correo })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alertSuccessValidacion.textContent = "✅ Código enviado al correo";
+                    localStorage.setItem('datosUsuario', JSON.stringify({ tipoDoc, numDoc, correo }));
+                    setTimeout(() => {
+                        seccionValidacion.classList.add('oculto');
+                        seccionCodigo.classList.remove('oculto');
+                    }, 1000);
+                } else {
+                    alertErrorValidacion.textContent = result.mensaje || "❌ Error enviando código";
+                    alertErrorValidacion.style.display = 'block';
+                }
 
             } catch (e) {
                 alertErrorValidacion.textContent = `❌ Error: ${e.message}`;
@@ -185,67 +195,52 @@
         }
 
         async function verificarCodigo() {
-    ocultarTodasAlertas();
-    const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
-    const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
-    const correoValidacion = document.getElementById('correo').value.trim(); // Correo ingresado en validación
-    const codigosUsados = JSON.parse(localStorage.getItem('codigosUsados')) || [];
+            ocultarTodasAlertas();
+            const codigoIngresado = document.getElementById('codigoIngresado').value.trim();
+            const datosUsuario = JSON.parse(localStorage.getItem('datosUsuario'));
 
-    if (!codigoIngresado || codigoIngresado.length !== 6 || !datosUsuario || !correoValidacion) {
-        alertEmptyCodigo.style.display = 'block';
-        return;
-    }
-
-    // Evitar códigos ya usados
-    if (codigosUsados.includes(codigoIngresado)) {
-        alertErrorCodigo.textContent = "❌ Código ya fue utilizado";
-        alertErrorCodigo.style.display = 'block';
-        return;
-    }
-
-    btnVerificarCodigo.disabled = true;
-    alertSuccessCodigo.style.display = 'block';
-    alertSuccessCodigo.textContent = "✅ Verificando código...";
-
-    try {
-        // Forzar carga sin caché
-        const respuesta = await fetch('https://raw.githubusercontent.com/Misemilla2025/formularios-la-bendicion/main/codigos-validacion.txt', { cache: 'no-store' });
-        const contenido = await respuesta.text();
-        const lineas = contenido.split('\n').filter(l => l.trim() !== '');
-
-        let codigoValido = false;
-        lineas.forEach(linea => {
-            const datos = linea.split(',').map(item => item.trim()); // Eliminar espacios en cada campo
-            // Ahora comparamos los 4 campos: tipo doc, num doc, código y correo
-            if (datos[0] === datosUsuario.tipoDoc && datos[1] === datosUsuario.numDoc && datos[2] === codigoIngresado && datos[3] === correoValidacion) {
-                codigoValido = true;
+            if (!codigoIngresado || !datosUsuario) {
+                alertEmptyCodigo.style.display = 'block';
+                return;
             }
-        });
 
-        if (codigoValido) {
-            codigosUsados.push(codigoIngresado);
-            localStorage.setItem('codigosUsados', JSON.stringify(codigosUsados));
-            
-            alertSuccessCodigo.textContent = "✅ Código válido - Abriendo formulario...";
-            setTimeout(() => {
-                seccionCodigo.classList.add('oculto');
-                seccionFormulario.classList.remove('oculto');
-            }, 1500);
-        } else {
-            alertErrorCodigo.textContent = "❌ Código incorrecto, o no coincide con los datos ingresados";
-            alertErrorCodigo.style.display = 'block';
+            btnVerificarCodigo.disabled = true;
+            alertSuccessCodigo.style.display = 'block';
+            alertSuccessCodigo.textContent = "✅ Verificando código...";
+
+            try {
+                const response = await fetch(`${backendURL}/verificar-codigo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        correo: datosUsuario.correo,
+                        tipoDoc: datosUsuario.tipoDoc,
+                        numDoc: datosUsuario.numDoc,
+                        codigo: codigoIngresado
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alertSuccessCodigo.textContent = result.mensaje;
+                    setTimeout(() => {
+                        seccionCodigo.classList.add('oculto');
+                        seccionFormulario.classList.remove('oculto');
+                    }, 1000);
+                } else {
+                    alertErrorCodigo.textContent = result.mensaje || "❌ Código incorrecto";
+                    alertErrorCodigo.style.display = 'block';
+                }
+
+            } catch (e) {
+                alertErrorCodigo.textContent = `❌ Error: ${e.message}`;
+                alertErrorCodigo.style.display = 'block';
+            } finally {
+                btnVerificarCodigo.disabled = false;
+            }
         }
 
-    } catch (e) {
-        alertErrorCodigo.textContent = `❌ Error: ${e.message}`;
-        alertErrorCodigo.style.display = 'block';
-    } finally {
-        btnVerificarCodigo.disabled = false;
-    }
-}
-
-
-        // Función 3: Guardar cambios
         function guardarCambios() {
             ocultarTodasAlertas();
             const nombre = document.getElementById('nombreCompleto').value.trim();
@@ -267,7 +262,6 @@
             }, 1500);
         }
 
-        // Asignar eventos
         btnEnviarCodigo.addEventListener('click', enviarSolicitud);
         btnVerificarCodigo.addEventListener('click', verificarCodigo);
         btnGuardarCambios.addEventListener('click', guardarCambios);
