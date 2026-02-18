@@ -9,6 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Validar datos recibidos
+        run: |
+          if [ -z "${{ github.event.client_payload.correo }}" ] || [ -z "${{ github.event.client_payload.codigo }}" ]; then
+            echo "❌ Payload incompleto"
+            exit 1
+          fi
+
       - name: Enviar correo con SendGrid
         uses: fjogeleit/http-request-action@v1
         with:
@@ -17,7 +24,8 @@ jobs:
           customHeaders: >
             {
               "Authorization": "Bearer ${{ secrets.SENDGRID_API_KEY }}",
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              "Accept": "application/json"
             }
           data: >
             {
