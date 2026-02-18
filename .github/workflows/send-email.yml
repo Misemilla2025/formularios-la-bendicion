@@ -1,57 +1,43 @@
 name: Enviar código por correo
+
 on:
   repository_dispatch:
-    types: [solicitar-codigo] # Nombre actualizado para coincidir con la llamada posterior
-  workflow_dispatch:
-    inputs:
-      tipo_doc:
-        required: true
-        type: string
-      num_doc:
-        required: true
-        type: string
-      correo:
-        required: true
-        type: string
+    types: [solicitar-codigo]
 
 jobs:
   enviar-correo:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Clonar repositorio
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Asegura que se traiga todo el historial para el commit
-
-      - name: Generar código de validación
-        id: generar-codigo
-        run: echo "codigo=$(printf "%06d" $RANDOM)" >> $GITHUB_OUTPUT
-
-      - name: Guardar código y datos
-        run: |
-          echo "${{ github.event.inputs.tipo_doc || github.event.client_payload.tipo_doc }},${{ github.event.inputs.num_doc || github.event.client_payload.num_doc }},${{ steps.generar-codigo.outputs.codigo }},${{ github.event.inputs.correo || github.event.client_payload.correo }}" >> codigos-validacion.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Commit y push de los datos
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Agregar código de validación"
-          file_pattern: codigos-validacion.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }} # Agregado para permisos de push
-
-      - name: Enviar con SendGrid
+      - name: Enviar correo con SendGrid
         uses: fjogeleit/http-request-action@v1
         with:
           url: https://api.sendgrid.com/v3/mail/send
           method: POST
-          customHeaders: '{"Authorization":"Bearer ${{ secrets.SENDGRID_API_KEY }}", "Content-Type":"application/json"}'
+          customHeaders: >
+            {
+              "Authorization": "Bearer ${{ secrets.SENDGRID_API_KEY }}",
+              "Content-Type": "application/json"
+            }
           data: >
             {
-              "personalizations": [{"to": [{"email": "${{ github.event.inputs.correo || github.event.client_payload.correo }}"}]}],
-              "from": {"email": "administracion@misemilla.org"},
+              "personalizations": [
+                {
+                  "to": [
+                    {
+                      "email": "${{ github.event.client_payload.correo }}"
+                    }
+                  ]
+                }
+              ],
+              "from": {
+                "email": "administracion@misemilla.org"
+              },
               "subject": "Código de Acceso",
-              "content": [{"type": "text/plain", "value": "Tu código es: ${{ steps.generar-codigo.outputs.codigo }}"}]
+              "content": [
+                {
+                  "type": "text/plain",
+                  "value": "Tu código de verificación es: ${{ github.event.client_payload.codigo }}"
+                }
+              ]
             }
-            
