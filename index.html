@@ -993,6 +993,16 @@ if (billetera && billetera !== "N/A") {
     "Registro encontrado\n\n" +
     (data.primer_nombre || "") + " " + (data.apellidos || "")
   );
+  
+  // 🔐 REDIRECCIÓN A VALIDACIÓN POR CÓDIGO (Rail)
+const params = new URLSearchParams({
+  doc: numero,
+  correo: correo
+});
+
+window.location.href =
+  "https://servidor-misemilla-formulario-production.up.railway.app/?" +
+  params.toString();
 
   /* 🔹 CAMPOS DIRECTOS */
   setVal("primer_nombre", data.primer_nombre);
@@ -1038,8 +1048,8 @@ if (billetera && billetera !== "N/A") {
     setVal(`ben${i}_parentesco`, data[`ben${i}_parentesco`]);
   }
 
-  document.getElementById("bloque_formulario")?.classList.remove("hidden");
-};
+  //document.getElementById("bloque_formulario")?.classList.remove("hidden");
+//};
 
 /* =========================
  ACTUALIZAR (BLINDADO – NO TOCAR)
