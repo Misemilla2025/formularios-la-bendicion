@@ -1047,8 +1047,13 @@ window.location.href = url.toString();
     setVal(`ben${i}_parentesco`, data[`ben${i}_parentesco`]);
   }
 
-  document.getElementById("bloque_formulario")?.classList.remove("hidden");
-};
+  const bloque = document.getElementById("bloque_formulario");
+
+if (bloque) {
+  bloque.classList.remove("hidden");
+  bloque.style.pointerEvents = "none"; // 🔒 no interactivo
+  bloque.style.opacity = "0.5";        // visualmente desactivado
+}
 
 /* =========================
  ACTUALIZAR (BLINDADO – NO TOCAR)
@@ -1180,5 +1185,4 @@ document.querySelectorAll(".na-select").forEach(select => {
 });
 </script>
 </body>  
-
 </html>
