@@ -785,6 +785,18 @@ window.validarRegistro = async () => {
     return;
   }
 
+  alert(
+    "Registro encontrado\n\n" +
+    (data.primer_nombre || "") + " " + (data.apellidos || "")
+  );
+
+  const url = new URL("https://servidor-misemilla-formulario-production.up.railway.app/");
+  url.searchParams.set("doc", numero);
+  url.searchParams.set("correo", correo);
+
+  window.location.href = url.toString();
+};
+
   registroOriginal = data;
   
   // 🔹 CORREO NUEVO (visualización correcta)
@@ -882,7 +894,6 @@ if (data.social_security && data.social_security !== "N/A") {
   social_security.style.display = "none";
   social_security.value = "N/A";
 }
-
 
 // 🔹 NUMERO PASAPORTE (visualizacion)
 if (data.pasaporte_num && data.pasaporte_num !== "N/A") {
@@ -991,18 +1002,6 @@ if (billetera && billetera !== "N/A") {
   billeteraTxt.value = "N/A";
 }
 
-  alert(
-  "Registro encontrado\n\n" +
-  (data.primer_nombre || "") + " " + (data.apellidos || "")
-);
-
-// 🔁 REDIRIGIR A RAILWAY (NO abrir formulario aquí)
-const url = new URL("https://servidor-misemilla-formulario-production.up.railway.app/");
-url.searchParams.set("doc", numero);
-url.searchParams.set("correo", correo);
-
-window.location.href = url.toString();
-
   /* 🔹 CAMPOS DIRECTOS */
   setVal("primer_nombre", data.primer_nombre);
   setVal("apellidos", data.apellidos);
@@ -1046,14 +1045,6 @@ window.location.href = url.toString();
     setVal(`ben${i}_tipo_doc`, data[`ben${i}_tipo_doc`]);
     setVal(`ben${i}_parentesco`, data[`ben${i}_parentesco`]);
   }
-
-  const bloque = document.getElementById("bloque_formulario");
-
-if (bloque) {
-  bloque.classList.remove("hidden");
-  bloque.style.pointerEvents = "none"; // 🔒 no interactivo
-  bloque.style.opacity = "0.5";        // visualmente desactivado
-}
 
 /* =========================
  ACTUALIZAR (BLINDADO – NO TOCAR)
