@@ -731,6 +731,8 @@ const supabase = createClient(
  REGISTRO ORIGINAL (CLAVE)
 ========================= */
 let registroOriginal = {};
+let codigoEnviado = "";
+let codigoValidado = false; // 🔐 CONTROL DE FLUJO
 
 /* =========================
  AUXILIARES SEGUROS
