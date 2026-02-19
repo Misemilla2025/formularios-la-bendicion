@@ -790,11 +790,13 @@ window.validarRegistro = async () => {
     (data.primer_nombre || "") + " " + (data.apellidos || "")
   );
 
-  const url = new URL("https://servidor-misemilla-formulario-production.up.railway.app/");
-  url.searchParams.set("doc", numero);
-  url.searchParams.set("correo", correo);
+  const url = new URL(
+  "https://servidor-misemilla-formulario-production.up.railway.app/enviar-codigo"
+);
+url.searchParams.set("doc", numero);
+url.searchParams.set("correo", correo);
 
-  window.location.href = url.toString();
+window.location.href = url.toString();
 };
 
   registroOriginal = data;
