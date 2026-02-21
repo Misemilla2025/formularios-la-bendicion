@@ -790,6 +790,24 @@ window.validarRegistro = async () => {
     alert("Registro no encontrado");
     return;
   }
+  
+  /* ✅ ENVIAR CÓDIGO AL CORREO */
+await fetch(backendURL + "/enviar-codigo", {
+  method:"POST",
+  headers:{
+    "Content-Type":"application/json"
+  },
+  body: JSON.stringify({
+    tipoDoc: datosUsuario.tipoDoc || "CC",
+    numDoc: datosUsuario.numeroDoc,
+    correo: data.correo_validacion
+  })
+});
+
+/* ✅ MOSTRAR SECCIÓN DE CÓDIGO */
+document.getElementById("seccionCodigo")?.classList.remove("hidden");
+
+alert("✅ Registro encontrado\nSe envió un código a tu correo");
 
   registroOriginal = data;
   
