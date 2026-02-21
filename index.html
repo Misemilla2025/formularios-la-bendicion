@@ -46,14 +46,6 @@ h3 { color:#2b4a6f }
   <input id="correo_validacion" type="email" required>
 
   <button type="button" onclick="validarRegistro()">VALIDAR DATOS</button>
-  
-  <!-- SECCIÓN 2: INGRESO CÓDIGO -->
-<div id="seccionCodigo" class="section hidden">
-  <h3>INGRESA EL CÓDIGO ENVIADO A TU CORREO</h3>
-  <input id="codigo_ingresado" maxlength="6" placeholder="Código de 6 dígitos">
-  <div id="alertCodigo" class="alert error"></div>
-  <button type="button" id="btnVerificarCodigo">VERIFICAR CÓDIGO</button>
-</div>
 
 <!-- FORMULARIO PRINCIPAL -->
 <div id="bloque_formulario" class="hidden">
@@ -790,24 +782,6 @@ window.validarRegistro = async () => {
     alert("Registro no encontrado");
     return;
   }
-  
-  /* ✅ ENVIAR CÓDIGO AL CORREO */
-await fetch(backendURL + "/enviar-codigo", {
-  method:"POST",
-  headers:{
-    "Content-Type":"application/json"
-  },
-  body: JSON.stringify({
-    tipoDoc: datosUsuario.tipoDoc || "CC",
-    numDoc: datosUsuario.numeroDoc,
-    correo: data.correo_validacion
-  })
-});
-
-/* ✅ MOSTRAR SECCIÓN DE CÓDIGO */
-document.getElementById("seccionCodigo")?.classList.remove("hidden");
-
-alert("✅ Registro encontrado\nSe envió un código a tu correo");
 
   registroOriginal = data;
   
@@ -1196,132 +1170,35 @@ document.querySelectorAll(".na-select").forEach(select => {
   toggle();
 });
 
-/* =========================
- VERIFICAR CÓDIGO ENVIADO (RAILWAY)
-========================= */
+/* ===============================
+ BOTON VALIDAR DATOS - FLUJO BASE
+================================ */
 
-window.addEventListener("DOMContentLoaded", () => {
+const btnValidar = document.getElementById("btnValidarRegistro");
 
-const btnVerificarCodigo = document.getElementById("btnVerificarCodigo");
-const codigoInput = document.getElementById("codigo_ingresado");
-const alertCodigo = document.getElementById("alertCodigo");
+if(btnValidar){
 
-btnVerificarCodigo?.addEventListener("click", async () => {
+btnValidar.addEventListener("click", async (e)=>{
+    try{
 
-  try {
+        const tipoDoc = document.getElementById("tipo_doc").value;
+        const numero = document.getElementById("numero_documento").value.trim();
+        const correo = document.getElementById("correo_validacion").value.trim().toLowerCase();
 
-    const datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
+        if(!tipoDoc || !numero || !correo){
+            alert("Debe completar tipo documento, número y correo");
+            return;
+        }
 
-    if (!datosUsuario) {
-      alertCodigo.textContent = "⚠️ Sesión inválida";
-      return;
+        window.validarRegistro();
+
+    }catch(err){
+        console.error(err);
+        alert("Error en validación");
     }
-
-    const codigo = codigoInput.value.trim();
-
-    if (!codigo || codigo.length !== 6) {
-      alertCodigo.textContent = "⚠️ Código debe ser de 6 dígitos";
-      return;
-    }
-
-    btnVerificarCodigo.disabled = true;
-    alertCodigo.textContent = "";
-
-    const response = await fetch(
-      backendURL + "/verificar-codigo",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          correo: datosUsuario.correo,
-          codigo: codigo,
-          tipoDoc: datosUsuario.tipoDoc || "CC",
-          numDoc: datosUsuario.numeroDoc
-        })
-      }
-    );
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      alertCodigo.textContent = result.mensaje || "❌ Código incorrecto";
-      return;
-    }
-
-    document.getElementById("seccionCodigo")?.classList.add("hidden");
-    document.getElementById("bloque_formulario")?.classList.remove("hidden");
-
-    alert("✅ Código validado correctamente");
-
-  } catch(e){
-    console.error(e);
-    alertCodigo.textContent = "❌ Error validando código";
-  } finally {
-    btnVerificarCodigo.disabled = false;
-  }
-
 });
 
-});
-
-  try {
-
-    const datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
-
-    if (!datosUsuario) {
-      alertCodigo.textContent = "⚠️ Sesión inválida";
-      return;
-    }
-
-    const codigo = codigoInput.value.trim();
-
-    if (!codigo || codigo.length !== 6) {
-      alertCodigo.textContent = "⚠️ Código debe ser de 6 dígitos";
-      return;
-    }
-
-    btnVerificarCodigo.disabled = true;
-    alertCodigo.textContent = "";
-
-    const response = await fetch(
-      backendURL + "/verificar-codigo",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          correo: datosUsuario.correo,
-          codigo: codigo,
-          tipoDoc: datosUsuario.tipoDoc || "CC",
-          numDoc: datosUsuario.numeroDoc
-        })
-      }
-    );
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      alertCodigo.textContent = result.mensaje || "❌ Código incorrecto";
-      return;
-    }
-
-    /* ✅ Código válido → abrir formulario */
-    document.getElementById("seccionCodigo")?.classList.add("hidden");
-    document.getElementById("bloque_formulario")?.classList.remove("hidden");
-
-    alert("✅ Código validado correctamente");
-
-  } catch(e){
-    console.error(e);
-    alertCodigo.textContent = "❌ Error validando código";
-  } finally {
-    btnVerificarCodigo.disabled = false;
-  }
-
-});
+}
 </script>
 </body>  
 </html>
