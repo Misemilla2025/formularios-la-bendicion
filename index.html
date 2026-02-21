@@ -46,6 +46,14 @@ h3 { color:#2b4a6f }
   <input id="correo_validacion" type="email" required>
 
   <button type="button" onclick="validarRegistro()">VALIDAR DATOS</button>
+  
+  <!-- SECCIÓN 2: INGRESO CÓDIGO -->
+<div id="seccionCodigo" class="section hidden">
+  <h3>INGRESA EL CÓDIGO ENVIADO A TU CORREO</h3>
+  <input id="codigo_ingresado" maxlength="6" placeholder="Código de 6 dígitos">
+  <div id="alertCodigo" class="alert error"></div>
+  <button type="button" id="btnVerificarCodigo">VERIFICAR CÓDIGO</button>
+</div>
 
 <!-- FORMULARIO PRINCIPAL -->
 <div id="bloque_formulario" class="hidden">
@@ -731,8 +739,6 @@ const supabase = createClient(
  REGISTRO ORIGINAL (CLAVE)
 ========================= */
 let registroOriginal = {};
-let codigoEnviado = "";
-let codigoValidado = false; // 🔐 CONTROL DE FLUJO
 
 /* =========================
  AUXILIARES SEGUROS
@@ -785,44 +791,7 @@ window.validarRegistro = async () => {
     return;
   }
 
-  // Guardamos el registro original (lo que ya tenías)
   registroOriginal = data;
-
-  alert(
-    "Registro encontrado\n\n" +
-    (data.primer_nombre || "") + " " + (data.apellidos || "")
-  );
-
-  // ================== ENVIAR CÓDIGO (POST) ==================
-  const res = await fetch(
-    "https://servidor-misemilla-formulario-production.up.railway.app/enviar-codigo",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        tipoDoc: tipoDoc,
-        numDoc: numero,
-        correo: correo
-      })
-    }
-  );
-
-  const resultado = await res.json();
-
-  if (!res.ok) {
-    alert(resultado.mensaje || "Error enviando el código");
-    return;
-  }
-
-  // ================== REDIRECCIÓN FINAL ==================
-  const url = new URL(
-    "https://servidor-misemilla-formulario-production.up.railway.app/"
-  );
-  url.searchParams.set("doc", numero);
-  url.searchParams.set("correo", correo);
-
-  window.location.href = url.toString();
-};
   
   // 🔹 CORREO NUEVO (visualización correcta)
 if (data.correo_nuevo && data.correo_nuevo !== "N/A") {
@@ -919,6 +888,7 @@ if (data.social_security && data.social_security !== "N/A") {
   social_security.style.display = "none";
   social_security.value = "N/A";
 }
+
 
 // 🔹 NUMERO PASAPORTE (visualizacion)
 if (data.pasaporte_num && data.pasaporte_num !== "N/A") {
@@ -1027,6 +997,11 @@ if (billetera && billetera !== "N/A") {
   billeteraTxt.value = "N/A";
 }
 
+  alert(
+    "Registro encontrado\n\n" +
+    (data.primer_nombre || "") + " " + (data.apellidos || "")
+  );
+
   /* 🔹 CAMPOS DIRECTOS */
   setVal("primer_nombre", data.primer_nombre);
   setVal("apellidos", data.apellidos);
@@ -1070,6 +1045,9 @@ if (billetera && billetera !== "N/A") {
     setVal(`ben${i}_tipo_doc`, data[`ben${i}_tipo_doc`]);
     setVal(`ben${i}_parentesco`, data[`ben${i}_parentesco`]);
   }
+
+  document.getElementById("bloque_formulario")?.classList.remove("hidden");
+};
 
 /* =========================
  ACTUALIZAR (BLINDADO – NO TOCAR)
@@ -1198,6 +1176,73 @@ document.querySelectorAll(".na-select").forEach(select => {
 
   // 🔥 ejecuta al cargar datos desde BD
   toggle();
+});
+
+/* =========================
+ VERIFICAR CÓDIGO ENVIADO (RAILWAY)
+========================= */
+
+const btnVerificarCodigo = document.getElementById("btnVerificarCodigo");
+const codigoInput = document.getElementById("codigo_ingresado");
+const alertCodigo = document.getElementById("alertCodigo");
+
+btnVerificarCodigo?.addEventListener("click", async () => {
+
+  try {
+
+    const datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
+
+    if (!datosUsuario) {
+      alertCodigo.textContent = "⚠️ Sesión inválida";
+      return;
+    }
+
+    const codigo = codigoInput.value.trim();
+
+    if (!codigo || codigo.length !== 6) {
+      alertCodigo.textContent = "⚠️ Código debe ser de 6 dígitos";
+      return;
+    }
+
+    btnVerificarCodigo.disabled = true;
+    alertCodigo.textContent = "";
+
+    const response = await fetch(
+      backendURL + "/verificar-codigo",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          correo: datosUsuario.correo,
+          codigo: codigo,
+          tipoDoc: datosUsuario.tipoDoc || "CC",
+          numDoc: datosUsuario.numeroDoc
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      alertCodigo.textContent = result.mensaje || "❌ Código incorrecto";
+      return;
+    }
+
+    /* ✅ Código válido → abrir formulario */
+    document.getElementById("seccionCodigo")?.classList.add("hidden");
+    document.getElementById("bloque_formulario")?.classList.remove("hidden");
+
+    alert("✅ Código validado correctamente");
+
+  } catch(e){
+    console.error(e);
+    alertCodigo.textContent = "❌ Error validando código";
+  } finally {
+    btnVerificarCodigo.disabled = false;
+  }
+
 });
 </script>
 </body>  
