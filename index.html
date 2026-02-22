@@ -799,6 +799,8 @@ window.validarRegistro = async () => {
 
   registroOriginal = data;
   
+  document.getElementById("btnEnviarCodigo").style.display = "block";
+  
   // 🔹 CORREO NUEVO (visualización correcta)
 if (data.correo_nuevo && data.correo_nuevo !== "N/A") {
   correo_nuevo.value = "OTRO";
@@ -1052,7 +1054,7 @@ if (billetera && billetera !== "N/A") {
     setVal(`ben${i}_parentesco`, data[`ben${i}_parentesco`]);
   }
 
-  document.getElementById("bloque_formulario")?.classList.remove("hidden");
+  
 };
 
 /* =========================
