@@ -45,7 +45,9 @@ h3 { color:#2b4a6f }
   <label>CORREO ACTUAL (VALIDACION)</label>
   <input id="correo_validacion" type="email" required>
 
-  <button type="button" onclick="validarRegistro()">VALIDAR DATOS</button>
+  <button type="button" id="btnValidarRegistro" onclick="validarRegistro()">
+VALIDAR DATOS
+</button>
   
   <button type="button" id="btnEnviarCodigo" style="display:none"
 onclick="enviarCodigoCorreo()">
@@ -799,7 +801,11 @@ window.validarRegistro = async () => {
 
   registroOriginal = data;
   
-  document.getElementById("btnEnviarCodigo").style.display = "block";
+  document.getElementById("btnEnviarCodigo")
+  ?.style.setProperty("display","block");
+  
+  document.getElementById("bloque_formulario")
+  ?.classList.add("hidden");
   
   // 🔹 CORREO NUEVO (visualización correcta)
 if (data.correo_nuevo && data.correo_nuevo !== "N/A") {
@@ -1006,9 +1012,23 @@ if (billetera && billetera !== "N/A") {
 }
 
   alert(
-    "Registro encontrado\n\n" +
-    (data.primer_nombre || "") + " " + (data.apellidos || "")
-  );
+  "Registro encontrado\n\n" +
+  (data.primer_nombre || "") + " " + (data.apellidos || "")
+);
+
+/* OCULTAR VALIDAR Y MOSTRAR ENVIAR CODIGO */
+
+const btnValidar = document.getElementById("btnValidarRegistro");
+const btnEnviar = document.getElementById("btnEnviarCodigo");
+
+if(btnValidar){
+  btnValidar.style.display = "none";
+}
+
+if(btnEnviar){
+  btnEnviar.style.display = "block";
+}
+  
 
   /* 🔹 CAMPOS DIRECTOS */
   setVal("primer_nombre", data.primer_nombre);
