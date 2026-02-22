@@ -46,6 +46,20 @@ h3 { color:#2b4a6f }
   <input id="correo_validacion" type="email" required>
 
   <button type="button" onclick="validarRegistro()">VALIDAR DATOS</button>
+  
+  <button type="button" id="btnEnviarCodigo" style="display:none"
+onclick="enviarCodigoCorreo()">
+ENVIAR CÓDIGO AL CORREO
+</button>
+
+<div id="bloqueCodigo" style="display:none; margin-top:15px">
+<label>INGRESE EL CÓDIGO RECIBIDO</label>
+<input id="codigo_verificacion" maxlength="6">
+
+<button type="button" onclick="verificarCodigo()">
+VERIFICAR CÓDIGO
+</button>
+</div>
 
 <!-- FORMULARIO PRINCIPAL -->
 <div id="bloque_formulario" class="hidden">
@@ -727,8 +741,6 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5Ym96eWtiZmVoZmpsZGhheHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMjU0OTMsImV4cCI6MjA3NDkwMTQ5M30.Bj1Jl3-g0gyp1UwsiK-cwjS8Cm2z7Il4_jZ-tCQhbwM"
 );
 
-const backendURL = "https://servidor-misemilla-formulario-production.up.railway.app";
-
 /* =========================
  REGISTRO ORIGINAL (CLAVE)
 ========================= */
@@ -1171,6 +1183,98 @@ document.querySelectorAll(".na-select").forEach(select => {
   // 🔥 ejecuta al cargar datos desde BD
   toggle();
 });
+</script>
+
+<script type="module">
+
+const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
+
+/* =========================
+   ENVÍO CODIGO
+========================= */
+
+window.enviarCodigoCorreo = async () => {
+
+  const correo = document.getElementById("correo_validacion").value.trim().toLowerCase();
+  const tipoDoc = document.getElementById("tipo_doc").value;
+  const numDoc = document.getElementById("numero_documento").value.trim();
+
+  if (!correo || !numDoc) {
+    alert("Complete los datos antes de enviar el código");
+    return;
+  }
+
+  try {
+
+    const res = await fetch(API_BASE + "/enviar-codigo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        correo,
+        tipoDoc,
+        numDoc
+      })
+    });
+
+    const data = await res.json();
+
+    alert(data.mensaje || "Código enviado");
+
+    document.getElementById("bloqueCodigo").style.display = "block";
+
+  } catch (e) {
+    alert("Error enviando código");
+  }
+};
+
+/* =========================
+   VERIFICAR CODIGO
+========================= */
+
+window.verificarCodigo = async () => {
+
+  const correo = document.getElementById("correo_validacion").value.trim().toLowerCase();
+  const codigo = document.getElementById("codigo_verificacion").value.trim();
+
+  if (!codigo) {
+    alert("Ingrese el código");
+    return;
+  }
+
+  try {
+
+    const res = await fetch(API_BASE + "/verificar-codigo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        correo,
+        codigo
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.mensaje || "Código inválido");
+      return;
+    }
+
+    alert("✅ Código validado");
+
+    document.getElementById("bloque_formulario")
+      ?.classList.remove("hidden");
+
+    document.getElementById("bloqueCodigo").style.display = "none";
+
+  } catch (e) {
+    alert("Error verificando código");
+  }
+};
+
 </script>
 </body>  
 </html>
