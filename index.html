@@ -727,6 +727,8 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5Ym96eWtiZmVoZmpsZGhheHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMjU0OTMsImV4cCI6MjA3NDkwMTQ5M30.Bj1Jl3-g0gyp1UwsiK-cwjS8Cm2z7Il4_jZ-tCQhbwM"
 );
 
+const backendURL = "https://servidor-misemilla-formulario-production.up.railway.app";
+
 /* =========================
  REGISTRO ORIGINAL (CLAVE)
 ========================= */
@@ -784,8 +786,6 @@ window.validarRegistro = async () => {
   }
 
   registroOriginal = data;
-  
-  const backendURL = "https://formularios-la-bendicion.up.railway.app";
   
   // 🔹 CORREO NUEVO (visualización correcta)
 if (data.correo_nuevo && data.correo_nuevo !== "N/A") {
@@ -1171,36 +1171,6 @@ document.querySelectorAll(".na-select").forEach(select => {
   // 🔥 ejecuta al cargar datos desde BD
   toggle();
 });
-
-/* ===============================
- BOTON VALIDAR DATOS - FLUJO BASE
-================================ */
-
-const btnValidar = document.getElementById("btnValidarRegistro");
-
-if(btnValidar){
-
-btnValidar.addEventListener("click", async (e)=>{
-    try{
-
-        const tipoDoc = document.getElementById("tipo_doc").value;
-        const numero = document.getElementById("numero_documento").value.trim();
-        const correo = document.getElementById("correo_validacion").value.trim().toLowerCase();
-
-        if(!tipoDoc || !numero || !correo){
-            alert("Debe completar tipo documento, número y correo");
-            return;
-        }
-
-        window.validarRegistro();
-
-    }catch(err){
-        console.error(err);
-        alert("Error en validación");
-    }
-});
-
-}
 </script>
 </body>  
 </html>
