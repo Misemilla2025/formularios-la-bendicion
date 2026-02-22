@@ -785,6 +785,8 @@ window.validarRegistro = async () => {
 
   registroOriginal = data;
   
+  const backendURL = "https://formularios-la-bendicion.up.railway.app";
+  
   // 🔹 CORREO NUEVO (visualización correcta)
 if (data.correo_nuevo && data.correo_nuevo !== "N/A") {
   correo_nuevo.value = "OTRO";
