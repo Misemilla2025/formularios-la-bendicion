@@ -5,63 +5,122 @@
 <title>ACTUALIZACION REGISTROS LA BENDICION</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body { font-family: Arial, sans-serif; background: linear-gradient(135deg,#eef2f7,#f9fbff); padding:20px }
-h2 { text-align:center; color:#2b4a6f }
-form { background:#fff; padding:20px; border-radius:10px; max-width:900px; margin:auto; box-shadow:0 4px 12px rgba(0,0,0,.08) }
-label { display:block; margin-top:12px; font-weight:bold; color:#34495e }
-input, select { width:100%; padding:9px; margin-top:4px; border-radius:6px; border:1px solid #ccc }
-input:focus, select:focus { outline:none; border-color:#4a90e2 }
-button { margin-top:20px; padding:14px; width:100%; font-size:16px; background:#4a90e2; color:#fff; border:none; border-radius:8px; cursor:pointer }
-button:hover { background:#357ab8 }
-.hidden { display:none }
-.section { border-top:1px solid #dde3ec; margin-top:25px; padding-top:15px }
-h3 { color:#2b4a6f }
-</style>
+body { 
+    font-family: Arial, sans-serif; 
+    background: linear-gradient(135deg, #eef2f7, #f9fbff); 
+    padding: 20px; /* Añadido punto y coma */
+}
 
+h2 { 
+    text-align: center; 
+    color: #2b4a6f; /* Añadido punto y coma */
+}
+
+form { 
+    background: #fff; 
+    padding: 20px; 
+    border-radius: 10px; 
+    max-width: 900px; 
+    margin: auto; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08); /* Añadido punto y coma */
+}
+
+label { 
+    display: block; 
+    margin-top: 12px; 
+    font-weight: bold; 
+    color: #34495e; /* Añadido punto y coma */
+}
+
+input, select { 
+    width: 100%; 
+    padding: 9px; 
+    margin-top: 4px; 
+    border-radius: 6px; 
+    border: 1px solid #ccc; /* Añadido punto y coma */
+}
+
+input:focus, select:focus { 
+    outline: none; 
+    border-color: #4a90e2; /* Añadido punto y coma */
+}
+
+button { 
+    margin-top: 20px; 
+    padding: 14px; 
+    width: 100%; 
+    font-size: 16px; 
+    background: #4a90e2; 
+    color: #fff; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; /* Añadido punto y coma */
+}
+
+button:hover { 
+    background: #357ab8; /* Añadido punto y coma */
+}
+
+/* Eliminada la duplicación de la clase .hidden */
+.hidden { 
+    display: none; /* Unificada la regla y añadido espacio para legibilidad */
+}
+
+.section { 
+    border-top: 1px solid #dde3ec; 
+    margin-top: 25px; 
+    padding-top: 15px; /* Añadido punto y coma */
+}
+
+h3 { 
+    color: #2b4a6f; /* Añadido punto y coma */
+}
+
+</style>
 </head>
 <body>
 
 <h2>ACTUALIZACION REGISTROS LA BENDICION</h2>
 
 <form id="formulario">
+ <!-- VALIDACIÓN -->
+ <div id="seccionValidacion">
+ <div class="section">
+   <select id="tipo_doc" required>
+   <option value="">SELECCIONE</option>
+   <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
+   <option value="CEDULA_VENEZOLANA">CEDULA VENEZOLANA</option>
+   <option value="DNI">DNI</option>
+   <option value="IDMEX">IDMEX</option>
+   <option value="INE">INE</option>
+   <option value="LICENCIA_CONDUCIR">LICENCIA DE CONDUCIR</option>
+ </select>
+ <label>NUMERO DE DOCUMENTO</label>
+ <input id="numero_documento" required
+        placeholder="Solo Mayusculas y Numeros"
+        oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+   <label>CORREO ACTUAL (VALIDACION)</label>
+   <input id="correo_validacion" type="email" required>
+   <button type="button" id="btnValidarRegistro" onclick="validarRegistro()">
+ VALIDAR DATOS
+ </button>
+   
+   <button type="button" id="btnEnviarCodigo" style="display:none"
+ onclick="enviarCodigoCorreo()">
+ ENVIAR CÓDIGO AL CORREO
+ </button>
+ <div id="bloqueCodigo" style="display:none; margin-top:15px">
+ <label>INGRESE EL CÓDIGO RECIBIDO</label>
+ <input id="codigo_verificacion" maxlength="6">
+ <p id="contadorOTP" style="margin-top:10px; font-weight:bold;"></p>
+ <button type="button" onclick="verificarCodigo()">
+ VERIFICAR CÓDIGO
+ </button>
+ </div>
+ </div>
+ </div>
 
-<!-- VALIDACIÓN -->
-<div class="section">
-  <select id="tipo_doc" required>
-  <option value="">SELECCIONE</option>
-  <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
-  <option value="CEDULA_VENEZOLANA">CEDULA VENEZOLANA</option>
-  <option value="DNI">DNI</option>
-  <option value="IDMEX">IDMEX</option>
-  <option value="INE">INE</option>
-  <option value="LICENCIA_CONDUCIR">LICENCIA DE CONDUCIR</option>
-</select>
 
-<label>NUMERO DE DOCUMENTO</label>
-<input id="numero_documento" required
-       placeholder="Solo Mayusculas y Numeros"
-       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
-
-  <label>CORREO ACTUAL (VALIDACION)</label>
-  <input id="correo_validacion" type="email" required>
-
-  <button type="button" id="btnValidarRegistro" onclick="validarRegistro()">
-VALIDAR DATOS
-</button>
-  
-  <button type="button" id="btnEnviarCodigo" style="display:none"
-onclick="enviarCodigoCorreo()">
-ENVIAR CÓDIGO AL CORREO
-</button>
-
-<div id="bloqueCodigo" style="display:none; margin-top:15px">
-<label>INGRESE EL CÓDIGO RECIBIDO</label>
-<input id="codigo_verificacion" maxlength="6">
-
-<button type="button" onclick="verificarCodigo()">
-VERIFICAR CÓDIGO
-</button>
-</div>
 
 <!-- FORMULARIO PRINCIPAL -->
 <div id="bloque_formulario" class="hidden">
@@ -99,13 +158,12 @@ VERIFICAR CÓDIGO
   <label>APELLIDOS COMPLETOS</label>
   <input id="apellidos" required>
 
-  <label>GENERO</label>
-<select id="genero" required>
-  <option value="MALE">MALE</option>
-  <option value="FEMALE">FEMALE</option>
-  <option value="PREFER NOT TO SAY">PREFER NOT TO SAY</option>
+  <select id="genero">
+  <option value="">SELECCIONE</option>
+  <option value="MASCULINO">MASCULINO</option>
+  <option value="FEMENINO">FEMENINO</option>
+  <option value="PREFIERO NO RESPONDER">PREFIERO NO RESPONDER</option>
 </select>
-</div>
 
 <div class="section">
   <label>PAIS DE CIUDADANIA</label>
@@ -487,22 +545,67 @@ VERIFICAR CÓDIGO
   </select>
 
   <label>COMPRO PAQUETE LA BENDICION</label>
-  <select id="paquete_bendicion" required>
-    <option>SI</option>
-    <option>NO</option>
-  </select>
+<select id="paquete_bendicion" required>
+  <option value="">SELECCIONE</option>
+  <option value="SI">SI</option>
+  <option value="NO">NO</option>
+</select>
 
-  <label>COMPRO PAQUETE COMERCIALIZADORA VENCER</label>
-  <select id="paquete_vencer" required>
-    <option>SI</option>
-    <option>NO</option>
-  </select>
+<label>COMPRO PAQUETE COMERCIALIZADORA VENCER</label>
+<select id="paquete_vencer" required>
+  <option value="">SELECCIONE</option>
+  <option value="SI">SI</option>
+  <option value="NO">NO</option>
+</select>
 
-  <label>PERTENECE DIAMANTE 700</label>
-  <select id="diamante_700" required>
-    <option>SI</option>
-    <option>NO</option>
+<label>PERTENECE DIAMANTE 700</label>
+<select id="diamante_700" required>
+  <option value="">SELECCIONE</option>
+  <option value="SI">SI</option>
+  <option value="NO">NO</option>
+</select>
+</div>
+
+<!-- =========================
+REGISTRO BANCUS
+========================= -->
+
+<div class="form-group" style="margin-top:15px;">
+  <label for="bancus_registro">
+    ¿Usted se registró en Bancus?
+  </label>
+
+  <select id="bancus_registro">
+    <option value="NO">NO</option>
+    <option value="SI">SI</option>
   </select>
+</div>
+
+<!-- CONTENEDOR CORREO -->
+<div id="bancus_correo_container" style="display:none; margin-top:10px;">
+  <label for="bancus_correo">
+    Escriba el correo con el que se registró
+  </label>
+
+  <input
+    type="email"
+    id="bancus_correo"
+    placeholder="correo@ejemplo.com"
+    style="text-transform: lowercase;"
+  />
+</div>
+
+<!-- CONTENEDOR LIDER -->
+<div id="bancus_lider_container" style="display:none; margin-top:10px;">
+  <label for="bancus_lider">
+    Escriba el líder con el que se registró
+  </label>
+
+  <input
+    type="text"
+    id="bancus_lider"
+    placeholder="Nombre del líder"
+  />
 </div>
 
 <button type="button" onclick="actualizarRegistro()">ACTUALIZAR DATOS</button>
@@ -541,16 +644,22 @@ document.querySelectorAll('input[type="text"], input:not([type])')
 });
 
 /* =========================
-   EMAILS — MINÚSCULAS + @
+ EMAILS — VALIDACIÓN EN DOM (SUAVE)
 ========================= */
-["correo_validacion","correo_nuevo_text"].forEach(id=>{
+
+["correo_validacion","correo_nuevo_text","bancus_correo"].forEach(id=>{
   const el=document.getElementById(id);
   if(!el) return;
 
   el.addEventListener("input",()=>{
-    el.value=aMinus(el.value);
+    el.value = el.value.toLowerCase();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     el.setCustomValidity(
-      el.value.includes("@") ? "" : "Debe contener @"
+      emailRegex.test(el.value) || el.value === ""
+        ? ""
+        : "Correo con formato inválido"
     );
   });
 });
@@ -573,8 +682,17 @@ codigoPostal && codigoPostal.addEventListener("input", ()=>{
 });
 
 const socialSecurity = document.getElementById("social_security");
-socialSecurity && socialSecurity.addEventListener("input", ()=>{
-  socialSecurity.value = socialSecurity.value.replace(/\D/g,"");
+
+socialSecurity && socialSecurity.addEventListener("input", () => {
+
+  // 1. Convertir a mayúsculas
+  let valor = socialSecurity.value.toUpperCase();
+
+  // 2. Permitir solo A-Z y 0-9
+  valor = valor.replace(/[^A-Z0-9]/g, "");
+
+  socialSecurity.value = valor;
+
 });
 
 /* =========================
@@ -736,6 +854,7 @@ estado.addEventListener("change",()=>{
 </script>
 
 <script type="module">
+
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const supabase = createClient(
@@ -762,10 +881,17 @@ const naValue = (selId, txtId, campoBD) => {
 
   if (!sel) return registroOriginal[campoBD] ?? "N/A";
 
+  // Si selecciona OTRO
   if (sel.value === "OTRO") {
-    return txt?.value || registroOriginal[campoBD] || "N/A";
+    return txt?.value?.trim() || "N/A";
   }
 
+  // Si selecciona N/A
+  if (sel.value === "N/A") {
+    return "N/A";
+  }
+
+  // Si no cambió nada
   return registroOriginal[campoBD] ?? "N/A";
 };
 
@@ -778,7 +904,7 @@ window.validarRegistro = async () => {
   const correo  = document.getElementById("correo_validacion").value.trim().toLowerCase();
 
   if (!tipoDoc || !numero || !correo) {
-    alert("Debe ingresar tipo de documento, número de documento y correo");
+    alert(" ⚠️ Debe ingresar tipo de documento, número de documento y correo");
     return;
   }
 
@@ -795,11 +921,13 @@ window.validarRegistro = async () => {
   }
 
   if (!data) {
-    alert("Registro no encontrado");
+    alert("⚠️ Registro no encontrado");
     return;
   }
 
   registroOriginal = data;
+  
+  
   
   document.getElementById("btnEnviarCodigo")
   ?.style.setProperty("display","block");
@@ -955,6 +1083,8 @@ if (data.autoridad_sel && data.autoridad_sel !== "N/A") {
   autoridad_sel_txt.value = "N/A";
 }
 
+
+
 // ===== BENEFICIARIOS 1, 2, 3 =====
 [1, 2, 3].forEach(i => {
   const nombre = registroOriginal[`ben${i}_nombre_sel`];
@@ -1011,9 +1141,26 @@ if (billetera && billetera !== "N/A") {
   billeteraTxt.value = "N/A";
 }
 
+
+
+// ===== BANCUS =====
+document.getElementById("bancus_registro").value =
+  registroOriginal.bancus_registro || "NO";
+
+document.getElementById("bancus_correo").value =
+  registroOriginal.bancus_correo || "";
+
+document.getElementById("bancus_lider").value =
+  registroOriginal.bancus_lider || "";
+
+controlarBancus(false);
+
+
+
   alert(
-  "Registro encontrado\n\n" +
-  (data.primer_nombre || "") + " " + (data.apellidos || "")
+       " 😃 Registro encontrado\n\n" +
+       (data.primer_nombre || "") + " " + (data.apellidos || "") + "\n\n" +
+       "A continuación dele click al botón enviar código al correo para que pueda validar y actualizar su información registrada 👉 este código tiene una duración de 3 minutos pasado ese tiempo puede solicitar otro tocando el botón enviar código al correo 👈"
 );
 
 /* OCULTAR VALIDAR Y MOSTRAR ENVIAR CODIGO */
@@ -1028,6 +1175,8 @@ if(btnValidar){
 if(btnEnviar){
   btnEnviar.style.display = "block";
 }
+
+
   
 
   /* 🔹 CAMPOS DIRECTOS */
@@ -1040,11 +1189,16 @@ if(btnEnviar){
   setVal("indicativo", data.indicativo);
   setVal("telegram", data.telegram);
   setVal("lider", data.lider);
+  setVal("genero", data.genero);
 
   setVal("pais_residencia", data.pais_residencia);
   setVal("estado", data.estado);
   setVal("ciudad", data.ciudad);
   setVal("pais_pasaporte", data.pais_pasaporte);
+  
+  setVal("paquete_bendicion", data.paquete_bendicion);
+setVal("paquete_vencer", data.paquete_vencer);
+setVal("diamante_700", data.diamante_700);
 
   /* 🔹 CAMPOS N/A */
   const setNa = (sel, txt, val) => {
@@ -1078,22 +1232,60 @@ if(btnEnviar){
 };
 
 /* =========================
+CONTROL TOTAL BANCUS
+========================= */
+
+function controlarBancus(limpiar = true) {
+
+  const selectBancus = document.getElementById("bancus_registro");
+  const contenedorCorreo = document.getElementById("bancus_correo_container");
+  const contenedorLider = document.getElementById("bancus_lider_container");
+  const inputCorreo = document.getElementById("bancus_correo");
+  const inputLider = document.getElementById("bancus_lider");
+
+  if (!selectBancus || !contenedorCorreo || !contenedorLider || !inputCorreo || !inputLider) return;
+
+  if (selectBancus.value === "SI") {
+
+    contenedorCorreo.style.display = "block";
+    contenedorLider.style.display = "block";
+
+  } else {
+
+    contenedorCorreo.style.display = "none";
+    contenedorLider.style.display = "none";
+
+    if (limpiar) {
+      inputCorreo.value = "";
+      inputLider.value = "";
+    }
+  }
+}
+
+document.getElementById("bancus_registro")
+  ?.addEventListener("change", () => controlarBancus(true));
+
+/* =========================
  ACTUALIZAR (BLINDADO – NO TOCAR)
 ========================= */
 window.actualizarRegistro = async () => {
   const numero = numero_documento.value.trim();
   const correo = correo_validacion.value.trim().toLowerCase();
   
-  /* =========================
-   SINCRONIZAR CORREO
+/* =========================
+ SINCRONIZAR CORREO NUEVO
 ========================= */
+
 let correoParaValidar = correo;
 
 if (correo_nuevo.value === "OTRO") {
+
   const nuevoCorreo = correo_nuevo_text.value.trim().toLowerCase();
 
-  if (!nuevoCorreo.includes("@")) {
-    alert("El correo nuevo debe contener @");
+  const emailRegex = /^[^\s@]+\@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(nuevoCorreo)) {
+    alert("⚠️ El correo nuevo  que desea actualizar debe incluir @ y un dominio válido (.com, .net, etc.)");
     return;
   }
 
@@ -1102,12 +1294,35 @@ if (correo_nuevo.value === "OTRO") {
 
   // 🔒 validar tratamiento de datos
 if (autoriza_datos.value !== "SI") {
-  alert("Debe aceptar el tratamiento de datos personales para poder enviar el formulario.");
+  alert("⚠️ Debe aceptar el tratamiento de datos personales para poder enviar el formulario.");
   return; // Detiene el envío
 }
-  
-  
 
+let bancusRegistro = document.getElementById("bancus_registro")?.value || "NO";
+let bancusCorreoFinal = "N/A";
+let bancusLiderFinal = "N/A";
+
+if (bancusRegistro === "SI") {
+
+  const correoValor = document.getElementById("bancus_correo")?.value.trim().toLowerCase() || "";
+  const liderValor = document.getElementById("bancus_lider")?.value.trim().toUpperCase() || "";
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|co|edu|gov|info|biz|io|es|mx|cl|pe)$/i;
+
+  if (!emailRegex.test(correoValor)) {
+    alert("⚠️ El correo de Bancus debe incluir @ y un dominio válido (.com, .net, etc.)");
+    return;
+  }
+
+  if (!liderValor) {
+    alert("⚠️ Debe escribir el líder con el que se registró en Bancus");
+    return;
+  }
+
+  bancusCorreoFinal = correoValor;
+  bancusLiderFinal = liderValor;
+}
+  
   const payload = {
   primer_nombre: primer_nombre.value || registroOriginal.primer_nombre,
   segundo_nombre_sel: naValue("segundo_nombre_sel","segundo_nombre_sel_txt","segundo_nombre_sel"),
@@ -1129,7 +1344,7 @@ if (autoriza_datos.value !== "SI") {
     ? social_security.value.replace(/\D/g, '')
     : "N/A",
 
-  genero: genero.value || registroOriginal.genero,
+  genero: (genero.value || registroOriginal.genero || "N/A").toUpperCase(),
   pais_ciudadania: pais_ciudadania.value || registroOriginal.pais_ciudadania,
   idioma: idioma.value || registroOriginal.idioma,
 
@@ -1155,32 +1370,108 @@ if (autoriza_datos.value !== "SI") {
   ben3_documento_sel: naValue("ben3_documento_sel","ben3_documento_sel_txt","ben3_documento_sel"),
   ben3_parentesco: ben3_parentesco.value || registroOriginal.ben3_parentesco,
 
-  billetera_usdt: naValue("billetera_usdt","billetera_usdt_txt","billetera_usdt"),
+  billetera_usdt:
+document.getElementById("billetera_usdt")?.value === "OTRO"
+  ? document.getElementById("billetera_usdt_txt")?.value?.trim() || "N/A"
+  : document.getElementById("billetera_usdt")?.value === "N/A"
+    ? "N/A"
+    : registroOriginal?.billetera_usdt || "N/A",
   lider: lider.value || registroOriginal.lider,
   autoriza_datos: autoriza_datos.value,
   paquete_bendicion: paquete_bendicion.value,
   paquete_vencer: paquete_vencer.value,
-  diamante_700: diamante_700.value
+  diamante_700: diamante_700.value,
+  bancus_registro: bancusRegistro,
+bancus_correo: bancusCorreoFinal,
+bancus_lider: bancusLiderFinal
+  
 };
 
-  // 🔹 Ejecutar actualización en Supabase
-  const { error } = await supabase
-    .from("actualizacion_registros_la_bendicion")
-    .update(payload)
-    .eq("numero_documento", numero)
-    .eq("correo_validacion", registroOriginal.correo_validacion);
+  try {
 
-  if (error) {
-    alert(error.message);
-    return;
+    const { data, error } = await supabase
+  .from("actualizacion_registros_la_bendicion")
+  .update(payload)
+  .eq("numero_documento", numero)
+  .eq("correo_validacion", registroOriginal.correo_validacion)
+  .select();
+
+if (error) throw error;
+
+console.log("Resultado update:", data);
+
+if (!data || data.length === 0) {
+  alert("⚠️ No se encontró ningún registro para actualizar.");
+  return;
+}
+
+/* =========================
+   AUDITORÍA DE CAMBIOS
+========================= */
+
+const CAMPOS_NO_AUDITAR = [
+  "tipo_doc",
+  "numero_documento",
+  "primer_nombre",
+  "segundo_nombre_sel",
+  "apellidos",
+  "fecha_nacimiento_doc",
+  "genero",
+  "idioma",
+  "paquete_bendicion",
+  "paquete_vencer",
+  "diamante_700"
+];
+
+const cambios = [];
+
+for (const campo in payload) {
+
+  if (CAMPOS_NO_AUDITAR.includes(campo)) continue;
+
+  const valorAnterior = registroOriginal?.[campo] ?? "N/A";
+  const valorNuevo = payload[campo] ?? "N/A";
+
+  if (String(valorAnterior) !== String(valorNuevo)) {
+    cambios.push({
+      documento_usuario: registroOriginal.numero_documento,
+      correo_usuario: registroOriginal.correo_validacion,
+      nombre_completo_usuario:
+        registroOriginal.primer_nombre + " " + registroOriginal.apellidos,
+      campo_modificado: campo,
+      valor_anterior: valorAnterior,
+      valor_nuevo: valorNuevo,
+      tipo_operacion: "ACTUALIZACION"
+    });
   }
+}
 
-  // Actualizamos la referencia interna
-  registroOriginal.correo_validacion = payload.correo_validacion;
+if (cambios.length > 0) {
+  const { error: errorAuditoria } = await supabase
+    .from("auditoria_actualizaciones")
+    .insert(cambios);
 
-  // ✅ Mostrar mensaje y cerrar formulario
-  alert("Datos actualizados correctamente ✅");
-  document.getElementById("bloque_formulario")?.classList.add("hidden");
+  if (errorAuditoria) {
+    console.log("Error auditoría:", errorAuditoria);
+  }
+}
+
+/* =========================
+   FIN AUDITORÍA
+========================= */
+
+alert("✅ Datos actualizados correctamente! 🔔 Gracias por actualizar su información si requiere, podrá hacerlo dentro de 30 días nuevamente 🗓️");
+
+const formulario = document.getElementById("bloque_formulario");
+if (formulario) {
+  formulario.style.display = "none";
+}
+
+  } catch (error) {
+
+    console.log(error);
+    alert("❌ Error al actualizar: " + error.message);
+  }
 };
 
 /* =========================
@@ -1208,6 +1499,10 @@ document.querySelectorAll(".na-select").forEach(select => {
 </script>
 
 <script type="module">
+let timerOTP = null;
+let intervalOTP = null;
+let intervaloExpiracion = null; // Nueva variable para el temporizador persistente
+let tiempoExpiracionCodigo = null; // Nueva variable para guardar el tiempo de expiración
 
 const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
 
@@ -1217,12 +1512,24 @@ const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.ap
 
 window.enviarCodigoCorreo = async () => {
 
+  // 1. BLOQUEAR BOTÓN INMEDIATAMENTE AL HACER CLIC
+  const btnEnviarCodigo = document.getElementById('btnEnviarCodigo');
+  if (btnEnviarCodigo) {
+    btnEnviarCodigo.disabled = true;
+    btnEnviarCodigo.textContent = 'Enviando código...';
+  }
+
   const correo = document.getElementById("correo_validacion").value.trim().toLowerCase();
   const tipoDoc = document.getElementById("tipo_doc").value;
   const numDoc = document.getElementById("numero_documento").value.trim();
 
   if (!correo || !numDoc) {
-    alert("Complete los datos antes de enviar el código");
+    alert("⚠️ Complete los datos antes de enviar el código");
+    // Si hay error de datos, volvemos a activar el botón para que reintente
+    if (btnEnviarCodigo) {
+      btnEnviarCodigo.disabled = false;
+      btnEnviarCodigo.textContent = 'ENVIAR CÓDIGO AL CORREO';
+    }
     return;
   }
 
@@ -1241,15 +1548,84 @@ window.enviarCodigoCorreo = async () => {
     });
 
     const data = await res.json();
+    
+    if (!res.ok) {
+      alert(data.mensaje || "Error enviando código");
+      // Si hay error en el envío, volvemos a activar el botón para que reintente
+      if (btnEnviarCodigo) {
+        btnEnviarCodigo.disabled = false;
+        btnEnviarCodigo.textContent = 'ENVIAR CÓDIGO AL CORREO';
+      }
+      return;
+    }
 
-    alert(data.mensaje || "Código enviado");
+    /* ===============================
+       SOLO SI BACKEND RESPONDIÓ OK
+    =============================== */
 
-    document.getElementById("bloqueCodigo").style.display = "block";
+    alert(" 🔐 Codigo enviado revise su correo copié y pegué después de aceptar el numero de seis dígitos que le llego");
+
+    const btnEnviar = document.getElementById("btnEnviarCodigo");
+    const bloqueCodigo = document.getElementById("bloqueCodigo");
+    const contador = document.getElementById("contadorOTP");
+
+    if (btnEnviar) {
+      btnEnviar.style.display = "none";
+      btnEnviar.disabled = true; // Ya lo tenías, lo mantenemos por seguridad
+    }
+
+    if (bloqueCodigo) {
+      bloqueCodigo.style.display = "block";
+    }
+
+    // ===== INICIAR CONTADOR 3 MINUTOS (PERSISTENTE) =====
+    // Limpiar cualquier intervalo anterior para evitar duplicados
+    if (intervaloExpiracion) {
+      clearInterval(intervaloExpiracion);
+    }
+
+    tiempoExpiracionCodigo = 180; // 3 minutos en segundos
+
+    intervaloExpiracion = setInterval(() => {
+      let minutos = Math.floor(tiempoExpiracionCodigo / 60);
+      let segundos = tiempoExpiracionCodigo % 60;
+
+      if (contador) {
+        contador.textContent =
+          "El código expira en: " +
+          String(minutos).padStart(2, "0") +
+          ":" +
+          String(segundos).padStart(2, "0");
+      }
+
+      tiempoExpiracionCodigo--;
+
+      if (tiempoExpiracionCodigo < 0) {
+        clearInterval(intervaloExpiracion);
+
+        if (bloqueCodigo) bloqueCodigo.style.display = "none";
+        if (btnEnviar) {
+          btnEnviar.style.display = "block";
+          btnEnviar.disabled = false; // Al expirar, volvemos a activar el botón
+          btnEnviar.textContent = 'ENVIAR CÓDIGO AL CORREO';
+        }
+        if (contador) contador.textContent = "";
+      }
+    }, 1000);
+
+    // respaldo de seguridad por si algo falla
+    timerOTP = setTimeout(() => {}, 180000);
 
   } catch (e) {
-    alert("Error enviando código");
+    alert("⚠️ Error enviando código");
+    // Si hay error de conexión o otro, volvemos a activar el botón
+    if (btnEnviarCodigo) {
+      btnEnviarCodigo.disabled = false;
+      btnEnviarCodigo.textContent = 'ENVIAR CÓDIGO AL CORREO';
+    }
   }
 };
+
 
 /* =========================
    VERIFICAR CODIGO
@@ -1257,11 +1633,19 @@ window.enviarCodigoCorreo = async () => {
 
 window.verificarCodigo = async () => {
 
+  if (timerOTP) clearTimeout(timerOTP);
+  if (intervalOTP) clearInterval(intervalOTP);
+
   const correo = document.getElementById("correo_validacion").value.trim().toLowerCase();
-  const codigo = document.getElementById("codigo_verificacion").value.trim();
+  const codigo = document.getElementById("codigo_verificacion")
+  .value
+  .replace(/\s/g, '');
+  const documento = document.getElementById("numero_documento").value.trim();
+  const boton = document.getElementById("btnVerificarCodigo"); // Coincide con el HTML
+  const contador = document.getElementById("contadorOTP");
 
   if (!codigo) {
-    alert("Ingrese el código");
+    alert("⚠️ Ingrese el código");
     return;
   }
 
@@ -1274,25 +1658,118 @@ window.verificarCodigo = async () => {
       },
       body: JSON.stringify({
         correo,
-        codigo
+        codigo,
+        documento
       })
     });
 
     const data = await res.json();
+
+    // 🛑 Agregamos esto para ver exactamente qué llega del backend
+    console.log("Datos recibidos del backend:", data);
+    console.log("Tipo de bloqueo recibido:", data.tipoBloqueo);
+
+    /* ===============================
+       SI BLOQUEADO (403)
+    =============================== */
+
+    if (res.status === 403) {
+      let tiempo;
+      let mensaje;
+
+      // Verificar tipo de bloqueo con más tolerancia
+      if (data.tipoBloqueo === "30_dias" || data.mensaje?.includes("30 días")) {
+        // Bloqueo de 30 días → mensaje y tiempo correctos
+        mensaje = "⛔ Ya actualizaste tu información, Bloqueado por 30 días.";
+        tiempo = 30 * 24 * 60 * 60; // 30 días en segundos
+      } else {
+        // Bloqueo de 30 minutos → mensaje y tiempo correctos
+        mensaje = "⛔ Haz ingresado el código 5 veces sin éxito, Bloqueado por 30 minutos.";
+        tiempo = 30 * 60; // 30 minutos en segundos
+      }
+
+      alert(mensaje); // El alert coincide con el tipo de bloqueo
+
+      if (boton) {
+        boton.disabled = true;
+      }
+
+      intervalOTP = setInterval(() => {
+
+        // Calcular días, horas, minutos y segundos para el bloqueo
+        const dias = Math.floor(tiempo / (24 * 60 * 60));
+        const horas = Math.floor((tiempo % (24 * 60 * 60)) / (60 * 60));
+        const minutos = Math.floor((tiempo % (60 * 60)) / 60);
+        const segundos = tiempo % 60;
+
+        if (boton) {
+          // Mostrar días solo si es mayor a 0, sino mostrar horas/minutos/segundos
+          if (dias > 0) {
+            boton.innerText = 
+              `Bloqueado ${dias}d ${horas}h ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+          } else {
+            boton.innerText = 
+              `Bloqueado ${horas}h ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+          }
+        }
+
+        tiempo--;
+
+        if (tiempo < 0) {
+          clearInterval(intervalOTP);
+
+          if (boton) {
+            boton.disabled = false;
+            boton.innerText = "Verificar Código";
+          }
+        }
+
+      }, 1000);
+
+      return;
+    }
+
+    /* ===============================
+       OTROS ERRORES
+    =============================== */
 
     if (!res.ok) {
       alert(data.mensaje || "Código inválido");
       return;
     }
 
-    alert("✅ Código validado");
+    /* ===============================
+       CODIGO CORRECTO
+    =============================== */
 
-    document.getElementById("bloque_formulario")
-      ?.classList.remove("hidden");
+    // Detener el temporizador de expiración porque el código fue validado
+    if (intervaloExpiracion) {
+      clearInterval(intervaloExpiracion);
+    }
+    if (contador) {
+      contador.textContent = "";
+    }
 
-    document.getElementById("bloqueCodigo").style.display = "none";
+    alert("💻 Datos cargados correctamente ✅ verificación exitosa, ya puede ingresar revisar y actualizar su información");
+
+    const formulario = document.getElementById("bloque_formulario");
+    const validacion = document.getElementById("seccionValidacion");
+    const modalConfirmacion = document.getElementById("modalConfirmacion");
+
+    if (formulario) {
+      formulario.style.setProperty("display", "block", "important");
+    }
+
+    if (validacion) {
+      validacion.style.setProperty("display", "none", "important");
+    }
+
+    if (modalConfirmacion) {
+      modalConfirmacion.style.display = "none"; // Ocultamos mensaje al entrar
+    }
 
   } catch (e) {
+    console.error("Error detallado en verificarCodigo:", e); // Para ver errores en consola
     alert("Error verificando código");
   }
 };
