@@ -1157,10 +1157,16 @@ controlarBancus(false);
 
 
 
-  alert(
-       " 😃 Registro encontrado\n\n" +
-       (data.primer_nombre || "") + " " + (data.apellidos || "") + "\n\n" +
-       "A continuación dele click al botón enviar código al correo para que pueda validar y actualizar su información registrada 👉 este código tiene una duración de 3 minutos pasado ese tiempo puede solicitar otro tocando el botón enviar código al correo 👈"
+  const nombreCompleto = [
+  data.primer_nombre,
+  data.segundo_nombre_sel,
+  data.apellidos
+].filter(Boolean).join(" ");
+
+alert(
+  " 😃 Registro encontrado\n\n" +
+  nombreCompleto +
+  "\n\nA continuación dele click al botón enviar código al correo para que pueda validar y actualizar su información registrada 👉 este código tiene una duración de 3 minutos pasado ese tiempo puede solicitar otro tocando el botón enviar código al correo 👈"
 );
 
 /* OCULTAR VALIDAR Y MOSTRAR ENVIAR CODIGO */
@@ -1777,3 +1783,4 @@ window.verificarCodigo = async () => {
 </script>
 </body>  
 </html>
+es
