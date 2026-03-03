@@ -862,6 +862,8 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5Ym96eWtiZmVoZmpsZGhheHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMjU0OTMsImV4cCI6MjA3NDkwMTQ5M30.Bj1Jl3-g0gyp1UwsiK-cwjS8Cm2z7Il4_jZ-tCQhbwM"
 );
 
+const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
+
 /* =========================
  REGISTRO ORIGINAL (CLAVE)
 ========================= */
@@ -926,8 +928,6 @@ window.validarRegistro = async () => {
   }
 
   registroOriginal = data;
-  
-  
   
   document.getElementById("btnEnviarCodigo")
   ?.style.setProperty("display","block");
@@ -1031,7 +1031,6 @@ if (data.social_security && data.social_security !== "N/A") {
   social_security.value = "N/A";
 }
 
-
 // 🔹 NUMERO PASAPORTE (visualizacion)
 if (data.pasaporte_num && data.pasaporte_num !== "N/A") {
   pasaporte_num.value = "OTRO";
@@ -1082,8 +1081,6 @@ if (data.autoridad_sel && data.autoridad_sel !== "N/A") {
   autoridad_sel_txt.style.display = "none";
   autoridad_sel_txt.value = "N/A";
 }
-
-
 
 // ===== BENEFICIARIOS 1, 2, 3 =====
 [1, 2, 3].forEach(i => {
@@ -1181,9 +1178,6 @@ if(btnValidar){
 if(btnEnviar){
   btnEnviar.style.display = "block";
 }
-
-
-  
 
   /* 🔹 CAMPOS DIRECTOS */
   setVal("primer_nombre", data.primer_nombre);
@@ -1518,11 +1512,14 @@ const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.ap
 
 window.enviarCodigoCorreo = async () => {
 
-  // 1. BLOQUEAR BOTÓN INMEDIATAMENTE AL HACER CLIC
-  const btnEnviarCodigo = document.getElementById('btnEnviarCodigo');
-  if (btnEnviarCodigo) {
-    btnEnviarCodigo.disabled = true;
-    btnEnviarCodigo.textContent = 'Enviando código...';
+  const btnEnviar = document.getElementById('btnEnviarCodigo');
+  const bloqueCodigo = document.getElementById("bloqueCodigo");
+  const contador = document.getElementById("contadorOTP");
+
+  // Bloquear botón inmediatamente
+  if (btnEnviar) {
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Enviando código...';
   }
 
   const correo = document.getElementById("correo_validacion").value.trim().toLowerCase();
@@ -1530,12 +1527,14 @@ window.enviarCodigoCorreo = async () => {
   const numDoc = document.getElementById("numero_documento").value.trim();
 
   if (!correo || !numDoc) {
+
     alert("⚠️ Complete los datos antes de enviar el código");
-    // Si hay error de datos, volvemos a activar el botón para que reintente
-    if (btnEnviarCodigo) {
-      btnEnviarCodigo.disabled = false;
-      btnEnviarCodigo.textContent = 'ENVIAR CÓDIGO AL CORREO';
+
+    if (btnEnviar) {
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = 'ENVIAR CÓDIGO AL CORREO';
     }
+
     return;
   }
 
@@ -1554,45 +1553,36 @@ window.enviarCodigoCorreo = async () => {
     });
 
     const data = await res.json();
-    
+
     if (!res.ok) {
+
       alert(data.mensaje || "Error enviando código");
-      // Si hay error en el envío, volvemos a activar el botón para que reintente
-      if (btnEnviarCodigo) {
-        btnEnviarCodigo.disabled = false;
-        btnEnviarCodigo.textContent = 'ENVIAR CÓDIGO AL CORREO';
+
+      if (btnEnviar) {
+        btnEnviar.disabled = false;
+        btnEnviar.textContent = 'ENVIAR CÓDIGO AL CORREO';
       }
+
       return;
     }
 
-    /* ===============================
-       SOLO SI BACKEND RESPONDIÓ OK
-    =============================== */
-
-    alert(" 🔐 Codigo enviado revise su correo copié y pegué después de aceptar el numero de seis dígitos que le llego");
-
-    const btnEnviar = document.getElementById("btnEnviarCodigo");
-    const bloqueCodigo = document.getElementById("bloqueCodigo");
-    const contador = document.getElementById("contadorOTP");
+    alert(" 🔐 Codigo enviado, despues de aceptar vaya a su correo y revise la carpeta SPAM, copié y pegue el numero de seis dígitos que le llego");
 
     if (btnEnviar) {
       btnEnviar.style.display = "none";
-      btnEnviar.disabled = true; // Ya lo tenías, lo mantenemos por seguridad
     }
 
     if (bloqueCodigo) {
       bloqueCodigo.style.display = "block";
     }
 
-    // ===== INICIAR CONTADOR 3 MINUTOS (PERSISTENTE) =====
-    // Limpiar cualquier intervalo anterior para evitar duplicados
-    if (intervaloExpiracion) {
-      clearInterval(intervaloExpiracion);
-    }
+    // ⏳ contador 3 minutos
+    if (intervaloExpiracion) clearInterval(intervaloExpiracion);
 
-    tiempoExpiracionCodigo = 180; // 3 minutos en segundos
+    tiempoExpiracionCodigo = 180;
 
     intervaloExpiracion = setInterval(() => {
+
       let minutos = Math.floor(tiempoExpiracionCodigo / 60);
       let segundos = tiempoExpiracionCodigo % 60;
 
@@ -1607,27 +1597,29 @@ window.enviarCodigoCorreo = async () => {
       tiempoExpiracionCodigo--;
 
       if (tiempoExpiracionCodigo < 0) {
+
         clearInterval(intervaloExpiracion);
 
         if (bloqueCodigo) bloqueCodigo.style.display = "none";
+
         if (btnEnviar) {
           btnEnviar.style.display = "block";
-          btnEnviar.disabled = false; // Al expirar, volvemos a activar el botón
+          btnEnviar.disabled = false;
           btnEnviar.textContent = 'ENVIAR CÓDIGO AL CORREO';
         }
+
         if (contador) contador.textContent = "";
       }
+
     }, 1000);
 
-    // respaldo de seguridad por si algo falla
-    timerOTP = setTimeout(() => {}, 180000);
-
   } catch (e) {
+
     alert("⚠️ Error enviando código");
-    // Si hay error de conexión o otro, volvemos a activar el botón
-    if (btnEnviarCodigo) {
-      btnEnviarCodigo.disabled = false;
-      btnEnviarCodigo.textContent = 'ENVIAR CÓDIGO AL CORREO';
+
+    if (btnEnviar) {
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = 'ENVIAR CÓDIGO AL CORREO';
     }
   }
 };
@@ -1674,66 +1666,6 @@ window.verificarCodigo = async () => {
     // 🛑 Agregamos esto para ver exactamente qué llega del backend
     console.log("Datos recibidos del backend:", data);
     console.log("Tipo de bloqueo recibido:", data.tipoBloqueo);
-
-    /* ===============================
-       SI BLOQUEADO (403)
-    =============================== */
-
-    if (res.status === 403) {
-      let tiempo;
-      let mensaje;
-
-      // Verificar tipo de bloqueo con más tolerancia
-      if (data.tipoBloqueo === "30_dias" || data.mensaje?.includes("30 días")) {
-        // Bloqueo de 30 días → mensaje y tiempo correctos
-        mensaje = "⛔ Ya actualizaste tu información, Bloqueado por 30 días.";
-        tiempo = 30 * 24 * 60 * 60; // 30 días en segundos
-      } else {
-        // Bloqueo de 30 minutos → mensaje y tiempo correctos
-        mensaje = "⛔ Haz ingresado el código 5 veces sin éxito, Bloqueado por 30 minutos.";
-        tiempo = 30 * 60; // 30 minutos en segundos
-      }
-
-      alert(mensaje); // El alert coincide con el tipo de bloqueo
-
-      if (boton) {
-        boton.disabled = true;
-      }
-
-      intervalOTP = setInterval(() => {
-
-        // Calcular días, horas, minutos y segundos para el bloqueo
-        const dias = Math.floor(tiempo / (24 * 60 * 60));
-        const horas = Math.floor((tiempo % (24 * 60 * 60)) / (60 * 60));
-        const minutos = Math.floor((tiempo % (60 * 60)) / 60);
-        const segundos = tiempo % 60;
-
-        if (boton) {
-          // Mostrar días solo si es mayor a 0, sino mostrar horas/minutos/segundos
-          if (dias > 0) {
-            boton.innerText = 
-              `Bloqueado ${dias}d ${horas}h ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
-          } else {
-            boton.innerText = 
-              `Bloqueado ${horas}h ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
-          }
-        }
-
-        tiempo--;
-
-        if (tiempo < 0) {
-          clearInterval(intervalOTP);
-
-          if (boton) {
-            boton.disabled = false;
-            boton.innerText = "Verificar Código";
-          }
-        }
-
-      }, 1000);
-
-      return;
-    }
 
     /* ===============================
        OTROS ERRORES
