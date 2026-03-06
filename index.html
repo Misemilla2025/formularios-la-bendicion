@@ -863,9 +863,12 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5Ym96eWtiZmVoZmpsZGhheHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMjU0OTMsImV4cCI6MjA3NDkwMTQ5M30.Bj1Jl3-g0gyp1UwsiK-cwjS8Cm2z7Il4_jZ-tCQhbwM"
 );
 
+// Agrega esta línea en tu formulario (frontend)
+const TIEMPO_BLOQUEO_EXITOSO = 30 * 24 * 60 * 60 * 1000; // 30 días en milisegundos
+
+
 const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
 
-const TIEMPO_BLOQUEO_EXITOSO = 30 * 24 * 60 * 60 * 1000; // 30 días en milisegundos
 
 
 /* =========================
