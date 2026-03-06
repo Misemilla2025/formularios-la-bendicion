@@ -158,7 +158,7 @@ h3 {
   <label>APELLIDOS COMPLETOS</label>
   <input id="apellidos" required>
 
-<label>IDIOMA</label>
+<label>GENERO</label>
   <select id="genero">
   <option value="">SELECCIONE</option>
   <option value="MASCULINO">MASCULINO</option>
@@ -1388,7 +1388,7 @@ bancus_lider: bancusLiderFinal
   
 };
 
-  try {
+    try {
 
     const { data, error } = await supabase
   .from("actualizacion_registros_la_bendicion")
@@ -1454,6 +1454,8 @@ if (cambios.length > 0) {
 
   if (errorAuditoria) {
     console.log("Error auditoría:", errorAuditoria);
+    // Aquí puedes decidir si este error es crítico o si la actualización principal puede continuar
+    // Para no dañar lo que ya funciona, solo lo logueamos como ya lo hacías.
   }
 }
 
@@ -1461,7 +1463,44 @@ if (cambios.length > 0) {
    FIN AUDITORÍA
 ========================= */
 
-alert("✅ Datos actualizados correctamente! 🔔 Gracias por actualizar su información si requiere, podrá hacerlo dentro de 30 días nuevamente 🗓️");
+/* =====================================================
+   BLOQUEAR CUENTA POR 30 DÍAS DESPUÉS DE LA ACTUALIZACIÓN EXITOSA
+   (EN EL FORMULARIO)
+===================================================== */
+// Asegúrate de que TIEMPO_BLOQUEO_EXITOSO esté definido en tu frontend
+// Ej: const TIEMPO_BLOQUEO_EXITOSO = 30 * 24 * 60 * 60 * 1000; // 30 días en milisegundos
+
+const bloqueadoHasta = new Date(Date.now() + TIEMPO_BLOQUEO_EXITOSO).toISOString();
+
+try {
+  const { error: errorBloqueoFrontend } = await supabase
+    .from('seguridad_usuarios')
+    .upsert(
+      {
+        documento: registroOriginal.numero_documento, // Usamos el documento del registro original
+        bloqueado_hasta: bloqueadoHasta,
+        intentos_fallidos: 0 // Reseteamos intentos
+      },
+      { onConflict: 'documento' } // 'documento' es UNIQUE en seguridad_usuarios, según confirmamos
+    );
+
+  if (errorBloqueoFrontend) {
+    console.error("Error al aplicar bloqueo de 30 días desde el formulario:", errorBloqueoFrontend);
+    // Se muestra una alerta diferente para informar del problema con el bloqueo.
+    alert("✅ Datos actualizados correctamente! ⚠️ Pero hubo un problema al aplicar el bloqueo de seguridad. Contacte a soporte.");
+  } else {
+    console.log("Bloqueo de 30 días aplicado exitosamente desde el formulario.");
+    // Mensaje final que indica éxito total incluyendo el bloqueo.
+    alert("✅ Datos actualizados correctamente! 🔔 Gracias por actualizar su información si requiere, podrá hacerlo dentro de 30 días nuevamente 🗓️");
+  }
+} catch (e) {
+  console.error("Excepción inesperada al aplicar bloqueo de 30 días en el formulario:", e);
+  alert("✅ Datos actualizados correctamente! ⚠️ Pero ocurrió un error inesperado al finalizar la actualización. Contacte a soporte.");
+}
+/* =====================================================
+   FIN BLOQUEO CUENTA POR 30 DÍAS
+===================================================== */
+
 
 const formulario = document.getElementById("bloque_formulario");
 if (formulario) {
