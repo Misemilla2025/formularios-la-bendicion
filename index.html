@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>ACTUALIZACION REGISTROS LA BENDICION / YO SOY EL QUE SOY</title>
+<title>ACTUALIZACION DATOS BENDICION / YO SOY EL QUE SOY</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body { 
@@ -80,7 +80,7 @@ h3 {
 </head>
 <body>
 
-<h2>ACTUALIZACION REGISTROS LA BENDICION / YO SOY EL QUE SOY</h2>
+<h2>ACTUALIZACION DATOS  BENDICION / YO SOY EL QUE SOY</h2>
 
 <form id="formulario">
  <!-- VALIDACIÓN -->
@@ -94,6 +94,8 @@ h3 {
    <option value="IDMEX">IDMEX</option>
    <option value="INE">INE</option>
    <option value="LICENCIA_CONDUCIR">LICENCIA DE CONDUCIR</option>
+   <option value="OTRO">OTRO</option>
+   
  </select>
  <label>NUMERO DE DOCUMENTO</label>
  <input id="numero_documento" required
@@ -175,7 +177,7 @@ h3 {
     <option value="">SELECCIONE IDIOMA</option>
   </select>
 
-  <label>FECHA DE NACIMIENTO (Tal cual aparece escrito en su documento)</label>
+  <label>FECHA DE NACIMIENTO (Tal cual aparece escrito en su documento, recomendación tener a mano su documento para no equivocarse al colocar la fecha)</label>
   <input id="fecha_nacimiento_doc" placeholder="FORMATO SEGUN DOCUMENTO" required>
 </div>
 
@@ -183,7 +185,7 @@ h3 {
   <label>PAIS DE RESIDENCIA</label>
   <select id="pais_residencia" required></select>
 
-  <label>DEPARTAMENTO / ESTADO</label>
+  <label>DEPARTAMENTO ESTADOS Y PROVINCIAS</label>
   <select id="estado" required></select>
 
   <label>CIUDAD</label>
@@ -220,7 +222,7 @@ h3 {
   <label>NUMERO CELULAR</label>
   <input id="celular" pattern="[0-9]+" required>
 
-  <label>USUARIO TELEGRAM</label>
+  <label>USUARIO TELEGRAM ( Inicie con el signo de @)</label>
   <input id="telegram" required>
 </div>
 
@@ -246,7 +248,7 @@ h3 {
 
 <!-- PASAPORTE -->
 <div class="section">
-  <label>NUMERO PASAPORTE</label>
+  <label>NUMERO PASAPORTE ( </label>
   <select id="pasaporte_num" required>
     <option value="N/A">N/A</option>
     <option value="OTRO">ESCRIBIR</option>
@@ -332,7 +334,7 @@ h3 {
   style="display:none">
 
 <div class="section">
-  <h3>BENEFICIARIOS (OPCIONAL)</h3>
+  <h3>BENEFICIARIOS</h3>
 
   <!-- BENEFICIARIO 1 -->
   <h4>Beneficiario 1</h4>
@@ -536,13 +538,8 @@ h3 {
   value="N/A"
   style="display:none">
 
-  <label>LIDER AL QUE PERTENECE</label>
-  <input id="lider" required>
-
-  <label>AUTORIZA MANEJO DATOS PERSONALES</label>
-  <select id="autoriza_datos" required>
-    <option>SI</option>
-    <option>NO</option>
+  <label>LIDER BENCION ( Campo no modificable )</label>
+  <input id="lider" required>  
   </select>
 
   <label>COMPRO PAQUETE LA BENDICION</label>
@@ -573,7 +570,7 @@ REGISTRO BANCUS
 
 <div class="form-group" style="margin-top:15px;">
   <label for="bancus_registro">
-    ¿Usted se registró en Bancus?
+    ¿USTED SE REGISTRO EN BANCUS?
   </label>
 
   <select id="bancus_registro">
@@ -585,7 +582,7 @@ REGISTRO BANCUS
 <!-- CONTENEDOR CORREO -->
 <div id="bancus_correo_container" style="display:none; margin-top:10px;">
   <label for="bancus_correo">
-    Escriba el correo con el que se registró
+    ESCRIBA EL CORREO ELECTRÓNICO CON EL QUE SE REGISTRO EN BANCUS
   </label>
 
   <input
@@ -599,7 +596,7 @@ REGISTRO BANCUS
 <!-- CONTENEDOR LIDER -->
 <div id="bancus_lider_container" style="display:none; margin-top:10px;">
   <label for="bancus_lider">
-    Escriba el líder con el que se registró
+    ESCRIBA EL NOMBRE DEL LIDER CON EL QUE SE REGISTRO EN BANCUS
   </label>
 
   <input
@@ -608,6 +605,12 @@ REGISTRO BANCUS
     placeholder="Nombre del líder"
   />
 </div>
+
+<label>AUTORIZA MANEJO DATOS PERSONALES</label>
+  <select id="autoriza_datos" required>
+    <option>SI</option>
+    <option>NO</option>
+   </select>
 
 <button type="button" onclick="actualizarRegistro()">ACTUALIZAR DATOS</button>
 </div>
