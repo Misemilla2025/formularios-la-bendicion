@@ -93,10 +93,14 @@ h3 {
    <option value="DNI">DNI</option>
    <option value="IDMEX">IDMEX</option>
    <option value="INE">INE</option>
-   <option value="LICENCIA_CONDUCIR">LICENCIA DE CONDUCIR</option>
-   <option value="OTRO">OTRO</option>
    
- </select>
+   <option value="TARJETA DE IDENTIDAD">TARJETA DE IDENTIDAD</option>
+   
+   <option value="LICENCIA_CONDUCIR">LICENCIA DE CONDUCIR</option>
+   
+   <option value="OTRO">OTRO</option>
+   </select>
+ 
  <label>NUMERO DE DOCUMENTO</label>
  <input id="numero_documento" required
         placeholder="Solo Mayusculas y Numeros"
@@ -109,14 +113,14 @@ h3 {
    
    <button type="button" id="btnEnviarCodigo" style="display:none"
  onclick="enviarCodigoCorreo()">
- ENVIAR CÓDIGO AL CORREO
+ ENVIAR CODIGO AL CORREO
  </button>
  <div id="bloqueCodigo" style="display:none; margin-top:15px">
  <label>INGRESE EL CÓDIGO RECIBIDO</label>
  <input id="codigo_verificacion" maxlength="6">
  <p id="contadorOTP" style="margin-top:10px; font-weight:bold;"></p>
  <button type="button" onclick="verificarCodigo()">
- VERIFICAR CÓDIGO
+ VERIFICAR CODIGO
  </button>
  </div>
  </div>
@@ -128,12 +132,20 @@ h3 {
 <div id="bloque_formulario" class="hidden">
 
 <div class="section">
-  <label>CORREO NUEVO ( Si necesita actualizar su correo actual, escriba el nuevo correo, de lo contrario déjelo como esta )</label>
-  <select id="correo_nuevo" required>
-    <option value="N/A">N/A</option>
-    <option value="OTRO">ESCRIBIR</option>
-  </select>
-  <input id="correo_nuevo_text" placeholder="Ingrese su correo" style="display:none;">
+<label>
+CORREO NUEVO  
+(Si necesita actualizar su correo actual, escriba el nuevo correo, de lo contrario déjelo como esta)
+</label>
+
+<select id="correo_nuevo" required>
+  <option value="">SELECCIONE</option>
+  <option value="OTRO">ESCRIBIR</option>
+</select>
+
+<input id="correo_nuevo_text" type="email" placeholder="Ingrese su correo" style="display:none;">
+
+<!-- 🔹 Contenedor dinámico para cambio de documento -->
+<div id="zona_actualizacion_documento"></div>
 
   <label>PRIMER NOMBRE</label>
   <input id="primer_nombre" required>
@@ -161,7 +173,7 @@ h3 {
   <input id="apellidos" required>
 
 <label>GENERO</label>
-  <select id="genero">
+<select id="genero" required>
   <option value="">SELECCIONE</option>
   <option value="MASCULINO">MASCULINO</option>
   <option value="FEMENINO">FEMENINO</option>
@@ -222,8 +234,8 @@ h3 {
   <label>NUMERO CELULAR</label>
   <input id="celular" pattern="[0-9]+" required>
 
-  <label>USUARIO TELEGRAM ( Inicie con el signo de @)</label>
-  <input id="telegram" required>
+  <label>TELEGRAM</label>
+<input id="telegram" required pattern="^@.+">
 </div>
 
 <div class="form-group">
@@ -248,7 +260,7 @@ h3 {
 
 <!-- PASAPORTE -->
 <div class="section">
-  <label>NUMERO PASAPORTE ( </label>
+  <label>NUMERO PASAPORTE (Tal cual esta escrito en su documento)</label>
   <select id="pasaporte_num" required>
     <option value="N/A">N/A</option>
     <option value="OTRO">ESCRIBIR</option>
@@ -260,7 +272,7 @@ h3 {
     <option value="N/A">N/A</option>
   </select>
 
-  <label>FECHA NACIMIENTO PASAPORTE</label>
+  <label>FECHA NACIMIENTO PASAPORTE (Tal cual esta escrito en su documento)</label>
 
 <select
   id="pas_nac_sel"
@@ -279,7 +291,7 @@ h3 {
   value="N/A"
   style="display:none">
 
-  <label>FECHA EXPEDICION PASAPORTE</label>
+  <label>FECHA EXPEDICION PASAPORTE (Tal cual esta escrito en su documento)</label>
 
 <select
   id="pas_exp_sel"
@@ -297,7 +309,7 @@ h3 {
   value="N/A"
   style="display:none">
 
-  <label>FECHA VENCIMIENTO PASAPORTE</label>
+  <label>FECHA VENCIMIENTO PASAPORTE (Tal cual esta escrito en su documento)</label>
 
 <select
   id="pas_ven_sel"
@@ -315,7 +327,7 @@ h3 {
   value="N/A"
   style="display:none">
 
-  <label>AUTORIDAD EMISORA</label>
+  <label>AUTORIDAD EMISORA (Tal cual esta escrito en su documento)</label>
 
 <select
   id="autoridad_sel"
@@ -364,7 +376,9 @@ h3 {
   <option>DNI</option>
   <option>IDMEX</option>
   <option>INE</option>
+  <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
+  <option>OTRO</option>
 </select>
 
   <label>BENEFICIARIO 1 - NUMERO DOCUMENTO</label>
@@ -425,7 +439,9 @@ h3 {
   <option>DNI</option>
   <option>IDMEX</option>
   <option>INE</option>
+  <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
+  <option>OTRO</option>
 </select>
 
   <label>BENEFICIARIO 2 - NUMERO DOCUMENTO</label>
@@ -486,7 +502,9 @@ h3 {
   <option>DNI</option>
   <option>IDMEX</option>
   <option>INE</option>
+  <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
+  <option>OTRO</option>
 </select>
 
   <label>BENEFICIARIO 3 - NUMERO DOCUMENTO</label>
@@ -538,9 +556,8 @@ h3 {
   value="N/A"
   style="display:none">
 
-  <label>LIDER BENCION ( Campo no modificable )</label>
-  <input id="lider" required>  
-  </select>
+  <label>LIDER BENDICION (Campo no modificable)</label>
+<input id="lider" readonly required>
 
   <label>COMPRO PAQUETE LA BENDICION</label>
 <select id="paquete_bendicion" required>
@@ -556,7 +573,13 @@ h3 {
   <option value="NO">NO</option>
 </select>
 
-<label>PERTENECE DIAMANTE 700</label>
+<label>ACEPTA RECIBIR LOS BENEFICIOS DE YO SOY EL QUE SOY</label>
+  <select id="yo_soy" required>
+    <option>SI</option>
+    <option>NO</option>
+   </select>
+
+<label>PERTENECE A DIAMANTE 700</label>
 <select id="diamante_700" required>
   <option value="">SELECCIONE</option>
   <option value="SI">SI</option>
@@ -582,7 +605,7 @@ REGISTRO BANCUS
 <!-- CONTENEDOR CORREO -->
 <div id="bancus_correo_container" style="display:none; margin-top:10px;">
   <label for="bancus_correo">
-    ESCRIBA EL CORREO ELECTRÓNICO CON EL QUE SE REGISTRO EN BANCUS
+    ESCRIBA EL CORREO ELECTRONICO CON EL QUE SE REGISTRO EN BANCUS
   </label>
 
   <input
@@ -606,7 +629,7 @@ REGISTRO BANCUS
   />
 </div>
 
-<label>AUTORIZA MANEJO DATOS PERSONALES</label>
+<label>AUTORIZA EL MANEJO DE DATOS PERSONALES (Sus datos seran usados para el fin que los permitio y nunca se compartiran con terceros)</label>
   <select id="autoriza_datos" required>
     <option>SI</option>
     <option>NO</option>
@@ -630,22 +653,39 @@ const aMinus = v => v.toLowerCase();
    NORMALIZACIONES GENERALES
 ========================= */
 document.querySelectorAll('input[type="text"], input:not([type])')
-.forEach(el=>{
-  if(
-    el.type === "email" || 
+.forEach(el => {
+
+  if (
+    el.type === "email" ||
     el.id === "billetera_usdt_txt"
   ) return;
 
-  el.addEventListener("input", ()=> {
-    // 🔹 TELEGRAM: solo convertir letras minúsculas a mayúsculas, números y símbolos se mantienen
-    if(el.id === "telegram") {
-      el.value = el.value.replace(/[a-z]/g, c => c.toUpperCase());
-    } else {
-      // 🔹 RESTO DE INPUTS: todo a mayúscula normal
-      el.value = aMayus(el.value);
+  el.addEventListener("input", () => {
+
+    // 🔹 TELEGRAM: permitir mayúsculas, minúsculas, números y símbolos
+    if (el.id === "telegram") {
+      return;
     }
+
+    // 🔹 RESTO DE INPUTS: convertir a MAYÚSCULAS
+    el.value = aMayus(el.value);
+
   });
+
 });
+
+/* =========================
+ VALIDACIÓN TELEGRAM
+========================= */
+const telegram = document.getElementById("telegram");
+
+telegram.addEventListener("blur", () => {
+  if (!telegram.value.startsWith("@")) {
+    alert("El usuario de TELEGRAM debe comenzar con @");
+    telegram.focus();
+  }
+});
+
 
 /* =========================
  EMAILS — VALIDACIÓN EN DOM (SUAVE)
@@ -872,7 +912,142 @@ const TIEMPO_BLOQUEO_EXITOSO = 30 * 24 * 60 * 60 * 1000; // 30 días en milisegu
 
 const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
 
+/* =========================
+FUNCIONES DE EDAD
+========================= */
 
+function convertirFecha(fecha){
+
+if(!fecha) return null;
+
+const meses = {
+"ENE":0,"JAN":0,
+"FEB":1,
+"MAR":2,
+"ABR":3,
+"MAY":4,
+"JUN":5,
+"JUL":6,
+"AGO":7,
+"SEP":8,
+"OCT":9,
+"NOV":10,
+"DIC":11
+};
+
+try{
+
+const partes = fecha.trim().split("-");
+
+if(partes.length !== 3) return null;
+
+const dia = parseInt(partes[0]);
+
+const mesTexto = partes[1].substring(0,3).toUpperCase();
+
+const mes = meses[mesTexto];
+
+const anio = parseInt(partes[2]);
+
+if(isNaN(dia) || isNaN(anio) || mes === undefined){
+return null;
+}
+
+return new Date(anio, mes, dia);
+
+}catch(e){
+console.error(e);
+return null;
+}
+
+}
+
+function calcularEdad(fechaNacimiento){
+
+const hoy = new Date();
+const nacimiento = convertirFecha(fechaNacimiento);
+
+if(!nacimiento) return null;
+
+let edad = hoy.getFullYear() - nacimiento.getFullYear();
+
+const m = hoy.getMonth() - nacimiento.getMonth();
+
+if(m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())){
+edad--;
+}
+
+return edad;
+
+}
+
+function verificarMayorDeEdadYMostrarCampo(data){
+
+try{
+
+if(!data?.fecha_nacimiento_doc) return;
+
+const edad = calcularEdad(data.fecha_nacimiento_doc);
+
+const tipoDoc = (data.tipo_doc || "").toUpperCase();
+
+const esMayorDocumento =
+tipoDoc.includes("CEDULA") ||
+tipoDoc.includes("CIUDADANIA") ||
+tipoDoc.includes("IDENTIDAD") ||
+tipoDoc.includes("TI") ||
+tipoDoc.includes("TARJETA");
+
+/*
+⭐ SI YA MIGRÓ A MAYOR EDAD → NO MOSTRAR NADA
+*/
+
+if(data.migrado_mayor_edad === true){
+console.log("✅ Usuario ya migrado a mayor edad");
+return;
+}
+
+/*
+⭐ SOLO MOSTRAR CUANDO:
+- Edad ≥ 18
+- Documento válido
+- No migrado antes
+*/
+
+if(edad >= 18 && esMayorDocumento){
+
+console.log("🔥 CONDICION MAYOR DE EDAD CUMPLIDA");
+
+alert("⚠️ Detectamos que ahora eres mayor de edad. Actualice su documento de identidad.");
+
+const zona = document.getElementById("zona_actualizacion_documento");
+
+if(zona){
+
+zona.style.display = "block";
+
+zona.innerHTML = `
+<label style="font-weight:bold">
+ACTUALIZAR DOCUMENTO DE IDENTIDAD (CÉDULA)
+</label>
+
+<input
+id="documento_actualizado"
+type="text"
+placeholder="Ingrese su nuevo documento"
+style="width:100%; padding:8px; margin-top:6px;"
+/>
+`;
+
+}
+
+}
+
+}catch(e){
+console.error(e);
+}
+
+}
 
 /* =========================
  REGISTRO ORIGINAL (CLAVE)
@@ -938,7 +1113,7 @@ window.validarRegistro = async () => {
   }
 
   registroOriginal = data;
-  
+ 
   document.getElementById("btnEnviarCodigo")
   ?.style.setProperty("display","block");
   
@@ -1148,8 +1323,6 @@ if (billetera && billetera !== "N/A") {
   billeteraTxt.value = "N/A";
 }
 
-
-
 // ===== BANCUS =====
 document.getElementById("bancus_registro").value =
   registroOriginal.bancus_registro || "NO";
@@ -1193,6 +1366,7 @@ if(btnEnviar){
   setVal("primer_nombre", data.primer_nombre);
   setVal("apellidos", data.apellidos);
   setVal("fecha_nacimiento_doc", data.fecha_nacimiento_doc);
+  setVal("tipo_doc", data.tipo_doc);
   setVal("direccion_residencia", data.direccion_residencia);
   setVal("celular", data.celular);
   setVal("codigo_postal", data.codigo_postal);
@@ -1200,7 +1374,7 @@ if(btnEnviar){
   setVal("telegram", data.telegram);
   setVal("lider", data.lider);
   setVal("genero", data.genero);
-
+  setVal("yo_soy", data.yo_soy);
   setVal("pais_residencia", data.pais_residencia);
   setVal("estado", data.estado);
   setVal("ciudad", data.ciudad);
@@ -1209,6 +1383,11 @@ if(btnEnviar){
   setVal("paquete_bendicion", data.paquete_bendicion);
 setVal("paquete_vencer", data.paquete_vencer);
 setVal("diamante_700", data.diamante_700);
+
+setTimeout(()=>{
+   console.log("🚀 DETECTOR EDAD FINAL");
+   verificarMayorDeEdadYMostrarCampo(data);
+},1000);
 
   /* 🔹 CAMPOS N/A */
   const setNa = (sel, txt, val) => {
@@ -1390,11 +1569,18 @@ document.getElementById("billetera_usdt")?.value === "OTRO"
   autoriza_datos: autoriza_datos.value,
   paquete_bendicion: paquete_bendicion.value,
   paquete_vencer: paquete_vencer.value,
+  yo_soy: yo_soy.value,
   diamante_700: diamante_700.value,
   bancus_registro: bancusRegistro,
 bancus_correo: bancusCorreoFinal,
-bancus_lider: bancusLiderFinal
-  
+bancus_lider: bancusLiderFinal,
+
+numero_documento:
+
+   document.getElementById("documento_actualizado")?.value?.trim()
+   || registroOriginal.numero_documento,
+
+migrado_mayor_edad: true
 };
 
     try {
