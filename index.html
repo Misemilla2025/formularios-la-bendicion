@@ -86,6 +86,7 @@ h3 {
  <!-- VALIDACIÓN -->
  <div id="seccionValidacion">
  <div class="section">
+ <label>TIPO DE DOCUMENTO</label>
    <select id="tipo_doc" required>
    <option value="">SELECCIONE</option>
    <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
@@ -98,14 +99,37 @@ h3 {
    
    <option value="LICENCIA_CONDUCIR">LICENCIA DE CONDUCIR</option>
    
+   <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
+   
+<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
+
+<option value="CARNE DE IDENTIDAD">CARNE DE IDENTIDAD</option>
+
+<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
+
+<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
+
+<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
+
+<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
+
+<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
+
+<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
+
+<option value="PASAPORTE">PASAPORTE</option>
+
+<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
+   
    <option value="OTRO">OTRO</option>
    </select>
  
  <label>NUMERO DE DOCUMENTO</label>
- <input id="numero_documento" required
-        placeholder="Solo Mayusculas y Numeros"
-        oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
-   <label>CORREO ACTUAL (VALIDACION)</label>
+<input id="numero_documento" required
+       placeholder="Solo Mayusculas, Numeros o N/A"
+       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9/]/g,'')">
+   
+<label>CORREO ACTUAL (VALIDACION)</label>
    <input id="correo_validacion" type="email" required>
    <button type="button" id="btnValidarRegistro" onclick="validarRegistro()">
  VALIDAR DATOS
@@ -378,7 +402,29 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option>PASAPORTE</option>
+
+  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
+  
+<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
+
+<option value="CARNE DE IDENTIDAD">CARNE DE IDENTIDAD</option>
+
+<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
+
+<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
+
+<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
+
+<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
+
+<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
+
+<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
+
+<option value="PASAPORTE">PASAPORTE</option>
+
+<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
+
   <option>OTRO</option>
 </select>
 
@@ -442,7 +488,17 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option>PASAPORTE</option>
+  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
+<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
+<option value="CARNE DE IDENTIDAD">CARNE DE IDENTIDAD</option>
+<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
+<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
+<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
+<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
+<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
+<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
+<option value="PASAPORTE">PASAPORTE</option>
+<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
   <option>OTRO</option>
 </select>
 
@@ -506,7 +562,17 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option>PASAPORTE</option>
+  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
+<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
+<option value="CARNE DE IDENTIDAD">CARNE DE IDENTIDAD</option>
+<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
+<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
+<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
+<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
+<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
+<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
+<option value="PASAPORTE">PASAPORTE</option>
+<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
   <option>OTRO</option>
 </select>
 
