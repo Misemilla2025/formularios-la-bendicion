@@ -86,7 +86,6 @@ h3 {
  <!-- VALIDACIÓN -->
  <div id="seccionValidacion">
  <div class="section">
- <label>TIPO DE DOCUMENTO</label>
    <select id="tipo_doc" required>
    <option value="">SELECCIONE</option>
    <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
@@ -125,11 +124,10 @@ h3 {
    </select>
  
  <label>NUMERO DE DOCUMENTO</label>
-<input id="numero_documento" required
-       placeholder="Solo Mayusculas, Numeros o N/A"
-       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9/]/g,'')">
-   
-<label>CORREO ACTUAL (VALIDACION)</label>
+ <input id="numero_documento" required
+        placeholder="Solo Mayusculas y Numeros"
+        oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
+   <label>CORREO ACTUAL (VALIDACION)</label>
    <input id="correo_validacion" type="email" required>
    <button type="button" id="btnValidarRegistro" onclick="validarRegistro()">
  VALIDAR DATOS
@@ -402,29 +400,7 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-
-  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
-  
-<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
-
-<option value="CARNE DE IDENTIDAD">CARNE DE IDENTIDAD</option>
-
-<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
-
-<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
-
-<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
-
-<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
-
-<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
-
-<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
-
-<option value="PASAPORTE">PASAPORTE</option>
-
-<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
-
+  <option>PASAPORTE</option>
   <option>OTRO</option>
 </select>
 
@@ -488,17 +464,7 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
-<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
-<option value="CARNE DE IDENTIDAD">CARNE DE IDENTIDAD</option>
-<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
-<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
-<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
-<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
-<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
-<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
-<option value="PASAPORTE">PASAPORTE</option>
-<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
+  <option>PASAPORTE</option>
   <option>OTRO</option>
 </select>
 
@@ -562,17 +528,7 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
-<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
-<option value="CARNE DE IDENTIDAD">CARNE DE IDENTIDAD</option>
-<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
-<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
-<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
-<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
-<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
-<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
-<option value="PASAPORTE">PASAPORTE</option>
-<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
+  <option>PASAPORTE</option>
   <option>OTRO</option>
 </select>
 
@@ -1155,34 +1111,46 @@ const naValue = (selId, txtId, campoBD) => {
  VALIDAR (SOLO VISUAL)
 ========================= */
 window.validarRegistro = async () => {
+
+  console.log("validarRegistro ejecutado");
+
   const tipoDoc = document.getElementById("tipo_doc").value;
   const numero  = document.getElementById("numero_documento").value.trim();
   const correo  = document.getElementById("correo_validacion").value.trim().toLowerCase();
 
+  console.log("datos capturados:", tipoDoc, numero, correo);
+
   if (!tipoDoc || !numero || !correo) {
-    alert(" ⚠️ Debe ingresar tipo de documento, número de documento y correo");
+    alert("⚠️ Debe ingresar tipo de documento, número de documento y correo");
     return;
   }
 
-  const { data, error } = await supabase
-    .from("actualizacion_registros_la_bendicion")
-    .select("*")
-    .eq("numero_documento", numero)
-    .eq("correo_validacion", correo)
-    .maybeSingle();
+  console.log("antes de fetch");
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+  const resp = await fetch(`${API_BASE}/validar-datos`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    documento: numero,
+    correo: correo
+  })
+});
 
-  if (!data) {
-    alert("⚠️ Registro no encontrado");
+  console.log("respuesta fetch:", resp);
+
+  const data = await resp.json();
+
+  console.log("data recibida:", data);
+
+  if (!resp.ok) {
+    alert(data.mensaje);
     return;
   }
 
   registroOriginal = data;
- 
+
   document.getElementById("btnEnviarCodigo")
   ?.style.setProperty("display","block");
   
