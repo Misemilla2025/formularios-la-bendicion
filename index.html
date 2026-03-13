@@ -1013,15 +1013,10 @@ try{
 if(!data?.fecha_nacimiento_doc) return;
 
 const edad = calcularEdad(data.fecha_nacimiento_doc);
-
 const tipoDoc = (data.tipo_doc || "").toUpperCase();
 
-const esMayorDocumento =
-tipoDoc.includes("CEDULA") ||
-tipoDoc.includes("CIUDADANIA") ||
-tipoDoc.includes("IDENTIDAD") ||
-tipoDoc.includes("TI") ||
-tipoDoc.includes("TARJETA");
+console.log("Edad detectada:", edad);
+console.log("Tipo documento:", tipoDoc);
 
 /*
 ⭐ SI YA MIGRÓ A MAYOR EDAD → NO MOSTRAR NADA
@@ -1033,15 +1028,17 @@ return;
 }
 
 /*
-⭐ SOLO MOSTRAR CUANDO:
-- Edad ≥ 18
-- Documento válido
-- No migrado antes
+⭐ SOLO SI TENÍA TARJETA DE IDENTIDAD
+Y YA CUMPLIÓ 18
 */
 
-if(edad >= 18 && esMayorDocumento){
+const eraMenor =
+tipoDoc.includes("TARJETA") ||
+tipoDoc.includes("TI");
 
-console.log("🔥 CONDICION MAYOR DE EDAD CUMPLIDA");
+if(edad >= 18 && eraMenor){
+
+console.log("🔥 MIGRACION DE MENOR A MAYOR DETECTADA");
 
 alert("⚠️ Detectamos que ahora eres mayor de edad. Actualice su documento de identidad.");
 
@@ -1069,7 +1066,7 @@ style="width:100%; padding:8px; margin-top:6px;"
 }
 
 }catch(e){
-console.error(e);
+console.error("Error detector edad:",e);
 }
 
 }
@@ -1423,6 +1420,7 @@ setVal("diamante_700", data.diamante_700);
 
 setTimeout(()=>{
    console.log("🚀 DETECTOR EDAD FINAL");
+   console.log("Datos usuario:", data);
    verificarMayorDeEdadYMostrarCampo(data);
 },1000);
 
