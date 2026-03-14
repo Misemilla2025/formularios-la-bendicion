@@ -823,38 +823,36 @@ document.querySelectorAll(".na-select").forEach(select=>{
    CARGAR PAISES
 ========================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
 
-  const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
-
-  const paisCiudadania = document.getElementById("pais_ciudadania");
-  const paisResidencia = document.getElementById("pais_residencia");
-  const paisPasaporte = document.getElementById("pais_pasaporte");
-
-  fetch(`${API_BASE}/api/paises`)
+fetch(`${API_BASE}/api/paises`)
   .then(res => res.json())
   .then(paises => {
 
+    // Limpiar selects
     paisCiudadania.innerHTML = '<option value="">SELECCIONE</option>';
     paisResidencia.innerHTML = '<option value="">SELECCIONE</option>';
     paisPasaporte.innerHTML = '<option value="N/A">N/A</option>';
 
+    // Ordenar países: poner Colombia primero
+    paises.sort((a,b) => {
+      if(a.name === "Colombia") return -1;
+      if(b.name === "Colombia") return 1;
+      return a.name.localeCompare(b.name);
+    });
+
+    // Agregar países a los selects
     paises.forEach(p => {
-
-      const nombre = p.name.toUpperCase();
-
+      const nombre = p.name.toUpperCase(); // mayúsculas, sin tilde si tu JSON ya viene así
       paisCiudadania.add(new Option(nombre, p.name));
       paisResidencia.add(new Option(nombre, p.name));
       paisPasaporte.add(new Option(nombre, p.name));
-
     });
 
   })
   .catch(err => {
     console.error("Error cargando países:", err);
   });
-
-});
 
 /* =========================
    PAÍS → ESTADO → CIUDAD
