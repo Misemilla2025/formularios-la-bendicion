@@ -820,117 +820,82 @@ document.querySelectorAll(".na-select").forEach(select=>{
 });
 
 /* =========================
-   CARGAR PAISES
+   CARGAR PAISES — JSON LOCAL OFFLINE
 ========================= */
 
-const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
-
-fetch(`${API_BASE}/api/paises`)
+fetch("data/world.json")
   .then(res => res.json())
   .then(paises => {
 
-    // Limpiar selects
+    // 🧹 Limpiar selects
     paisCiudadania.innerHTML = '<option value="">SELECCIONE</option>';
     paisResidencia.innerHTML = '<option value="">SELECCIONE</option>';
     paisPasaporte.innerHTML = '<option value="N/A">N/A</option>';
 
-    // Ordenar países: poner Colombia primero
-    paises.sort((a,b) => {
-      if(a.name === "Colombia") return -1;
-      if(b.name === "Colombia") return 1;
+    // Opcional: ordenar países por nombre
+    paises.sort((a, b) => {
+      if (a.name === "COLOMBIA") return -1; // poner Colombia primero
+      if (b.name === "COLOMBIA") return 1;
       return a.name.localeCompare(b.name);
     });
 
-    // Agregar países a los selects
+    // 🔹 Agregar países a los selects
     paises.forEach(p => {
-      const nombre = p.name.toUpperCase(); // mayúsculas, sin tilde si tu JSON ya viene así
-      paisCiudadania.add(new Option(nombre, p.name));
-      paisResidencia.add(new Option(nombre, p.name));
-      paisPasaporte.add(new Option(nombre, p.name));
+      paisCiudadania.add(new Option(p.name, p.name));
+      paisResidencia.add(new Option(p.name, p.name));
+      paisPasaporte.add(new Option(p.name, p.name));
+    });
+
+    // 🟢 PAÍS → ESTADO
+    paisResidencia.addEventListener("change", () => {
+
+      // Limpiar selects
+      estado.innerHTML = '<option value="">SELECCIONE ESTADO</option>';
+      ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
+      estado.disabled = true;
+      ciudad.disabled = true;
+      indicativo.value = "";
+
+      // Buscar país seleccionado
+      const paisSel = paises.find(x => x.name === paisResidencia.value);
+      if (!paisSel) return;
+
+      // Indicativo
+      indicativo.value = paisSel.dial_code || "";
+
+      // Llenar estados
+      paisSel.states.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.name;        // valor limpio para BD/UI
+        opt.dataset.state = s.name; // referencia para ciudades
+        opt.textContent = s.name;  // nombre para el usuario
+        estado.appendChild(opt);
+      });
+
+      estado.disabled = false;
+    });
+
+    // 🟢 ESTADO → CIUDAD
+    estado.addEventListener("change", () => {
+
+      ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
+      ciudad.disabled = true;
+
+      const paisSel = paises.find(x => x.name === paisResidencia.value);
+      if (!paisSel) return;
+
+      const stateSel = paisSel.states.find(s => s.name === estado.value);
+      if (!stateSel) return;
+
+      stateSel.cities.forEach(c => {
+        ciudad.appendChild(new Option(c, c));
+      });
+
+      ciudad.disabled = false;
     });
 
   })
-  .catch(err => {
-    console.error("Error cargando países:", err);
-  });
-
-/* =========================
-   PAÍS → ESTADO → CIUDAD
-========================= */
-paisResidencia.addEventListener("change",()=>{
-  estado.innerHTML='<option value="">SELECCIONE ESTADO</option>';
-  ciudad.innerHTML='<option value="">SELECCIONE CIUDAD</option>';
-  estado.disabled=true;
-  ciudad.disabled=true;
-  indicativo.value="";
-
-  // INDICATIVO
-  fetch("https://countriesnow.space/api/v0.1/countries/codes",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({country:paisResidencia.value})
-  })
-  .then(r=>r.json())
-  .then(d=>{
-    if(d?.data?.dial_code)
-      indicativo.value=d.data.dial_code.replace("+","");
-  });
-
-  // ESTADOS
-  fetch("https://countriesnow.space/api/v0.1/countries/states",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({country:paisResidencia.value})
-  })
-  .then(r=>r.json())
-  .then(d=>{
-    d.data.states.forEach(s=>{
-
-      const apiState = s.name;
-
-      const limpio = aMayus(
-        s.name
-          .replace(/\s*DEPARTMENT$/i,"")
-          .replace(/\s*STATE$/i,"")
-          .replace(/\s*PROVINCE$/i,"")
-          .trim()
-      );
-
-      const opt=document.createElement("option");
-      opt.value = limpio;       // 👉 BD LIMPIA
-      opt.dataset.api = apiState; // 👉 API
-      opt.textContent = limpio; // 👉 UI
-
-      estado.appendChild(opt);
-    });
-    estado.disabled=false;
-  });
-});
-
-estado.addEventListener("change",()=>{
-  ciudad.innerHTML='<option value="">SELECCIONE CIUDAD</option>';
-  ciudad.disabled=true;
-
-  const apiState = estado.selectedOptions[0]?.dataset.api;
-  if(!apiState) return;
-
-  fetch("https://countriesnow.space/api/v0.1/countries/state/cities",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      country:paisResidencia.value,
-      state:apiState
-    })
-  })
-  .then(r=>r.json())
-  .then(d=>{
-    d.data.forEach(c=>{
-      const limpioCiudad = aMayus(c);
-      ciudad.appendChild(new Option(limpioCiudad, limpioCiudad));
-    });
-    ciudad.disabled=false;
-  });
-});
+  .catch(err => console.error("Error cargando world.json:", err));
 
 /* =========================
    IDIOMAS
