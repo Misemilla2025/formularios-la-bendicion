@@ -820,12 +820,18 @@ document.querySelectorAll(".na-select").forEach(select=>{
 });
 
 /* =========================
-   CARGAR PAISES
+   CARGAR PAISES DESDE BACKEND
 ========================= */
 
-fetch("/api/paises")
+const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
+
+let paisesGlobal = []; // variable global para poder usar en eventos
+
+fetch(`${API_BASE}/api/paises`)
   .then(res => res.json())
   .then(paises => {
+
+    paisesGlobal = paises; // guardamos globalmente
 
     // Limpiar selects
     paisCiudadania.innerHTML = '<option value="">SELECCIONE</option>';
@@ -834,8 +840,8 @@ fetch("/api/paises")
 
     // Ordenar países: poner Colombia primero
     paises.sort((a,b) => {
-      if(a.name === "COLOMBIA") return -1;
-      if(b.name === "COLOMBIA") return 1;
+      if(a.name.toUpperCase() === "COLOMBIA") return -1;
+      if(b.name.toUpperCase() === "COLOMBIA") return 1;
       return a.name.localeCompare(b.name);
     });
 
@@ -865,7 +871,7 @@ paisResidencia.addEventListener("change", () => {
   const paisSeleccionado = paisResidencia.value;
   if (!paisSeleccionado) return;
 
-  const paisObj = paises.find(p => p.name === paisSeleccionado);
+  const paisObj = paisesGlobal.find(p => p.name === paisSeleccionado);
   if (!paisObj) return;
 
   // Indicativo
@@ -873,10 +879,10 @@ paisResidencia.addEventListener("change", () => {
 
   // Estados
   paisObj.states.forEach(s => {
-    const limpio = s.name.toUpperCase(); // limpiar texto
+    const limpio = s.name.toUpperCase();
     const opt = document.createElement("option");
     opt.value = limpio;
-    opt.dataset.api = s.name; // API original
+    opt.dataset.api = s.name; // nombre original
     opt.textContent = limpio;
     estado.appendChild(opt);
   });
@@ -890,7 +896,7 @@ estado.addEventListener("change", () => {
   const estadoSeleccionado = estado.selectedOptions[0]?.dataset.api;
   if (!estadoSeleccionado) return;
 
-  const paisObj = paises.find(p => p.name === paisResidencia.value);
+  const paisObj = paisesGlobal.find(p => p.name === paisResidencia.value);
   if (!paisObj) return;
 
   const estadoObj = paisObj.states.find(s => s.name === estadoSeleccionado);
