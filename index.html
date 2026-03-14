@@ -820,82 +820,88 @@ document.querySelectorAll(".na-select").forEach(select=>{
 });
 
 /* =========================
-   CARGAR PAISES — JSON LOCAL OFFLINE
+   CARGAR PAISES
 ========================= */
 
-fetch("data/world.json")
+fetch("/api/paises")
   .then(res => res.json())
   .then(paises => {
 
-    // 🧹 Limpiar selects
+    // Limpiar selects
     paisCiudadania.innerHTML = '<option value="">SELECCIONE</option>';
     paisResidencia.innerHTML = '<option value="">SELECCIONE</option>';
     paisPasaporte.innerHTML = '<option value="N/A">N/A</option>';
 
-    // Opcional: ordenar países por nombre
-    paises.sort((a, b) => {
-      if (a.name === "COLOMBIA") return -1; // poner Colombia primero
-      if (b.name === "COLOMBIA") return 1;
+    // Ordenar países: poner Colombia primero
+    paises.sort((a,b) => {
+      if(a.name === "COLOMBIA") return -1;
+      if(b.name === "COLOMBIA") return 1;
       return a.name.localeCompare(b.name);
     });
 
-    // 🔹 Agregar países a los selects
+    // Agregar países a los selects
     paises.forEach(p => {
-      paisCiudadania.add(new Option(p.name, p.name));
-      paisResidencia.add(new Option(p.name, p.name));
-      paisPasaporte.add(new Option(p.name, p.name));
-    });
-
-    // 🟢 PAÍS → ESTADO
-    paisResidencia.addEventListener("change", () => {
-
-      // Limpiar selects
-      estado.innerHTML = '<option value="">SELECCIONE ESTADO</option>';
-      ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
-      estado.disabled = true;
-      ciudad.disabled = true;
-      indicativo.value = "";
-
-      // Buscar país seleccionado
-      const paisSel = paises.find(x => x.name === paisResidencia.value);
-      if (!paisSel) return;
-
-      // Indicativo
-      indicativo.value = paisSel.dial_code || "";
-
-      // Llenar estados
-      paisSel.states.forEach(s => {
-        const opt = document.createElement("option");
-        opt.value = s.name;        // valor limpio para BD/UI
-        opt.dataset.state = s.name; // referencia para ciudades
-        opt.textContent = s.name;  // nombre para el usuario
-        estado.appendChild(opt);
-      });
-
-      estado.disabled = false;
-    });
-
-    // 🟢 ESTADO → CIUDAD
-    estado.addEventListener("change", () => {
-
-      ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
-      ciudad.disabled = true;
-
-      const paisSel = paises.find(x => x.name === paisResidencia.value);
-      if (!paisSel) return;
-
-      const stateSel = paisSel.states.find(s => s.name === estado.value);
-      if (!stateSel) return;
-
-      stateSel.cities.forEach(c => {
-        ciudad.appendChild(new Option(c, c));
-      });
-
-      ciudad.disabled = false;
+      const nombre = p.name.toUpperCase(); // mayúsculas
+      paisCiudadania.add(new Option(nombre, p.name));
+      paisResidencia.add(new Option(nombre, p.name));
+      paisPasaporte.add(new Option(nombre, p.name));
     });
 
   })
-  .catch(err => console.error("Error cargando world.json:", err));
+  .catch(err => {
+    console.error("Error cargando países:", err);
+  });
+
+/* =========================
+   PAÍS → ESTADO → CIUDAD
+========================= */
+paisResidencia.addEventListener("change", () => {
+  estado.innerHTML = '<option value="">SELECCIONE ESTADO</option>';
+  ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
+  estado.disabled = true;
+  ciudad.disabled = true;
+  indicativo.value = "";
+
+  const paisSeleccionado = paisResidencia.value;
+  if (!paisSeleccionado) return;
+
+  const paisObj = paises.find(p => p.name === paisSeleccionado);
+  if (!paisObj) return;
+
+  // Indicativo
+  indicativo.value = paisObj.dial_code || "";
+
+  // Estados
+  paisObj.states.forEach(s => {
+    const limpio = s.name.toUpperCase(); // limpiar texto
+    const opt = document.createElement("option");
+    opt.value = limpio;
+    opt.dataset.api = s.name; // API original
+    opt.textContent = limpio;
+    estado.appendChild(opt);
+  });
+  estado.disabled = false;
+});
+
+estado.addEventListener("change", () => {
+  ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
+  ciudad.disabled = true;
+
+  const estadoSeleccionado = estado.selectedOptions[0]?.dataset.api;
+  if (!estadoSeleccionado) return;
+
+  const paisObj = paises.find(p => p.name === paisResidencia.value);
+  if (!paisObj) return;
+
+  const estadoObj = paisObj.states.find(s => s.name === estadoSeleccionado);
+  if (!estadoObj) return;
+
+  estadoObj.cities.forEach(c => {
+    const limpioCiudad = c.toUpperCase();
+    ciudad.appendChild(new Option(limpioCiudad, limpioCiudad));
+  });
+  ciudad.disabled = false;
+});
 
 /* =========================
    IDIOMAS
