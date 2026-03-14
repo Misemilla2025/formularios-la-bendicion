@@ -820,19 +820,29 @@ document.querySelectorAll(".na-select").forEach(select=>{
 });
 
 /* =========================
-   PAÍSES
+   PAÍSES (DESDE TU SERVIDOR)
 ========================= */
-fetch("https://countriesnow.space/api/v0.1/countries")
-.then(r=>r.json())
-.then(data=>{
-  data.data.forEach(p=>{
-    const pais=aMayus(p.country);
-    paisCiudadania.appendChild(new Option(pais,pais));
-    paisResidencia.appendChild(new Option(pais,pais));
-    paisPasaporte.appendChild(new Option(pais,pais));
+
+const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
+
+fetch(`${API_BASE}/api/paises`)
+.then(r => r.json())
+.then(data => {
+
+  data.forEach(p => {
+
+    const apiPais = p.name;
+    const nombreMostrar = aMayus(apiPais);
+
+    paisCiudadania.appendChild(new Option(nombreMostrar, apiPais));
+    paisResidencia.appendChild(new Option(nombreMostrar, apiPais));
+    paisPasaporte.appendChild(new Option(nombreMostrar, apiPais));
+
   });
+
   paisPasaporte.insertBefore(new Option("N/A","N/A"), paisPasaporte.firstChild);
-  paisPasaporte.value="N/A";
+  paisPasaporte.value = "N/A";
+
 });
 
 /* =========================
@@ -1980,6 +1990,33 @@ window.verificarCodigo = async () => {
     }
 
     alert("💻 Datos cargados correctamente ✅ verificación exitosa, ya puede ingresar revisar y actualizar su información");
+
+// 🔹 Traer los datos actualizados del usuario
+try {
+  const resDatos = await fetch(API_BASE + "/obtener-datos-usuario", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ documento })
+  });
+
+  const datosActualizados = await resDatos.json();
+  console.log("Datos actualizados traídos del backend:", datosActualizados);
+
+  // 🔹 Llenar el formulario con los valores actuales
+  if (datosActualizados) {
+    const correoNuevoInput = document.getElementById("correo_nuevo");
+    if (correoNuevoInput) {
+      correoNuevoInput.value = datosActualizados.correo_nuevo || "";
+    }
+
+    // Aquí puedes agregar más inputs a llenar con los valores recibidos
+    // ejemplo:
+    // document.getElementById("primer_nombre").value = datosActualizados.primer_nombre || "";
+    // document.getElementById("numero_documento").value = datosActualizados.numero_documento || "";
+  }
+} catch (e) {
+  console.error("Error trayendo datos actualizados:", e);
+}
 
     const formulario = document.getElementById("bloque_formulario");
     const validacion = document.getElementById("seccionValidacion");
