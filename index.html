@@ -823,29 +823,37 @@ document.querySelectorAll(".na-select").forEach(select=>{
    CARGAR PAISES
 ========================= */
 
-const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
+document.addEventListener("DOMContentLoaded", () => {
 
-fetch(`${API_BASE}/api/paises`)
-.then(res => res.json())
-.then(paises => {
+  const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
 
-  paisCiudadania.innerHTML = '<option value="">SELECCIONE</option>';
-  paisResidencia.innerHTML = '<option value="">SELECCIONE</option>';
-  paisPasaporte.innerHTML = '<option value="N/A">N/A</option>';
+  const paisCiudadania = document.getElementById("pais_ciudadania");
+  const paisResidencia = document.getElementById("pais_residencia");
+  const paisPasaporte = document.getElementById("pais_pasaporte");
 
-  paises.forEach(p => {
+  fetch(`${API_BASE}/api/paises`)
+  .then(res => res.json())
+  .then(paises => {
 
-    const nombre = p.name.toUpperCase();
+    paisCiudadania.innerHTML = '<option value="">SELECCIONE</option>';
+    paisResidencia.innerHTML = '<option value="">SELECCIONE</option>';
+    paisPasaporte.innerHTML = '<option value="N/A">N/A</option>';
 
-    paisCiudadania.add(new Option(nombre, p.name));
-    paisResidencia.add(new Option(nombre, p.name));
-    paisPasaporte.add(new Option(nombre, p.name));
+    paises.forEach(p => {
 
+      const nombre = p.name.toUpperCase();
+
+      paisCiudadania.add(new Option(nombre, p.name));
+      paisResidencia.add(new Option(nombre, p.name));
+      paisPasaporte.add(new Option(nombre, p.name));
+
+    });
+
+  })
+  .catch(err => {
+    console.error("Error cargando países:", err);
   });
 
-})
-.catch(err => {
-  console.error("Error cargando países:", err);
 });
 
 /* =========================
