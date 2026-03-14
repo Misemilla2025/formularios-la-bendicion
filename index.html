@@ -820,29 +820,32 @@ document.querySelectorAll(".na-select").forEach(select=>{
 });
 
 /* =========================
-   PAÍSES (DESDE TU SERVIDOR)
+   PAÍSES (DESDE SERVIDOR)
 ========================= */
 
 const API_BASE = "https://servidor-misemilla-formulario-production.up.railway.app";
 
 fetch(`${API_BASE}/api/paises`)
-.then(r => r.json())
-.then(data => {
+.then(res => res.json())
+.then(paises => {
 
-  data.forEach(p => {
+  paises.forEach(p => {
 
     const apiPais = p.name;
     const nombreMostrar = aMayus(apiPais);
 
-    paisCiudadania.appendChild(new Option(nombreMostrar, apiPais));
-    paisResidencia.appendChild(new Option(nombreMostrar, apiPais));
-    paisPasaporte.appendChild(new Option(nombreMostrar, apiPais));
+    paisCiudadania.add(new Option(nombreMostrar, apiPais));
+    paisResidencia.add(new Option(nombreMostrar, apiPais));
+    paisPasaporte.add(new Option(nombreMostrar, apiPais));
 
   });
-
+  
   paisPasaporte.insertBefore(new Option("N/A","N/A"), paisPasaporte.firstChild);
   paisPasaporte.value = "N/A";
 
+})
+.catch(err => {
+  console.error("Error cargando paises:", err);
 });
 
 /* =========================
