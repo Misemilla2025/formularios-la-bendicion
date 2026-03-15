@@ -88,7 +88,7 @@ h3 {
  <div class="section">
    <select id="tipo_doc" required>
    <option value="">SELECCIONE</option>
-   <option value="CEDULA_CIUDADANIA">CEDULA DE CIUDADANIA</option>
+   <option value="CEDULA DE CIUDADANIA">CEDULA DE CIUDADANIA</option>
    <option value="CEDULA_VENEZOLANA">CEDULA VENEZOLANA</option>
    <option value="DNI">DNI</option>
    <option value="IDMEX">IDMEX</option>
@@ -127,7 +127,7 @@ h3 {
  <input id="numero_documento" required
         placeholder="Solo Mayusculas y Numeros"
         oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
-   <label>CORREO ACTUAL (VALIDACION)</label>
+   <label>CORREO ELECTRONICO</label>
    <input id="correo_validacion" type="email" required>
    <button type="button" id="btnValidarRegistro" onclick="validarRegistro()">
  VALIDAR DATOS
@@ -147,8 +147,6 @@ h3 {
  </div>
  </div>
  </div>
-
-
 
 <!-- FORMULARIO PRINCIPAL -->
 <div id="bloque_formulario" class="hidden">
@@ -170,8 +168,9 @@ CORREO NUEVO
 <div id="zona_actualizacion_documento"></div>
 
   <label>PRIMER NOMBRE</label>
-  <input id="primer_nombre" required>
-
+<input id="primer_nombre" required
+       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')">
+  
   <label>SEGUNDO NOMBRE</label>
 
 <select
@@ -189,11 +188,16 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')">
 
   <label>APELLIDOS COMPLETOS</label>
-  <input id="apellidos" required>
-
+  <input
+  id="apellidos"
+  required
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')"
+>
+  
 <label>GENERO</label>
 <select id="genero" required>
   <option value="">SELECCIONE</option>
@@ -212,7 +216,12 @@ CORREO NUEVO
   </select>
 
   <label>FECHA DE NACIMIENTO (Tal cual aparece escrito en su documento, recomendación tener a mano su documento para no equivocarse al colocar la fecha)</label>
-  <input id="fecha_nacimiento_doc" placeholder="FORMATO SEGUN DOCUMENTO" required>
+  <input
+  id="fecha_nacimiento_doc"
+  placeholder="FORMATO SEGUN DOCUMENTO"
+  required
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9 /-]/g,'')"
+/>
 </div>
 
 <div class="section">
@@ -287,7 +296,11 @@ CORREO NUEVO
     <option value="N/A">N/A</option>
     <option value="OTRO">ESCRIBIR</option>
   </select>
-  <input id="pasaporte_num_text" placeholder="Escriba igual como está en el pasaporte" style="font-size:13px; display:none;">
+  <input 
+  id="pasaporte_num_text" 
+  placeholder="Escriba igual como está en el pasaporte" 
+  style="font-size:13px; display:none;"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
   <label>PAIS EXPEDICION PASAPORTE</label>
   <select id="pais_pasaporte" onchange="formatoPasaporte()" required>
@@ -311,7 +324,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9 \-\/]/g,'')">
 
   <label>FECHA EXPEDICION PASAPORTE (Tal cual esta escrito en su documento)</label>
 
@@ -329,7 +343,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9 \-\/]/g,'')">
 
   <label>FECHA VENCIMIENTO PASAPORTE (Tal cual esta escrito en su documento)</label>
 
@@ -347,7 +362,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9 \-\/]/g,'')">
 
   <label>AUTORIDAD EMISORA (Tal cual esta escrito en su documento)</label>
 
@@ -365,7 +381,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9 .]/g,'')">
 
 <div class="section">
   <h3>BENEFICIARIOS</h3>
@@ -388,7 +405,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')">
 
   <label>BENEFICIARIO 1 - TIPO DOCUMENTO</label>
 <select id="ben1_tipo_doc">
@@ -400,7 +418,27 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option>PASAPORTE</option>
+  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
+
+<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
+
+<option value="CARNÉ DE IDENTIDAD">CARNÉ DE IDENTIDAD</option>
+
+<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
+
+<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
+
+<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
+
+<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
+
+<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
+
+<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
+
+<option value="PASAPORTE">PASAPORTE</option>
+
+<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
   <option>OTRO</option>
 </select>
 
@@ -420,7 +458,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
   <label>BENEFICIARIO 1 - PARENTESCO</label>
 <select id="ben1_parentesco" required>
@@ -445,14 +484,14 @@ CORREO NUEVO
   <option value="N/A">N/A</option>
   <option value="OTRO">ESCRIBIR</option>
 </select>
-
 <input
   placeholder="Ingrese información"
   id="ben2_nombre_sel_txt"
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')">
 
   <label>BENEFICIARIO 2 - TIPO DOCUMENTO</label>
 <select id="ben2_tipo_doc">
@@ -464,7 +503,27 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option>PASAPORTE</option>
+  <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
+
+<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
+
+<option value="CARNÉ DE IDENTIDAD">CARNÉ DE IDENTIDAD</option>
+
+<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
+
+<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
+
+<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
+
+<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
+
+<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
+
+<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
+
+<option value="PASAPORTE">PASAPORTE</option>
+
+<option value="REGISTRO CIVIL">REGISTRO CIVIL</option>
   <option>OTRO</option>
 </select>
 
@@ -484,7 +543,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
   <label>BENEFICIARIO 2 - PARENTESCO</label>
 <select id="ben2_parentesco" required>
@@ -516,7 +576,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')">
 
   <label>BENEFICIARIO 3 - TIPO DOCUMENTO</label>
 <select id="ben3_tipo_doc">
@@ -528,7 +589,27 @@ CORREO NUEVO
   <option>INE</option>
   <option>TARJETA DE IDENTIDAD</option>
   <option>LICENCIA DE CONDUCIR</option>
-  <option>PASAPORTE</option>
+ <option value="CEDULA DE IDENTIDAD">CEDULA DE IDENTIDAD</option>
+
+<option value="CEDULA DE EXTRANJERIA">CEDULA DE EXTRANJERIA</option>
+
+<option value="CARNÉ DE IDENTIDAD">CARNÉ DE IDENTIDAD</option>
+
+<option value="CEDULA DE IDENTIDAD ELECTORAL">CEDULA DE IDENTIDAD ELECTORAL</option>
+
+<option value="CEDULA DE IDENTIDAD CIVIL">CEDULA DE IDENTIDAD CIVIL</option>
+
+<option value="CEDULA DE IDENTIDAD PERSONAL">CEDULA DE IDENTIDAD PERSONAL</option>
+
+<option value="CLAVE UNICA DE REGISTRO DE POBLACION">CLAVE UNICA DE REGISTRO DE POBLACION</option>
+
+<option value="DOCUMENTO PERSONAL DE IDENTIFICACION">DOCUMENTO PERSONAL DE IDENTIFICACION</option>
+
+<option value="DOCUMENTO UNICO DE IDENTIDAD">DOCUMENTO UNICO DE IDENTIDAD</option>
+
+<option value="PASAPORTE">PASAPORTE</option>
+
+<option value="REGISTRO CIVIL">REGISTRO CIVIL</option> 
   <option>OTRO</option>
 </select>
 
@@ -548,7 +629,8 @@ CORREO NUEVO
   class="na-input mayusculas"
   type="text"
   value="N/A"
-  style="display:none">
+  style="display:none"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
   <label>BENEFICIARIO 3 - PARENTESCO</label>
 <select id="ben3_parentesco" required>
@@ -648,10 +730,11 @@ REGISTRO BANCUS
   </label>
 
   <input
-    type="text"
-    id="bancus_lider"
-    placeholder="Nombre del líder"
-  />
+  type="text"
+  id="bancus_lider"
+  placeholder="Nombre del líder"
+  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')"
+/>
 </div>
 
 <label>AUTORIZA EL MANEJO DE DATOS PERSONALES (Sus datos seran usados para el fin que los permitio y nunca se compartiran con terceros)</label>
@@ -710,7 +793,6 @@ telegram.addEventListener("blur", () => {
     telegram.focus();
   }
 });
-
 
 /* =========================
  EMAILS — VALIDACIÓN EN DOM (SUAVE)
@@ -820,6 +902,27 @@ document.querySelectorAll(".na-select").forEach(select=>{
 });
 
 /* =========================
+   FUNCION BANDERA
+========================= */
+function obtenerBandera(codigo) {
+  return codigo
+    .toUpperCase()
+    .replace(/./g, c =>
+      String.fromCodePoint(127397 + c.charCodeAt())
+    );
+}
+
+/* =========================
+   FUNCION NORMALIZAR (MAYUS + SIN TILDES)
+========================= */
+function normalizar(str) {
+  return str
+    .normalize("NFD")                   // descompone caracteres acentuados
+    .replace(/[\u0300-\u036f]/g, "")    // elimina tildes
+    .toUpperCase();                      // mayúsculas
+}
+
+/* =========================
    CARGAR PAISES DESDE JSON LOCAL
 ========================= */
 
@@ -845,13 +948,10 @@ fetch("./countries.json")
 
     // cargar países
     paises.forEach(p => {
-
-      const nombre = p.name.toUpperCase();
-
+      const nombre = normalizar(p.name); // <-- ahora normalizado
       paisCiudadania.add(new Option(nombre, p.name));
       paisResidencia.add(new Option(nombre, p.name));
       paisPasaporte.add(new Option(nombre, p.name));
-
     });
 
   })
@@ -880,26 +980,22 @@ paisResidencia.addEventListener("change", () => {
   const paisObj = paisesGlobal.find(p => p.name === paisSeleccionado);
   if (!paisObj) return;
 
-  // indicativo
-  indicativo.value = paisObj.dial_code || "";
+  // indicativo con bandera
+  const bandera = obtenerBandera(paisObj.iso2);
+  indicativo.value = `${bandera} ${paisObj.dial_code || ""}`;
 
   // estados
   paisObj.states.forEach(s => {
-
-    const nombreEstado = s.name.toUpperCase();
-
+    const nombreEstado = normalizar(s.name); // <-- normalizado
     const opt = document.createElement("option");
     opt.value = nombreEstado;
     opt.textContent = nombreEstado;
-
     estado.appendChild(opt);
-
   });
 
   estado.disabled = false;
 
 });
-
 
 estado.addEventListener("change", () => {
 
@@ -912,15 +1008,12 @@ estado.addEventListener("change", () => {
   const paisObj = paisesGlobal.find(p => p.name === paisResidencia.value);
   if (!paisObj) return;
 
-  const estadoObj = paisObj.states.find(s => s.name.toUpperCase() === estadoSeleccionado);
+  const estadoObj = paisObj.states.find(s => normalizar(s.name) === estadoSeleccionado);
   if (!estadoObj) return;
 
   estadoObj.cities.forEach(c => {
-
-    const nombreCiudad = c.toUpperCase();
-
+    const nombreCiudad = normalizar(c); // <-- normalizado
     ciudad.appendChild(new Option(nombreCiudad, nombreCiudad));
-
   });
 
   ciudad.disabled = false;
@@ -1383,13 +1476,13 @@ document.getElementById("bancus_lider").value =
 
 controlarBancus(false);
 
-
-
-  const nombreCompleto = [
+ const nombreCompleto = [
   data.primer_nombre,
   data.segundo_nombre_sel,
   data.apellidos
-].filter(Boolean).join(" ");
+]
+.filter(v => v && v !== "N/A") // elimina vacíos y "N/A"
+.join(" ");
 
 alert(
   " 😃 Registro encontrado\n\n" +
@@ -1466,7 +1559,6 @@ setTimeout(()=>{
     setVal(`ben${i}_parentesco`, data[`ben${i}_parentesco`]);
   }
 
-  
 };
 
 /* =========================
@@ -1503,38 +1595,43 @@ function controlarBancus(limpiar = true) {
 document.getElementById("bancus_registro")
   ?.addEventListener("change", () => controlarBancus(true));
 
-/* =========================
- ACTUALIZAR (BLINDADO – NO TOCAR)
-========================= */
-window.actualizarRegistro = async () => {
-  const numero = numero_documento.value.trim();
-  const correo = correo_validacion.value.trim().toLowerCase();
-  
-/* =========================
- SINCRONIZAR CORREO NUEVO
-========================= */
-
-let correoParaValidar = correo;
-
-if (correo_nuevo.value === "OTRO") {
-
-  const nuevoCorreo = correo_nuevo_text.value.trim().toLowerCase();
-
-  const emailRegex = /^[^\s@]+\@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(nuevoCorreo)) {
-    alert("⚠️ El correo nuevo  que desea actualizar debe incluir @ y un dominio válido (.com, .net, etc.)");
-    return;
-  }
-
-  correoParaValidar = nuevoCorreo;
-}
-
-  // 🔒 validar tratamiento de datos
-if (autoriza_datos.value !== "SI") {
-  alert("⚠️ Debe aceptar el tratamiento de datos personales para poder enviar el formulario.");
-  return; // Detiene el envío
-}
+// Declara esta variable FUERA de la función, para que persista su valor
+ let estaActualizando = false;
+ /* =========================
+  ACTUALIZAR (BLINDADO – NO TOCAR)
+ ========================= */
+ window.actualizarRegistro = async () => {
+   const btnActualizar = document.getElementById("btnActualizarDatos");
+   // --- CONTROL DE EJECUCIÓN MÚLTIPLE ---
+   if (estaActualizando) return; // Si ya está corriendo, no hacer nada
+   estaActualizando = true; // Marcar que está en proceso
+   // --- BLOQUEO INMEDIATO DEL BOTÓN ---
+   if (btnActualizar) {
+     btnActualizar.disabled = true;
+     btnActualizar.textContent = "Actualizando...";
+   }
+   try {
+     const numero = numero_documento.value.trim();
+     const correo = correo_validacion.value.trim().toLowerCase();
+   
+     /* =========================
+      SINCRONIZAR CORREO NUEVO
+     ========================= */
+     let correoParaValidar = correo;
+     if (correo_nuevo.value === "OTRO") {
+       const nuevoCorreo = correo_nuevo_text.value.trim().toLowerCase();
+       const emailRegex = /^[^\s@]+\@[^\s@]+\.[^\s@]+$/;
+       if (!emailRegex.test(nuevoCorreo)) {
+         alert("⚠️ El correo nuevo que desea actualizar debe incluir @ y un dominio válido (.com, .net, etc.)");
+         return; // Salir pero no olvidar restaurar en finally
+       }
+       correoParaValidar = nuevoCorreo;
+     }
+     // 🔒 validar tratamiento de datos
+     if (autoriza_datos.value !== "SI") {
+       alert("⚠️ Debe aceptar el tratamiento de datos personales para poder enviar el formulario.");
+       return; // Salir pero no olvidar restaurar en finally
+     }
 
 let bancusRegistro = document.getElementById("bancus_registro")?.value || "NO";
 let bancusCorreoFinal = "N/A";
@@ -1568,7 +1665,7 @@ if (bancusRegistro === "SI") {
   correo_nuevo: naValue("correo_nuevo","correo_nuevo_text","correo_nuevo"),
   correo_validacion: correoParaValidar,
   fecha_nacimiento_doc: fecha_nacimiento_doc.value || registroOriginal.fecha_nacimiento_doc,
-
+tipo_doc: document.getElementById("tipo_doc")?.value || "N/A",
   pais_residencia: pais_residencia.value || registroOriginal.pais_residencia,
   estado: estado.value || registroOriginal.estado,
   ciudad: ciudad.value || registroOriginal.ciudad,
@@ -1631,8 +1728,6 @@ numero_documento:
 
 migrado_mayor_edad: true
 };
-
-    try {
 
     const { data, error } = await supabase
   .from("actualizacion_registros_la_bendicion")
@@ -1773,11 +1868,18 @@ if (formulario) {
 }
 
   } catch (error) {
-
-    console.log(error);
-    alert("❌ Error al actualizar: " + error.message);
-  }
-};
+     console.log(error);
+     alert("❌ Error al actualizar: " + error.message);
+   } finally { // El bloque de restauración va aquí, dentro de la función y después del catch
+     // --- RESTAURAR TODO SIEMPRE ---
+     estaActualizando = false; // Desmarcar proceso
+     const btnActualizar = document.getElementById("btnActualizarDatos"); // Volver a obtener el botón (por si el ámbito cambia)
+     if (btnActualizar) {
+       btnActualizar.disabled = false;
+       btnActualizar.textContent = "Actualizar Datos";
+     }
+   }
+ }; // Cierre final de la función window.actualizarRegistro
 
 /* =========================
  VISUAL N/A (AUTOMÁTICO)
@@ -1928,7 +2030,6 @@ window.enviarCodigoCorreo = async () => {
     }
   }
 };
-
 
 /* =========================
    VERIFICAR CODIGO
