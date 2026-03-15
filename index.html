@@ -76,6 +76,93 @@ h3 {
     color: #2b4a6f; /* Añadido punto y coma */
 }
 
+/* ==============================================
+     ESTILOS PARA SELECTORES CON ÍNDICE DE LETRAS
+============================================== */
+/* Contenedor general de cada campo */
+.selector-grupo {
+  margin-bottom: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Índice de letras horizontal */
+.indice-letras {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 8px 0;
+  margin: 6px 0 10px 0;
+  border-bottom: 1px solid #dde3ec;
+  scrollbar-width: thin; /* Para Firefox */
+}
+
+/* Barra de scroll del índice */
+.indice-letras::-webkit-scrollbar {
+  height: 4px;
+}
+.indice-letras::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 2px;
+}
+
+/* Botones de cada letra */
+.letra-item {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  color: #34495e;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0; /* No se achican */
+}
+
+.letra-item:hover, .letra-item.active {
+  background-color: #4a90e2;
+  color: white;
+}
+
+/* Lista de opciones (países, estados, ciudades) */
+.lista-opciones {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  scrollbar-width: thin; /* Para Firefox */
+}
+
+/* Barra de scroll de la lista */
+.lista-opciones::-webkit-scrollbar {
+  width: 6px;
+}
+.lista-opciones::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+/* Elementos de la lista */
+.opcion-item {
+  padding: 10px 15px;
+  color: #34495e;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.opcion-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Ocultar selects antiguos cuando los reemplacemos */
+.select-antiguo {
+  display: none;
+}
+
 </style>
 </head>
 <body>
@@ -206,9 +293,17 @@ CORREO NUEVO
   <option value="PREFIERO NO RESPONDER">PREFIERO NO RESPONDER</option>
 </select>
 
-<div class="section">
-  <label>PAIS DE CIUDADANIA</label>
-  <select id="pais_ciudadania" required></select>
+<!-- NUEVO CAMPO: PAÍS DE CIUDADANÍA -->
+<div class="selector-grupo">
+  <label>PAÍS DE CIUDADANÍA</label>
+  <!-- Índice de letras (se crea dinámicamente) -->
+  <div class="indice-letras" id="indicePaisCiudadania"></div>
+  <!-- Lista de países (se carga desde JSON) -->
+  <div class="lista-opciones" id="listaPaisCiudadania"></div>
+  <!-- Input oculto para guardar el valor (mismo nombre que antes para que el formulario funcione) -->
+  <input type="hidden" id="pais_ciudadania" name="pais_ciudadania" required>
+</div>
+
 
   <label>IDIOMA</label>
   <select id="idioma" required>
@@ -2144,6 +2239,75 @@ try {
     alert("Error verificando código");
   }
 };
+
+// Función para cargar países desde tu JSON (estructura con name, states, cities)
+async function cargarPaisesCiudadania() {
+  try {
+    // JSON está al mismo nivel que el HTML, así que la ruta es correcta
+    const respuesta = await fetch('countries.json');
+    if (!respuesta.ok) throw new Error("Error al cargar países");
+    
+    const paises = await respuesta.json();
+    const lista = document.getElementById('listaPaisCiudadania');
+    const indice = document.getElementById('indicePaisCiudadania');
+
+    // 1. Crear botones de letras (A-Z + TODOS)
+    const letras = ["TODOS", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    indice.innerHTML = "";
+    letras.forEach(letra => {
+      const btn = document.createElement("button");
+      btn.className = "letra-item";
+      btn.dataset.letra = letra;
+      btn.textContent = letra === "TODOS" ? "T" : letra;
+      indice.appendChild(btn);
+    });
+
+    // 2. Cargar y ordenar países (usamos "name" en lugar de "nombre")
+    paises.sort((a, b) => a.name.localeCompare(b.name));
+    lista.innerHTML = "";
+    paises.forEach(pais => {
+      const item = document.createElement("div");
+      item.className = "opcion-item";
+      item.textContent = pais.name;
+      // Guardar el país completo en un atributo para usar sus estados después
+      item.dataset.paisCompleto = JSON.stringify(pais);
+      item.addEventListener("click", () => {
+        const paisSeleccionado = JSON.parse(item.dataset.paisCompleto);
+        document.getElementById('pais_ciudadania').value = paisSeleccionado.name;
+        console.log("País seleccionado:", paisSeleccionado.name);
+        console.log("Estados disponibles:", paisSeleccionado.states);
+        // Aquí podremos cargar los estados cuando lleguemos a ese campo
+      });
+      lista.appendChild(item);
+    });
+
+    // 3. Función de filtrado por letra
+    indice.querySelectorAll(".letra-item").forEach(boton => {
+      boton.addEventListener("click", () => {
+        const letra = boton.dataset.letra.toUpperCase();
+        lista.querySelectorAll(".opcion-item").forEach(item => {
+          if (letra === "TODOS" || item.textContent.toUpperCase().startsWith(letra)) {
+            item.style.display = "block";
+          } else {
+            item.style.display = "none";
+          }
+        });
+      });
+    });
+
+    // Seleccionar "TODOS" por defecto
+    indice.querySelector('[data-letra="TODOS"]').click();
+
+  } catch (error) {
+    console.error(error);
+    document.getElementById('listaPaisCiudadania').innerHTML = "<div class='opcion-item' style='color: red;'>❌ No se pudieron cargar los países</div>";
+  }
+}
+
+// Inicializar cuando la página cargue
+window.addEventListener("load", () => {
+  cargarPaisesCiudadania();
+});
 
 </script>
 </body>  
