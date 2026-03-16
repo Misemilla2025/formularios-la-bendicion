@@ -1343,15 +1343,13 @@ window.validarRegistro = async () => {
   console.log("antes de fetch");
 
   const resp = await fetch(`${API_BASE}/validar-datos`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    documento: numero,
-    correo: correo
-  })
-});
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      documento: numero,
+      correo: correo
+    })
+  });
 
   console.log("respuesta fetch:", resp);
 
@@ -1364,7 +1362,16 @@ window.validarRegistro = async () => {
     return;
   }
 
+  // ⚠️ Mensaje especial si el correo se guardó por primera vez
+  if (data.mensaje && data.mensaje.includes("Correo actualizado correctamente")) {
+    alert(data.mensaje); // 📩 Mostrar mensaje al usuario
+    return; // Detener flujo para que vuelva a hacer la validación
+  }
+
+  // Guardar registro original para uso posterior, sin mostrar el formulario aún
   registroOriginal = data;
+
+  // ⚠️ NO habilitamos formulario aquí, se habilitará solo después de validar el código OTP
 
   document.getElementById("btnEnviarCodigo")
   ?.style.setProperty("display","block");
