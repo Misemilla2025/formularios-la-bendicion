@@ -76,74 +76,6 @@ h3 {
     color: #2b4a6f; /* Añadido punto y coma */
 }
 
-/* ==============================================
-     ESTILOS UNIFICADOS PARA AUTOCOMPLETADO
-============================================== */
-.autocomplete-container {
-    position: relative;
-    width: 100%;
-    margin-bottom: 12px; /* Espacio entre campos */
-}
-
-.autocomplete-input {
-    width: 100%;
-    padding: 9px;
-    margin-top: 4px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 15px;
-    box-sizing: border-box; /* Evita desbordamientos */
-}
-
-.autocomplete-suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    max-height: 220px;
-    overflow-y: auto;
-    background: white;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 0 0 6px 6px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    z-index: 1000;
-    display: none;
-}
-
-.autocomplete-suggestion {
-    padding: 10px 15px;
-    cursor: pointer;
-    color: #34495e;
-}
-
-.autocomplete-suggestion:hover {
-    background-color: #f8f9fa;
-}
-
-.autocomplete-suggestion.active {
-    background-color: #eef2f7;
-}
-
-/* ==============================================
-     ESTILOS ESPECÍFICOS PARA ESTADOS Y CIUDADES
-============================================== */
-#inputEstado, #inputCiudad {
-    display: none; /* Oculto hasta selección de país/estado */
-    width: 100%;
-    padding: 9px; /* Igual que el resto de inputs */
-    margin-top: 4px; /* Igual que el resto de inputs */
-    border-radius: 6px; /* Igual que el resto de inputs */
-    border: 1px solid #ccc;
-    font-size: 15px; /* Igual que el resto de inputs */
-    box-sizing: border-box;
-}
-
-/* ==============================================
-     ELIMINAR ESTILOS DUPLICADOS Y SOBRANTES
-============================================== */
-/* Se quitaron estilos repetidos que causaban inconsistencias */
-
 </style>
 </head>
 <body>
@@ -274,16 +206,12 @@ CORREO NUEVO
   <option value="PREFIERO NO RESPONDER">PREFIERO NO RESPONDER</option>
 </select>
 
-<div class="section">
-    <!-- REEMPLAZA EL CAMPO ANTIGUO DE PAÍS DE CIUDADANÍA POR ESTE -->
-    <label>PAÍS DE CIUDADANÍA</label>
-    <div class="autocomplete-container">
-        <input type="text" id="inputPaisCiudadania" class="autocomplete-input" placeholder="Escribe el país...">
-        <div id="sugerenciasPaisCiudadania" class="autocomplete-suggestions"></div>
-        <input type="hidden" id="pais_ciudadania" name="pais_ciudadania" required>
-    </div>
-</div>
-
+<!-- PAÍS DE CIUDADANÍA CON FILTRO -->
+ <div class="section">
+   <label>PAÍS DE CIUDADANÍA</label>
+   <input type="text" id="filtroPaisCiudadania" placeholder="BUSCAR PAÍS...">
+   <select id="pais_ciudadania" required></select>
+ </div>
 
   <label>IDIOMA</label>
   <select id="idioma" required>
@@ -299,14 +227,22 @@ CORREO NUEVO
 />
 </div>
 
-<div class="section">
-   <label>PAIS DE RESIDENCIA</label>
+<!-- PAÍS DE RESIDENCIA CON FILTRO -->
+ <div class="section">
+   <label>PAÍS DE RESIDENCIA</label>
+   <input type="text" id="filtroPaisResidencia" placeholder="BUSCAR PAÍS...">
    <select id="pais_residencia" required></select>
-   
-   <label>DEPARTAMENTO ESTADOS Y PROVINCIAS</label>
+ </div>
+ <!-- DEPARTAMENTO/ESTADO CON FILTRO -->
+ <div class="section">
+   <label>DEPARTAMENTO/ESTADO</label>
+   <input type="text" id="filtroEstado" placeholder="BUSCAR DEPARTAMENTO...">
    <select id="estado" required></select>
-   
+ </div>
+ <!-- CIUDAD CON FILTRO -->
+ <div class="section">
    <label>CIUDAD</label>
+   <input type="text" id="filtroCiudad" placeholder="BUSCAR CIUDAD...">
    <select id="ciudad" required></select>
  </div>
 
@@ -378,10 +314,12 @@ CORREO NUEVO
   style="font-size:13px; display:none;"
   oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
-  <div class="section">
-  <label>PAIS EXPEDICION PASAPORTE</label>
-  <select id="pais_pasaporte" required></select>
-</div>
+  <!-- PAÍS EXPEDICIÓN PASAPORTE CON FILTRO -->
+ <div class="section">
+   <label>PAÍS EXPEDICIÓN PASAPORTE</label>
+   <input type="text" id="filtroPaisPasaporte" placeholder="BUSCAR PAÍS...">
+   <select id="pais_pasaporte" required></select>
+ </div>
 
   <label>FECHA NACIMIENTO PASAPORTE (Tal cual esta escrito en su documento)</label>
 
@@ -1029,6 +967,76 @@ fetch("./countries.json")
       paisResidencia.add(new Option(nombre, p.name));
       paisPasaporte.add(new Option(nombre, p.name));
     });
+    
+    /* =========================
+   FILTROS PARA TODOS LOS SELECTS
+========================= */
+// FUNCIÓN REUTILIZABLE PARA FILTRAR PAÍSES
+function filtrarPaises(filtroId, selectId) {
+  const filtro = document.getElementById(filtroId);
+  const select = document.getElementById(selectId);
+  
+  filtro.addEventListener('input', () => {
+    const textoFiltro = normalizar(filtro.value);
+    const paisesFiltrados = paisesGlobal.filter(p => normalizar(p.name).includes(textoFiltro));
+    
+    // Limpiar select
+    select.innerHTML = selectId === 'pais_pasaporte' 
+      ? '<option value="N/A">N/A</option>'  // Mantener N/A en pasaporte
+      : '<option value="">SELECCIONE</option>';
+    
+    // Cargar países filtrados
+    paisesFiltrados.forEach(p => {
+      const nombre = normalizar(p.name);
+      select.add(new Option(nombre, p.name));
+    });
+  });
+}
+
+// APLICAR FILTRO A CADA PAÍS
+filtrarPaises('filtroPaisCiudadania', 'pais_ciudadania');
+filtrarPaises('filtroPaisResidencia', 'pais_residencia');
+filtrarPaises('filtroPaisPasaporte', 'pais_pasaporte');
+
+// FILTRO PARA ESTADO/DEPARTAMENTO
+const filtroEstado = document.getElementById('filtroEstado');
+filtroEstado.addEventListener('input', () => {
+  const textoFiltro = normalizar(filtroEstado.value);
+  const paisSeleccionado = paisResidencia.value;
+  
+  if (!paisSeleccionado) return;
+  const paisObj = paisesGlobal.find(p => p.name === paisSeleccionado);
+  if (!paisObj) return;
+  
+  const estadosFiltrados = paisObj.states.filter(s => normalizar(s.name).includes(textoFiltro));
+  
+  estado.innerHTML = '<option value="">SELECCIONE</option>';
+  estadosFiltrados.forEach(s => {
+    const nombre = normalizar(s.name);
+    estado.add(new Option(nombre, s.name));
+  });
+});
+
+// FILTRO PARA CIUDAD
+const filtroCiudad = document.getElementById('filtroCiudad');
+filtroCiudad.addEventListener('input', () => {
+  const textoFiltro = normalizar(filtroCiudad.value);
+  const paisSeleccionado = paisResidencia.value;
+  const estadoSeleccionado = estado.value;
+  
+  if (!paisSeleccionado || !estadoSeleccionado) return;
+  const paisObj = paisesGlobal.find(p => p.name === paisSeleccionado);
+  const estadoObj = paisObj.states.find(s => normalizar(s.name) === normalizar(estadoSeleccionado));
+  if (!estadoObj) return;
+  
+  const ciudadesFiltradas = estadoObj.cities.filter(c => normalizar(c).includes(textoFiltro));
+  
+  ciudad.innerHTML = '<option value="">SELECCIONE</option>';
+  ciudadesFiltradas.forEach(c => {
+    const nombre = normalizar(c);
+    ciudad.add(new Option(nombre, nombre));
+  });
+});
 
   })
   .catch(err => {
@@ -2220,118 +2228,6 @@ try {
     alert("Error verificando código");
   }
 };
-
-</script>
-
-<script>
-/* =========================
-   VARIABLES GLOBALES Y FUNCIONES AUXILIARES
-========================= */
-let paisesGlobal = [];
-const paisCiudadania = document.getElementById('pais_ciudadania'); // Asegúrate que este ID exista en tu HTML
-const paisResidencia = document.getElementById('pais_residencia');
-const paisPasaporte = document.getElementById('pais_pasaporte');
-const estado = document.getElementById('estado');
-const ciudad = document.getElementById('ciudad');
-const indicativo = document.getElementById('indicativo');
-
-function normalizar(texto) {
-    return texto.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-function obtenerBandera(iso2) {
-    return iso2 ? String.fromCodePoint(...iso2.toUpperCase().split('').map(c => 0x1F1E6 + c.charCodeAt(0) - 0x41)) : "";
-}
-
-
-/* =========================
-   CARGAR PAISES DESDE JSON LOCAL
-========================= */
-fetch("./countries.json")
-  .then(res => res.json())
-  .then(paises => {
-    paisesGlobal = paises;
-
-    // Limpiar selects
-    paisCiudadania.innerHTML = '<option value="">SELECCIONE</option>';
-    paisResidencia.innerHTML = '<option value="">SELECCIONE</option>';
-    paisPasaporte.innerHTML = '<option value="N/A">N/A</option>'; // Opción N/A incluida
-
-    // Ordenar países (COLOMBIA primero)
-    paises.sort((a,b) => {
-      if(a.name === "COLOMBIA") return -1;
-      if(b.name === "COLOMBIA") return 1;
-      return a.name.localeCompare(b.name);
-    });
-
-    // Cargar países en los selects
-    paises.forEach(p => {
-      const nombre = normalizar(p.name);
-      paisCiudadania.add(new Option(nombre, p.name));
-      paisResidencia.add(new Option(nombre, p.name));
-      paisPasaporte.add(new Option(nombre, p.name));
-    });
-
-  })
-  .catch(err => {
-    console.error("Error cargando countries.json:", err);
-  });
-
-
-/* =========================
-   PAIS → ESTADO → CIUDAD (LOGICA ORIGINAL QUE FUNCIONA)
-========================= */
-paisResidencia.addEventListener("change", () => {
-  estado.innerHTML = '<option value="">SELECCIONE ESTADO</option>';
-  ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
-  estado.disabled = true;
-  ciudad.disabled = true;
-  indicativo.value = "";
-
-  const paisSeleccionado = paisResidencia.value;
-  if (!paisSeleccionado) return;
-
-  const paisObj = paisesGlobal.find(p => p.name === paisSeleccionado);
-  if (!paisObj) return;
-
-  // Indicativo con bandera
-  const bandera = obtenerBandera(paisObj.iso2);
-  indicativo.value = `${bandera} ${paisObj.dial_code || ""}`;
-
-  // Cargar estados
-  paisObj.states.forEach(s => {
-    const nombreEstado = normalizar(s.name);
-    const opt = document.createElement("option");
-    opt.value = nombreEstado;
-    opt.textContent = nombreEstado;
-    estado.appendChild(opt);
-  });
-
-  estado.disabled = false;
-});
-
-estado.addEventListener("change", () => {
-  ciudad.innerHTML = '<option value="">SELECCIONE CIUDAD</option>';
-  ciudad.disabled = true;
-
-  const estadoSeleccionado = estado.value;
-  if (!estadoSeleccionado) return;
-
-  const paisObj = paisesGlobal.find(p => p.name === paisResidencia.value);
-  if (!paisObj) return;
-
-  const estadoObj = paisObj.states.find(s => normalizar(s.name) === estadoSeleccionado);
-  if (!estadoObj) return;
-
-  // Cargar ciudades
-  estadoObj.cities.forEach(c => {
-    const nombreCiudad = normalizar(c);
-    ciudad.appendChild(new Option(nombreCiudad, nombreCiudad));
-  });
-
-  ciudad.disabled = false;
-});
-</script>
 
 </script>
 </body>  
