@@ -209,9 +209,14 @@ CORREO NUEVO
 <!-- PAÍS DE CIUDADANÍA CON FILTRO -->
  <div class="section">
    <label>PAÍS DE CIUDADANÍA</label>
-   <input type="text" id="filtroPaisCiudadania" placeholder="BUSCAR PAÍS...">
+   <input
+     type="text"
+     id="filtroPaisCiudadania"
+     placeholder="BUSCAR PAÍS..."
+     oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')"
+   >
    <select id="pais_ciudadania" required></select>
- </div>
+</div>
 
   <label>IDIOMA</label>
   <select id="idioma" required>
@@ -230,21 +235,38 @@ CORREO NUEVO
 <!-- PAÍS DE RESIDENCIA CON FILTRO -->
  <div class="section">
    <label>PAÍS DE RESIDENCIA</label>
-   <input type="text" id="filtroPaisResidencia" placeholder="BUSCAR PAÍS...">
+   <input
+     type="text"
+     id="filtroPaisResidencia"
+     placeholder="BUSCAR PAÍS..."
+     oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')"
+   >
    <select id="pais_residencia" required></select>
- </div>
+</div>
+
  <!-- DEPARTAMENTO/ESTADO CON FILTRO -->
  <div class="section">
    <label>DEPARTAMENTO/ESTADO</label>
-   <input type="text" id="filtroEstado" placeholder="BUSCAR DEPARTAMENTO...">
+   <input
+     type="text"
+     id="filtroEstado"
+     placeholder="BUSCAR DEPARTAMENTO..."
+     oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')"
+   >
    <select id="estado" required></select>
- </div>
+</div>
+
  <!-- CIUDAD CON FILTRO -->
  <div class="section">
    <label>CIUDAD</label>
-   <input type="text" id="filtroCiudad" placeholder="BUSCAR CIUDAD...">
+   <input
+     type="text"
+     id="filtroCiudad"
+     placeholder="BUSCAR CIUDAD..."
+     oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')"
+   >
    <select id="ciudad" required></select>
- </div>
+</div>
 
   <label>DIRECCION DE RESIDENCIA</label>
   <input id="direccion_residencia" required>
@@ -317,9 +339,14 @@ CORREO NUEVO
   <!-- PAÍS EXPEDICIÓN PASAPORTE CON FILTRO -->
  <div class="section">
    <label>PAÍS EXPEDICIÓN PASAPORTE</label>
-   <input type="text" id="filtroPaisPasaporte" placeholder="BUSCAR PAÍS...">
+   <input
+     type="text"
+     id="filtroPaisPasaporte"
+     placeholder="BUSCAR PAÍS..."
+     oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')"
+   >
    <select id="pais_pasaporte" required></select>
- </div>
+</div>
 
   <label>FECHA NACIMIENTO PASAPORTE (Tal cual esta escrito en su documento)</label>
 
