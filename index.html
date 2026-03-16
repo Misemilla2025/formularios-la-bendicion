@@ -77,90 +77,62 @@ h3 {
 }
 
 /* ==============================================
-     ESTILOS PARA SELECTORES CON ÍNDICE DE LETRAS
+     ESTILOS PARA AUTOCOMPLETADO SIMPLE
 ============================================== */
-/* Contenedor general de cada campo */
-.selector-grupo {
-  margin-bottom: 15px;
-  width: 100%;
-  box-sizing: border-box;
+.autocomplete-container {
+    position: relative;
+    width: 100%;
 }
 
-/* Índice de letras horizontal */
-.indice-letras {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  padding: 8px 0;
-  margin: 6px 0 10px 0;
-  border-bottom: 1px solid #dde3ec;
-  scrollbar-width: thin; /* Para Firefox */
+.autocomplete-input {
+    width: 100%;
+    padding: 9px;
+    margin-top: 4px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
 }
 
-/* Barra de scroll del índice */
-.indice-letras::-webkit-scrollbar {
-  height: 4px;
-}
-.indice-letras::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 2px;
-}
-
-/* Botones de cada letra */
-.letra-item {
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 50%;
-  background-color: #f5f5f5;
-  color: #34495e;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0; /* No se achican */
+.autocomplete-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: none;
 }
 
-.letra-item:hover, .letra-item.active {
-  background-color: #4a90e2;
-  color: white;
+.autocomplete-suggestion {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #34495e;
 }
 
-/* Lista de opciones (países, estados, ciudades) */
-.lista-opciones {
-  max-height: 220px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: white;
-  scrollbar-width: thin; /* Para Firefox */
+.autocomplete-suggestion:hover {
+    background-color: #f8f9fa;
 }
 
-/* Barra de scroll de la lista */
-.lista-opciones::-webkit-scrollbar {
-  width: 6px;
-}
-.lista-opciones::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 3px;
+.autocomplete-suggestion.active {
+    background-color: #eef2f7;
 }
 
-/* Elementos de la lista */
-.opcion-item {
-  padding: 10px 15px;
-  color: #34495e;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+/* ==============================================
+     ESTILOS EXTRA PARA ESTADOS Y CIUDADES
+============================================== */
+/* Ocultar campos de estado/ciudad hasta que se elija el país */
+#inputEstado, #inputCiudad {
+    display: none;
 }
 
-.opcion-item:hover {
-  background-color: #f8f9fa;
-}
-
-/* Ocultar selects antiguos cuando los reemplacemos */
-.select-antiguo {
-  display: none;
+#sugerenciasEstado, #sugerenciasCiudad {
+    display: none;
 }
 
 </style>
@@ -293,15 +265,14 @@ CORREO NUEVO
   <option value="PREFIERO NO RESPONDER">PREFIERO NO RESPONDER</option>
 </select>
 
-<!-- NUEVO CAMPO: PAÍS DE CIUDADANÍA -->
-<div class="selector-grupo">
-  <label>PAÍS DE CIUDADANÍA</label>
-  <!-- Índice de letras (se crea dinámicamente) -->
-  <div class="indice-letras" id="indicePaisCiudadania"></div>
-  <!-- Lista de países (se carga desde JSON) -->
-  <div class="lista-opciones" id="listaPaisCiudadania"></div>
-  <!-- Input oculto para guardar el valor (mismo nombre que antes para que el formulario funcione) -->
-  <input type="hidden" id="pais_ciudadania" name="pais_ciudadania" required>
+<div class="section">
+    <!-- REEMPLAZA EL CAMPO ANTIGUO DE PAÍS DE CIUDADANÍA POR ESTE -->
+    <label>PAÍS DE CIUDADANÍA</label>
+    <div class="autocomplete-container">
+        <input type="text" id="inputPaisCiudadania" class="autocomplete-input" placeholder="Escribe el país...">
+        <div id="sugerenciasPaisCiudadania" class="autocomplete-suggestions"></div>
+        <input type="hidden" id="pais_ciudadania" name="pais_ciudadania" required>
+    </div>
 </div>
 
 
@@ -320,14 +291,37 @@ CORREO NUEVO
 </div>
 
 <div class="section">
-  <label>PAIS DE RESIDENCIA</label>
-  <select id="pais_residencia" required></select>
+    <!-- REEMPLAZA EL CAMPO ANTIGUO DE PAÍS DE RESIDENCIA POR ESTE -->
+    <label>PAÍS DE RESIDENCIA</label>
+    <div class="autocomplete-container">
+        <input type="text" id="inputPaisResidencia" class="autocomplete-input" placeholder="Escribe el país...">
+        <div id="sugerenciasPaisResidencia" class="autocomplete-suggestions"></div>
+        <input type="hidden" id="pais_residencia" name="pais_residencia" required>
+    </div>
+</div>
 
-  <label>DEPARTAMENTO ESTADOS Y PROVINCIAS</label>
-  <select id="estado" required></select>
 
-  <label>CIUDAD</label>
-  <select id="ciudad" required></select>
+  <div class="section">
+    <!-- REEMPLAZA EL CAMPO ANTIGUO DE DEPARTAMENTO/ESTADOS/PROVINCIAS POR ESTE -->
+    <label>DEPARTAMENTO ESTADOS Y PROVINCIAS</label>
+    <div class="autocomplete-container">
+        <input type="text" id="inputEstado" class="autocomplete-input" placeholder="Escribe el departamento/estado...">
+        <div id="sugerenciasEstado" class="autocomplete-suggestions"></div>
+        <input type="hidden" id="estado" name="estado" required>
+    </div>
+</div>
+
+
+  <div class="section">
+    <!-- REEMPLAZA EL CAMPO ANTIGUO DE CIUDAD POR ESTE -->
+    <label>CIUDAD</label>
+    <div class="autocomplete-container">
+        <input type="text" id="inputCiudad" class="autocomplete-input" placeholder="Escribe la ciudad...">
+        <div id="sugerenciasCiudad" class="autocomplete-suggestions"></div>
+        <input type="hidden" id="ciudad" name="ciudad" required>
+    </div>
+</div>
+
 
   <label>DIRECCION DE RESIDENCIA</label>
   <input id="direccion_residencia" required>
@@ -397,10 +391,17 @@ CORREO NUEVO
   style="font-size:13px; display:none;"
   oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')">
 
-  <label>PAIS EXPEDICION PASAPORTE</label>
-  <select id="pais_pasaporte" onchange="formatoPasaporte()" required>
-    <option value="N/A">N/A</option>
-  </select>
+  <div class="section">
+    <!-- REEMPLAZA EL CAMPO ANTIGUO DE PAÍS EXPEDICIÓN PASAPORTE POR ESTE -->
+    <label>PAIS EXPEDICION PASAPORTE</label>
+    <div class="autocomplete-container">
+        <input type="text" id="inputPaisPasaporte" class="autocomplete-input" placeholder="Escribe el país..." onchange="formatoPasaporte()">
+        <div id="sugerenciasPaisPasaporte" class="autocomplete-suggestions"></div>
+        <input type="hidden" id="pais_pasaporte" name="pais_pasaporte" required>
+        <option value="N/A">N/A</option>
+    </div>
+</div>
+
 
   <label>FECHA NACIMIENTO PASAPORTE (Tal cual esta escrito en su documento)</label>
 
@@ -2240,75 +2241,217 @@ try {
   }
 };
 
-// Función para cargar países desde tu JSON (estructura con name, states, cities)
-async function cargarPaisesCiudadania() {
-  try {
-    // JSON está al mismo nivel que el HTML, así que la ruta es correcta
-    const respuesta = await fetch('countries.json');
-    if (!respuesta.ok) throw new Error("Error al cargar países");
-    
-    const paises = await respuesta.json();
-    const lista = document.getElementById('listaPaisCiudadania');
-    const indice = document.getElementById('indicePaisCiudadania');
+</script>
+<script>
+// Función base para inicializar un autocompletado individual
+async function initAutocomplete(inputId, sugerenciasId, hiddenId) {
+    try {
+        // Cargar países desde JSON
+        const res = await fetch('countries.json');
+        if (!res.ok) throw new Error("Error al cargar datos");
+        const paises = await res.json();
+        const paisesOrdenados = paises.sort((a, b) => a.name.localeCompare(b.name));
 
-    // 1. Crear botones de letras (A-Z + TODOS)
-    const letras = ["TODOS", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-    indice.innerHTML = "";
-    letras.forEach(letra => {
-      const btn = document.createElement("button");
-      btn.className = "letra-item";
-      btn.dataset.letra = letra;
-      btn.textContent = letra === "TODOS" ? "T" : letra;
-      indice.appendChild(btn);
-    });
+        const input = document.getElementById(inputId);
+        const sugerencias = document.getElementById(sugerenciasId);
+        const hidden = document.getElementById(hiddenId);
+        let seleccion = -1;
 
-    // 2. Cargar y ordenar países (usamos "name" en lugar de "nombre")
-    paises.sort((a, b) => a.name.localeCompare(b.name));
-    lista.innerHTML = "";
-    paises.forEach(pais => {
-      const item = document.createElement("div");
-      item.className = "opcion-item";
-      item.textContent = pais.name;
-      // Guardar el país completo en un atributo para usar sus estados después
-      item.dataset.paisCompleto = JSON.stringify(pais);
-      item.addEventListener("click", () => {
-        const paisSeleccionado = JSON.parse(item.dataset.paisCompleto);
-        document.getElementById('pais_ciudadania').value = paisSeleccionado.name;
-        console.log("País seleccionado:", paisSeleccionado.name);
-        console.log("Estados disponibles:", paisSeleccionado.states);
-        // Aquí podremos cargar los estados cuando lleguemos a ese campo
-      });
-      lista.appendChild(item);
-    });
+        // Mostrar sugerencias
+        function mostrarSugerencias(texto) {
+            sugerencias.innerHTML = "";
+            if (texto.length < 1) {
+                sugerencias.style.display = "none";
+                return;
+            }
 
-    // 3. Función de filtrado por letra
-    indice.querySelectorAll(".letra-item").forEach(boton => {
-      boton.addEventListener("click", () => {
-        const letra = boton.dataset.letra.toUpperCase();
-        lista.querySelectorAll(".opcion-item").forEach(item => {
-          if (letra === "TODOS" || item.textContent.toUpperCase().startsWith(letra)) {
-            item.style.display = "block";
-          } else {
-            item.style.display = "none";
-          }
+            const filtrados = paisesOrdenados.filter(p => p.name.toUpperCase().includes(texto.toUpperCase()));
+            if (filtrados.length > 0) {
+                sugerencias.style.display = "block";
+                filtrados.forEach((pais, i) => {
+                    const item = document.createElement("div");
+                    item.className = "autocomplete-suggestion";
+                    item.textContent = pais.name;
+                    item.onclick = () => {
+                        input.value = pais.name;
+                        hidden.value = pais.name;
+                        sugerencias.style.display = "none";
+                    };
+                    sugerencias.appendChild(item);
+                });
+            } else {
+                sugerencias.style.display = "none";
+            }
+        }
+
+        // Eventos
+        input.addEventListener("input", (e) => mostrarSugerencias(e.target.value));
+        input.addEventListener("keydown", (e) => {
+            const items = sugerencias.querySelectorAll(".autocomplete-suggestion");
+            if (e.key === "ArrowDown") seleccion = Math.min(seleccion + 1, items.length - 1);
+            if (e.key === "ArrowUp") seleccion = Math.max(seleccion - 1, -1);
+            if (e.key === "Enter" && seleccion >= 0) items[seleccion].click();
+            items.forEach((item, i) => item.classList.toggle("active", i === seleccion));
         });
-      });
-    });
 
-    // Seleccionar "TODOS" por defecto
-    indice.querySelector('[data-letra="TODOS"]').click();
+        document.addEventListener("click", (e) => {
+            if (!input.contains(e.target) && !sugerencias.contains(e.target)) sugerencias.style.display = "none";
+        });
 
-  } catch (error) {
-    console.error(error);
-    document.getElementById('listaPaisCiudadania').innerHTML = "<div class='opcion-item' style='color: red;'>❌ No se pudieron cargar los países</div>";
-  }
+    } catch (err) {
+        console.error(err);
+        document.getElementById(sugerenciasId).innerHTML = "<div class='autocomplete-suggestion' style='color: red;'>❌ Error de carga</div>";
+    }
 }
 
-// Inicializar cuando la página cargue
+// Inicializar cada campo por separado
 window.addEventListener("load", () => {
-  cargarPaisesCiudadania();
+    initAutocomplete("inputPaisCiudadania", "sugerenciasPaisCiudadania", "pais_ciudadania");
+    initAutocomplete("inputPaisResidencia", "sugerenciasPaisResidencia", "pais_residencia");
+    initAutocomplete("inputPaisPasaporte", "sugerenciasPaisPasaporte", "pais_pasaporte");
+});
+
+// Función para inicializar autocompletado de ESTADOS
+async function initAutocompleteEstado(paisSeleccionadoId, inputId, sugerenciasId, hiddenId) {
+    try {
+        // Obtener el país seleccionado
+        const paisInput = document.getElementById(paisSeleccionadoId);
+        const paisNombre = paisInput.value;
+        if (!paisNombre) return;
+
+        // Buscar el país en el JSON
+        const res = await fetch('countries.json');
+        const paises = await res.json();
+        const pais = paises.find(p => p.name === paisNombre);
+        if (!pais) throw new Error("País no encontrado");
+
+        const estados = pais.states.sort((a, b) => a.name.localeCompare(b.name));
+        const input = document.getElementById(inputId);
+        const sugerencias = document.getElementById(sugerenciasId);
+        const hidden = document.getElementById(hiddenId);
+        let seleccion = -1;
+
+        // Mostrar campos de estado
+        input.style.display = "block";
+        document.getElementById('labelEstado').textContent = `DEPARTAMENTO / ESTADO (${paisNombre})`;
+
+        // Función para mostrar sugerencias de estados
+        function mostrarEstados(texto) {
+            sugerencias.innerHTML = "";
+            if (texto.length < 1) {
+                sugerencias.style.display = "none";
+                return;
+            }
+
+            const filtrados = estados.filter(est => est.name.toUpperCase().includes(texto.toUpperCase()));
+            if (filtrados.length > 0) {
+                sugerencias.style.display = "block";
+                filtrados.forEach((est, i) => {
+                    const item = document.createElement("div");
+                    item.className = "autocomplete-suggestion";
+                    item.textContent = est.name;
+                    item.onclick = () => {
+                        input.value = est.name;
+                        hidden.value = est.name;
+                        sugerencias.style.display = "none";
+                        // Inicializar autocompletado de ciudades con este estado
+                        initAutocompleteCiudad(est.name, "inputCiudad", "sugerenciasCiudad", "ciudad");
+                    };
+                    sugerencias.appendChild(item);
+                });
+            }
+        }
+
+        // Eventos del input de estado
+        input.addEventListener("input", (e) => mostrarEstados(e.target.value));
+        input.addEventListener("keydown", (e) => {
+            const items = sugerencias.querySelectorAll(".autocomplete-suggestion");
+            switch(e.key) {
+                case "ArrowDown": seleccion = Math.min(seleccion + 1, items.length - 1); break;
+                case "ArrowUp": seleccion = Math.max(seleccion - 1, -1); break;
+                case "Enter": if (seleccion >= 0) items[seleccion].click(); break;
+            }
+            items.forEach((item, i) => item.classList.toggle("active", i === seleccion));
+        });
+
+    } catch (err) {
+        console.error(err);
+        document.getElementById(sugerenciasId).innerHTML = "<div style='color: red;'>❌ No se cargaron estados</div>";
+    }
+}
+
+// Función para inicializar autocompletado de CIUDADES
+async function initAutocompleteCiudad(estadoNombre, inputId, sugerenciasId, hiddenId) {
+    try {
+        const res = await fetch('countries.json');
+        const paises = await res.json();
+        // Encontrar el país y estado correspondientes
+        const paisSeleccionado = paises.find(p => p.states.some(est => est.name === estadoNombre));
+        const estado = paisSeleccionado.states.find(est => est.name === estadoNombre);
+        const ciudades = estado.cities.sort((a, b) => a.localeCompare(b));
+
+        const input = document.getElementById(inputId);
+        const sugerencias = document.getElementById(sugerenciasId);
+        const hidden = document.getElementById(hiddenId);
+        let seleccion = -1;
+
+        // Mostrar campo de ciudad
+        input.style.display = "block";
+        document.getElementById('labelCiudad').textContent = `CIUDAD (${estado.name})`;
+
+        // Función para mostrar ciudades
+        function mostrarCiudades(texto) {
+            sugerencias.innerHTML = "";
+            if (texto.length < 1) {
+                sugerencias.style.display = "none";
+                return;
+            }
+            const filtradas = ciudades.filter(ciu => ciu.toUpperCase().includes(texto.toUpperCase()));
+            if (filtradas.length > 0) {
+                sugerencias.style.display = "block";
+                filtradas.forEach(ciu => {
+                    const item = document.createElement("div");
+                    item.className = "autocomplete-suggestion";
+                    item.textContent = ciu;
+                    item.onclick = () => {
+                        input.value = ciu;
+                        hidden.value = ciu;
+                        sugerencias.style.display = "none";
+                    };
+                    sugerencias.appendChild(item);
+                });
+            }
+        }
+
+        // Eventos
+        input.addEventListener("input", (e) => mostrarCiudades(e.target.value));
+        input.addEventListener("keydown", (e) => {
+            const items = sugerencias.querySelectorAll(".autocomplete-suggestion");
+            switch(e.key) {
+                case "ArrowDown": seleccion = Math.min(seleccion + 1, items.length - 1); break;
+                case "ArrowUp": seleccion = Math.max(seleccion - 1, -1); break;
+                case "Enter": if (seleccion >= 0) items[seleccion].click(); break;
+            }
+            items.forEach((item, i) => item.classList.toggle("active", i === seleccion));
+        });
+
+    } catch (err) {
+        console.error(err);
+        document.getElementById(sugerenciasId).innerHTML = "<div style='color: red;'>❌ No se cargaron ciudades</div>";
+    }
+}
+
+// Vincular selección de país con carga de estados
+document.getElementById('pais_ciudadania').addEventListener("change", () => {
+    initAutocompleteEstado("pais_ciudadania", "inputEstado", "sugerenciasEstado", "estado");
+});
+
+// Vincular selección de estado con carga de ciudades
+document.getElementById('estado').addEventListener("change", () => {
+    initAutocompleteCiudad(document.getElementById('estado').value, "inputCiudad", "sugerenciasCiudad", "ciudad");
 });
 
 </script>
+
 </body>  
 </html>
