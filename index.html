@@ -126,14 +126,26 @@ h3 {
 /* ==============================================
      ESTILOS EXTRA PARA ESTADOS Y CIUDADES
 ============================================== */
-/* Ocultar campos de estado/ciudad hasta que se elija el país */
 #inputEstado, #inputCiudad {
-    display: none;
+    display: none; /* Se mantiene oculto hasta que se elija el país/estado */
+    width: 100%; /* Para que coincida con el tamaño del campo de país */
+    padding: 8px; /* Igual que el otro input */
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 #sugerenciasEstado, #sugerenciasCiudad {
-    display: none;
+    display: none; /* Se mantiene oculto hasta que haya sugerencias */
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
 }
+
 
 </style>
 </head>
@@ -302,7 +314,6 @@ CORREO NUEVO
 
 
   <div class="section">
-    <!-- REEMPLAZA EL CAMPO ANTIGUO DE DEPARTAMENTO/ESTADOS/PROVINCIAS POR ESTE -->
     <label>DEPARTAMENTO ESTADOS Y PROVINCIAS</label>
     <div class="autocomplete-container">
         <input type="text" id="inputEstado" class="autocomplete-input" placeholder="Escribe el departamento/estado...">
@@ -311,9 +322,7 @@ CORREO NUEVO
     </div>
 </div>
 
-
-  <div class="section">
-    <!-- REEMPLAZA EL CAMPO ANTIGUO DE CIUDAD POR ESTE -->
+<div class="section">
     <label>CIUDAD</label>
     <div class="autocomplete-container">
         <input type="text" id="inputCiudad" class="autocomplete-input" placeholder="Escribe la ciudad...">
@@ -321,6 +330,8 @@ CORREO NUEVO
         <input type="hidden" id="ciudad" name="ciudad" required>
     </div>
 </div>
+
+
 
 
   <label>DIRECCION DE RESIDENCIA</label>
@@ -2242,6 +2253,7 @@ try {
 };
 
 </script>
+
 <script>
 // Función base para inicializar un autocompletado individual
 async function initAutocomplete(inputId, sugerenciasId, hiddenId) {
@@ -2333,7 +2345,6 @@ async function initAutocompleteEstado(paisSeleccionadoId, inputId, sugerenciasId
 
         // Mostrar campos de estado
         input.style.display = "block";
-        document.getElementById('labelEstado').textContent = `DEPARTAMENTO / ESTADO (${paisNombre})`;
 
         // Función para mostrar sugerencias de estados
         function mostrarEstados(texto) {
@@ -2397,7 +2408,6 @@ async function initAutocompleteCiudad(estadoNombre, inputId, sugerenciasId, hidd
 
         // Mostrar campo de ciudad
         input.style.display = "block";
-        document.getElementById('labelCiudad').textContent = `CIUDAD (${estado.name})`;
 
         // Función para mostrar ciudades
         function mostrarCiudades(texto) {
@@ -2451,7 +2461,19 @@ document.getElementById('estado').addEventListener("change", () => {
     initAutocompleteCiudad(document.getElementById('estado').value, "inputCiudad", "sugerenciasCiudad", "ciudad");
 });
 
-</script>
+// Cuando se seleccione un país de residencia, mostrar y cargar estados
+document.getElementById('pais_residencia').addEventListener("change", () => {
+    const inputEstado = document.getElementById('inputEstado');
+    const sugerenciasEstado = document.getElementById('sugerenciasEstado');
+    
+    // Mostrar campos
+    inputEstado.style.display = "block";
+    sugerenciasEstado.style.display = "block";
+    
+    // Pasar el ID del input de país (no el nombre)
+    initAutocompleteEstado("pais_residencia", "inputEstado", "sugerenciasEstado", "estado");
+});
 
+</script>
 </body>  
 </html>
