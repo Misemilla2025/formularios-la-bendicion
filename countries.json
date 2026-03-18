@@ -1,6 +1,6 @@
 [
   {
-    "name": "AFGHANISTAN",
+    "name": "AFGANISTAN",
     "dial_code": "93",
     "iso2": "AF",
     "states": [
@@ -264,7 +264,7 @@
     ]
   },
   {
-    "name": "ALAND ISLANDS",
+    "name": "ISLAS ALAND",
     "dial_code": "358",
     "iso2": "AX",
     "states": [
@@ -1531,13 +1531,13 @@
     ]
   },
   {
-    "name": "ANTARCTICA",
+    "name": "ANTARTIDA",
     "dial_code": "672",
     "iso2": "AQ",
     "states": []
   },
   {
-    "name": "ANTIGUA AND BARBUDA",
+    "name": "ANTIGUA Y BARBUDA",
     "dial_code": "1",
     "iso2": "AG",
     "states": [
@@ -9885,7 +9885,7 @@
     ]
   },
   {
-    "name": "AZERBAIJAN",
+    "name": "AZERBAIYAN",
     "dial_code": "994",
     "iso2": "AZ",
     "states": [
@@ -10437,7 +10437,7 @@
     ]
   },
   {
-    "name": "THE BAHAMAS",
+    "name": "LAS BAHAMAS",
     "dial_code": "1",
     "iso2": "BS",
     "states": [
@@ -11239,7 +11239,7 @@
     ]
   },
   {
-    "name": "BELGIUM",
+    "name": "BELGICA",
     "dial_code": "32",
     "iso2": "BE",
     "states": [
@@ -11850,7 +11850,7 @@
     ]
   },
   {
-    "name": "BELIZE",
+    "name": "BELICE",
     "dial_code": "501",
     "iso2": "BZ",
     "states": [
@@ -12063,7 +12063,7 @@
     ]
   },
   {
-    "name": "BHUTAN",
+    "name": "BUTAN",
     "dial_code": "975",
     "iso2": "BT",
     "states": [
@@ -12507,7 +12507,7 @@
     ]
   },
   {
-    "name": "BOSNIA AND HERZEGOVINA",
+    "name": "BOSNIA Y HERZEGOVINA",
     "dial_code": "387",
     "iso2": "BA",
     "states": [
@@ -12801,7 +12801,7 @@
     ]
   },
   {
-    "name": "BOTSWANA",
+    "name": "BOTSUANA",
     "dial_code": "267",
     "iso2": "BW",
     "states": [
@@ -12932,13 +12932,13 @@
     ]
   },
   {
-    "name": "BOUVET ISLAND",
+    "name": "ISLA BOUVET",
     "dial_code": "0055",
     "iso2": "BV",
     "states": []
   },
   {
-    "name": "BRAZIL",
+    "name": "BRASIL",
     "dial_code": "55",
     "iso2": "BR",
     "states": [
@@ -18719,7 +18719,7 @@
     ]
   },
   {
-    "name": "BRITISH INDIAN OCEAN TERRITORY",
+    "name": "TERRITORIO BRITANICO DEL OCEANO INDICO",
     "dial_code": "246",
     "iso2": "IO",
     "states": []
@@ -19865,7 +19865,7 @@
     ]
   },
   {
-    "name": "CAMBODIA",
+    "name": "CAMBOYA",
     "dial_code": "855",
     "iso2": "KH",
     "states": [
@@ -20097,7 +20097,7 @@
     ]
   },
   {
-    "name": "CAMEROON",
+    "name": "CAMERUN",
     "dial_code": "237",
     "iso2": "CM",
     "states": [
@@ -21446,7 +21446,7 @@
     ]
   },
   {
-    "name": "CAPE VERDE",
+    "name": "CABO VERDE",
     "dial_code": "238",
     "iso2": "CV",
     "states": [
@@ -21590,7 +21590,7 @@
     ]
   },
   {
-    "name": "CAYMAN ISLANDS",
+    "name": "ISLAS CAIMAN",
     "dial_code": "1",
     "iso2": "KY",
     "states": [
@@ -21619,7 +21619,7 @@
     ]
   },
   {
-    "name": "CENTRAL AFRICAN REPUBLIC",
+    "name": "REPUBLICA CENTROAFRICANA",
     "dial_code": "236",
     "iso2": "CF",
     "states": [
@@ -23828,13 +23828,13 @@
     ]
   },
   {
-    "name": "CHRISTMAS ISLAND",
+    "name": "ISLA DE NAVIDAD",
     "dial_code": "61",
     "iso2": "CX",
     "states": []
   },
   {
-    "name": "COCOS (KEELING) ISLANDS",
+    "name": "ISLAS COCOS (KEELING)",
     "dial_code": "61",
     "iso2": "CC",
     "states": []
@@ -25134,7 +25134,7 @@
     ]
   },
   {
-    "name": "COMOROS",
+    "name": "COMORAS",
     "dial_code": "269",
     "iso2": "KM",
     "states": [
@@ -25327,7 +25327,7 @@
     ]
   },
   {
-    "name": "DEMOCRATIC REPUBLIC OF THE CONGO",
+    "name": "REPUBLICA DEMOCRATICA DEL CONGO",
     "dial_code": "243",
     "iso2": "CD",
     "states": [
@@ -25530,7 +25530,7 @@
     ]
   },
   {
-    "name": "COOK ISLANDS",
+    "name": "ISLAS COOK",
     "dial_code": "682",
     "iso2": "CK",
     "states": []
@@ -25737,7 +25737,7 @@
     ]
   },
   {
-    "name": "IVORY COAST",
+    "name": "COSTA DE MARFIL",
     "dial_code": "225",
     "iso2": "CI",
     "states": [
@@ -25965,7 +25965,7 @@
     ]
   },
   {
-    "name": "CROATIA",
+    "name": "CROACIA",
     "dial_code": "385",
     "iso2": "HR",
     "states": [
@@ -27014,7 +27014,7 @@
     ]
   },
   {
-    "name": "CYPRUS",
+    "name": "CHIPRE",
     "dial_code": "357",
     "iso2": "CY",
     "states": [
@@ -27146,7 +27146,7 @@
     ]
   },
   {
-    "name": "CZECH REPUBLIC",
+    "name": "REPUBLICA CHECA",
     "dial_code": "420",
     "iso2": "CZ",
     "states": [
@@ -28882,7 +28882,7 @@
     ]
   },
   {
-    "name": "DENMARK",
+    "name": "DINAMARCA",
     "dial_code": "45",
     "iso2": "DK",
     "states": [
@@ -29344,7 +29344,7 @@
     ]
   },
   {
-    "name": "DJIBOUTI",
+    "name": "YIBUTI",
     "dial_code": "253",
     "iso2": "DJ",
     "states": [
@@ -29467,7 +29467,7 @@
     ]
   },
   {
-    "name": "DOMINICAN REPUBLIC",
+    "name": "REPUBLICA DOMINICANA",
     "dial_code": "1",
     "iso2": "DO",
     "states": [
@@ -29836,7 +29836,7 @@
     ]
   },
   {
-    "name": "TIMOR-LESTE",
+    "name": "TIMOR ORIENTAL",
     "dial_code": "670",
     "iso2": "TL",
     "states": [
@@ -30194,7 +30194,7 @@
     ]
   },
   {
-    "name": "EGYPT",
+    "name": "EGIPTO",
     "dial_code": "20",
     "iso2": "EG",
     "states": [
@@ -30670,7 +30670,7 @@
     ]
   },
   {
-    "name": "EQUATORIAL GUINEA",
+    "name": "GUINEA ECUATORIAL",
     "dial_code": "240",
     "iso2": "GQ",
     "states": [
@@ -31036,7 +31036,7 @@
     ]
   },
   {
-    "name": "ETHIOPIA",
+    "name": "ETIOPIA",
     "dial_code": "251",
     "iso2": "ET",
     "states": [
@@ -31242,13 +31242,13 @@
     ]
   },
   {
-    "name": "FALKLAND ISLANDS",
+    "name": "ISLAS MALVINAS",
     "dial_code": "500",
     "iso2": "FK",
     "states": []
   },
   {
-    "name": "FAROE ISLANDS",
+    "name": "ISLAS FEROE",
     "dial_code": "298",
     "iso2": "FO",
     "states": [
@@ -31314,7 +31314,7 @@
     ]
   },
   {
-    "name": "FIJI ISLANDS",
+    "name": "ISLAS FIYI",
     "dial_code": "679",
     "iso2": "FJ",
     "states": [
@@ -31421,7 +31421,7 @@
     ]
   },
   {
-    "name": "FINLAND",
+    "name": "FINLANDIA",
     "dial_code": "358",
     "iso2": "FI",
     "states": [
@@ -31971,7 +31971,7 @@
     ]
   },
   {
-    "name": "FRANCE",
+    "name": "FRANCIA",
     "dial_code": "33",
     "iso2": "FR",
     "states": [
@@ -35008,11 +35008,11 @@
         "cities": []
       },
       {
-        "name": "FRENCH GUIANA",
+        "name": "GUAYANA FRANCESA",
         "cities": []
       },
       {
-        "name": "FRENCH POLYNESIA",
+        "name": "POLINESIA FRANCESA",
         "cities": []
       },
       {
@@ -41389,7 +41389,7 @@
     "states": []
   },
   {
-    "name": "FRENCH SOUTHERN TERRITORIES",
+    "name": "TERRITORIOS AUSTRALES FRANCESES",
     "dial_code": "262",
     "iso2": "TF",
     "states": []
@@ -41475,7 +41475,7 @@
     ]
   },
   {
-    "name": "THE GAMBIA",
+    "name": "LA GAMBIA",
     "dial_code": "220",
     "iso2": "GM",
     "states": [
@@ -41803,7 +41803,7 @@
     ]
   },
   {
-    "name": "GERMANY",
+    "name": "ALEMANIA",
     "dial_code": "49",
     "iso2": "DE",
     "states": [
@@ -49204,7 +49204,7 @@
     "states": []
   },
   {
-    "name": "GREECE",
+    "name": "GRECIA",
     "dial_code": "30",
     "iso2": "GR",
     "states": [
@@ -50436,13 +50436,13 @@
     ]
   },
   {
-    "name": "GREENLAND",
+    "name": "GROENLANDIA",
     "dial_code": "299",
     "iso2": "GL",
     "states": []
   },
   {
-    "name": "GRENADA",
+    "name": "GRANADA",
     "dial_code": "1",
     "iso2": "GD",
     "states": [
@@ -51637,7 +51637,7 @@
     ]
   },
   {
-    "name": "HEARD ISLAND AND MCDONALD ISLANDS",
+    "name": "ISLA HEARD Y ISLAS MCDONALD",
     "dial_code": "672",
     "iso2": "HM",
     "states": []
@@ -52285,7 +52285,7 @@
     ]
   },
   {
-    "name": "HONG KONG S.A.R.",
+    "name": "HONG KONG R.A.E.",
     "dial_code": "852",
     "iso2": "HK",
     "states": [
@@ -52406,7 +52406,7 @@
     ]
   },
   {
-    "name": "HUNGARY",
+    "name": "HUNGRIA",
     "dial_code": "36",
     "iso2": "HU",
     "states": [
@@ -53679,7 +53679,7 @@
     ]
   },
   {
-    "name": "ICELAND",
+    "name": "ISLANDIA",
     "dial_code": "354",
     "iso2": "IS",
     "states": [
@@ -61438,7 +61438,7 @@
     ]
   },
   {
-    "name": "IRELAND",
+    "name": "IRLANDA",
     "dial_code": "353",
     "iso2": "IE",
     "states": [
@@ -62124,7 +62124,7 @@
     ]
   },
   {
-    "name": "ITALY",
+    "name": "ITALIA",
     "dial_code": "39",
     "iso2": "IT",
     "states": [
@@ -73462,7 +73462,7 @@
     ]
   },
   {
-    "name": "JAPAN",
+    "name": "JAPON",
     "dial_code": "81",
     "iso2": "JP",
     "states": [
@@ -75496,7 +75496,7 @@
     ]
   },
   {
-    "name": "JORDAN",
+    "name": "JORDANIA",
     "dial_code": "962",
     "iso2": "JO",
     "states": [
@@ -75645,7 +75645,7 @@
     ]
   },
   {
-    "name": "KAZAKHSTAN",
+    "name": "KAZAJSTAN",
     "dial_code": "7",
     "iso2": "KZ",
     "states": [
@@ -75997,7 +75997,7 @@
     ]
   },
   {
-    "name": "KENYA",
+    "name": "KENIA",
     "dial_code": "254",
     "iso2": "KE",
     "states": [
@@ -76406,7 +76406,7 @@
     ]
   },
   {
-    "name": "NORTH KOREA",
+    "name": "COREA DEL NORTE",
     "dial_code": "850",
     "iso2": "KP",
     "states": [
@@ -76548,7 +76548,7 @@
     ]
   },
   {
-    "name": "SOUTH KOREA",
+    "name": "COREA DEL SUR",
     "dial_code": "82",
     "iso2": "KR",
     "states": [
@@ -77011,7 +77011,7 @@
     ]
   },
   {
-    "name": "KYRGYZSTAN",
+    "name": "KIRGUISTAN",
     "dial_code": "996",
     "iso2": "KG",
     "states": [
@@ -77288,7 +77288,7 @@
     ]
   },
   {
-    "name": "LATVIA",
+    "name": "LETONIA",
     "dial_code": "371",
     "iso2": "LV",
     "states": [
@@ -77634,7 +77634,7 @@
     ]
   },
   {
-    "name": "LEBANON",
+    "name": "LIBANO",
     "dial_code": "961",
     "iso2": "LB",
     "states": [
@@ -77707,7 +77707,7 @@
     ]
   },
   {
-    "name": "LESOTHO",
+    "name": "LESOTO",
     "dial_code": "266",
     "iso2": "LS",
     "states": [
@@ -77876,7 +77876,7 @@
     ]
   },
   {
-    "name": "LIBYA",
+    "name": "LIBIA",
     "dial_code": "218",
     "iso2": "LY",
     "states": [
@@ -78112,7 +78112,7 @@
     ]
   },
   {
-    "name": "LITHUANIA",
+    "name": "LITUANIA",
     "dial_code": "370",
     "iso2": "LT",
     "states": [
@@ -78534,7 +78534,7 @@
     ]
   },
   {
-    "name": "LUXEMBOURG",
+    "name": "LUXEMBURGO",
     "dial_code": "352",
     "iso2": "LU",
     "states": [
@@ -78745,13 +78745,13 @@
     ]
   },
   {
-    "name": "MACAU S.A.R.",
+    "name": "MACAO R.A.E.",
     "dial_code": "853",
     "iso2": "MO",
     "states": []
   },
   {
-    "name": "NORTH MACEDONIA",
+    "name": "MACEDONIA DEL NORTE",
     "dial_code": "389",
     "iso2": "MK",
     "states": [
@@ -79601,7 +79601,7 @@
     ]
   },
   {
-    "name": "MALAYSIA",
+    "name": "MALASIA",
     "dial_code": "60",
     "iso2": "MY",
     "states": [
@@ -79868,7 +79868,7 @@
     ]
   },
   {
-    "name": "MALDIVES",
+    "name": "MALDIVAS",
     "dial_code": "960",
     "iso2": "MV",
     "states": [
@@ -80543,7 +80543,7 @@
     ]
   },
   {
-    "name": "MAN (ISLE OF)",
+    "name": "ISLA DE MAN",
     "dial_code": "44",
     "iso2": "IM",
     "states": [
@@ -80596,7 +80596,7 @@
     ]
   },
   {
-    "name": "MARSHALL ISLANDS",
+    "name": "ISLAS MARSHALL",
     "dial_code": "692",
     "iso2": "MH",
     "states": [
@@ -80611,7 +80611,7 @@
     ]
   },
   {
-    "name": "MARTINIQUE",
+    "name": "MARTINICA",
     "dial_code": "596",
     "iso2": "MQ",
     "states": []
@@ -80741,7 +80741,7 @@
     ]
   },
   {
-    "name": "MAURITIUS",
+    "name": "MAURICIO",
     "dial_code": "230",
     "iso2": "MU",
     "states": [
@@ -90588,7 +90588,7 @@
     ]
   },
   {
-    "name": "MOLDOVA",
+    "name": "MOLDAVIA",
     "dial_code": "373",
     "iso2": "MD",
     "states": [
@@ -91172,7 +91172,7 @@
     "states": []
   },
   {
-    "name": "MOROCCO",
+    "name": "MARRUECOS",
     "dial_code": "212",
     "iso2": "MA",
     "states": [
@@ -92339,7 +92339,7 @@
     ]
   },
   {
-    "name": "BONAIRE, SINT EUSTATIUS AND SABA",
+    "name": "BONAIRE, SAN EUSTAQUIO Y SABA",
     "dial_code": "599",
     "iso2": "BQ",
     "states": [
@@ -92367,7 +92367,7 @@
     ]
   },
   {
-    "name": "NETHERLANDS",
+    "name": "PAISES BAJOS",
     "dial_code": "31",
     "iso2": "NL",
     "states": [
@@ -94100,7 +94100,7 @@
     ]
   },
   {
-    "name": "NEW CALEDONIA",
+    "name": "NUEVA CALEDONIA",
     "dial_code": "687",
     "iso2": "NC",
     "states": [
@@ -94132,7 +94132,7 @@
     ]
   },
   {
-    "name": "NEW ZEALAND",
+    "name": "NUEVA ZELANDIA",
     "dial_code": "64",
     "iso2": "NZ",
     "states": [
@@ -95404,19 +95404,19 @@
     "states": []
   },
   {
-    "name": "NORFOLK ISLAND",
+    "name": "ISLA NORFOLK",
     "dial_code": "672",
     "iso2": "NF",
     "states": []
   },
   {
-    "name": "NORTHERN MARIANA ISLANDS",
+    "name": "ISLAS MARIANAS DEL NORTE",
     "dial_code": "1",
     "iso2": "MP",
     "states": []
   },
   {
-    "name": "NORWAY",
+    "name": "NORUEGA",
     "dial_code": "47",
     "iso2": "NO",
     "states": [
@@ -96856,7 +96856,7 @@
     ]
   },
   {
-    "name": "PALESTINIAN TERRITORY OCCUPIED",
+    "name": "TERRITORIO PALESTINO OCUPADO",
     "dial_code": "970",
     "iso2": "PS",
     "states": [
@@ -97747,7 +97747,7 @@
     ]
   },
   {
-    "name": "PAPUA NEW GUINEA",
+    "name": "PAPUA NUEVA GUINEA",
     "dial_code": "675",
     "iso2": "PG",
     "states": [
@@ -98815,7 +98815,7 @@
     ]
   },
   {
-    "name": "PHILIPPINES",
+    "name": "FILIPINAS",
     "dial_code": "63",
     "iso2": "PH",
     "states": [
@@ -105765,13 +105765,13 @@
     ]
   },
   {
-    "name": "PITCAIRN ISLAND",
+    "name": "ISLA PITCAIRN",
     "dial_code": "870",
     "iso2": "PN",
     "states": []
   },
   {
-    "name": "POLAND",
+    "name": "POLONIA",
     "dial_code": "48",
     "iso2": "PL",
     "states": [
@@ -110984,7 +110984,7 @@
     "states": []
   },
   {
-    "name": "ROMANIA",
+    "name": "RUMANIA",
     "dial_code": "40",
     "iso2": "RO",
     "states": [
@@ -119282,7 +119282,7 @@
     ]
   },
   {
-    "name": "RUSSIA",
+    "name": "RUSIA",
     "dial_code": "7",
     "iso2": "RU",
     "states": [
@@ -125101,7 +125101,7 @@
     ]
   },
   {
-    "name": "RWANDA",
+    "name": "RUANDA",
     "dial_code": "250",
     "iso2": "RW",
     "states": [
@@ -125145,13 +125145,13 @@
     ]
   },
   {
-    "name": "SAINT HELENA",
+    "name": "SANTA ELENA",
     "dial_code": "290",
     "iso2": "SH",
     "states": []
   },
   {
-    "name": "SAINT KITTS AND NEVIS",
+    "name": "SAN CRISTOBAL Y NIEVES",
     "dial_code": "1",
     "iso2": "KN",
     "states": [
@@ -125244,7 +125244,7 @@
     ]
   },
   {
-    "name": "SAINT LUCIA",
+    "name": "SANTA LUCIA",
     "dial_code": "1",
     "iso2": "LC",
     "states": [
@@ -125790,13 +125790,13 @@
     ]
   },
   {
-    "name": "SAINT PIERRE AND MIQUELON",
+    "name": "SAN PEDRO Y MIQUELON",
     "dial_code": "508",
     "iso2": "PM",
     "states": []
   },
   {
-    "name": "SAINT VINCENT AND THE GRENADINES",
+    "name": "SAN VICENTE Y LAS GRANADINAS",
     "dial_code": "1",
     "iso2": "VC",
     "states": [
@@ -125842,13 +125842,13 @@
     ]
   },
   {
-    "name": "SAINT-BARTHELEMY",
+    "name": "SAN BARTOLOME",
     "dial_code": "590",
     "iso2": "BL",
     "states": []
   },
   {
-    "name": "SAINT-MARTIN (FRENCH PART)",
+    "name": "SAN MARTIN (PARTE FRANCESA)",
     "dial_code": "590",
     "iso2": "MF",
     "states": []
@@ -125994,7 +125994,7 @@
     ]
   },
   {
-    "name": "SAO TOME AND PRINCIPE",
+    "name": "SANTO TOME Y PRINCIPE",
     "dial_code": "239",
     "iso2": "ST",
     "states": [
@@ -126016,7 +126016,7 @@
     ]
   },
   {
-    "name": "SAUDI ARABIA",
+    "name": "ARABIA SAUDITA",
     "dial_code": "966",
     "iso2": "SA",
     "states": [
@@ -127186,7 +127186,7 @@
     ]
   },
   {
-    "name": "SIERRA LEONE",
+    "name": "SIERRA LEONA",
     "dial_code": "232",
     "iso2": "SL",
     "states": [
@@ -127303,7 +127303,7 @@
     ]
   },
   {
-    "name": "SINGAPORE",
+    "name": "SINGAPUR",
     "dial_code": "65",
     "iso2": "SG",
     "states": [
@@ -127361,7 +127361,7 @@
     ]
   },
   {
-    "name": "SLOVAKIA",
+    "name": "ESLOVAQUIA",
     "dial_code": "421",
     "iso2": "SK",
     "states": [
@@ -127641,7 +127641,7 @@
     ]
   },
   {
-    "name": "SLOVENIA",
+    "name": "ESLOVENIA",
     "dial_code": "386",
     "iso2": "SI",
     "states": [
@@ -129004,7 +129004,7 @@
     ]
   },
   {
-    "name": "SOLOMON ISLANDS",
+    "name": "ISLAS SALOMON",
     "dial_code": "677",
     "iso2": "SB",
     "states": [
@@ -129197,7 +129197,7 @@
     ]
   },
   {
-    "name": "SOUTH AFRICA",
+    "name": "SUDAFRICA",
     "dial_code": "27",
     "iso2": "ZA",
     "states": [
@@ -129563,13 +129563,13 @@
     ]
   },
   {
-    "name": "SOUTH GEORGIA",
+    "name": "GEORGIA DEL SUR",
     "dial_code": "500",
     "iso2": "GS",
     "states": []
   },
   {
-    "name": "SOUTH SUDAN",
+    "name": "SUDAN DEL SUR",
     "dial_code": "211",
     "iso2": "SS",
     "states": [
@@ -129618,7 +129618,7 @@
     ]
   },
   {
-    "name": "SPAIN",
+    "name": "ESPAÑA",
     "dial_code": "34",
     "iso2": "ES",
     "states": [
@@ -138853,7 +138853,7 @@
     ]
   },
   {
-    "name": "SURINAME",
+    "name": "SURINAM",
     "dial_code": "597",
     "iso2": "SR",
     "states": [
@@ -138922,7 +138922,7 @@
     ]
   },
   {
-    "name": "SVALBARD AND JAN MAYEN ISLANDS",
+    "name": "ISLAS SVALBARD Y JAN MAYEN",
     "dial_code": "47",
     "iso2": "SJ",
     "states": []
@@ -138989,7 +138989,7 @@
     ]
   },
   {
-    "name": "SWEDEN",
+    "name": "SUECIA",
     "dial_code": "46",
     "iso2": "SE",
     "states": [
@@ -139900,7 +139900,7 @@
     ]
   },
   {
-    "name": "SWITZERLAND",
+    "name": "SUIZA",
     "dial_code": "41",
     "iso2": "CH",
     "states": [
@@ -141544,7 +141544,7 @@
     ]
   },
   {
-    "name": "SYRIA",
+    "name": "SIRIA",
     "dial_code": "963",
     "iso2": "SY",
     "states": [
@@ -141918,7 +141918,7 @@
     ]
   },
   {
-    "name": "TAJIKISTAN",
+    "name": "TAYIKISTAN",
     "dial_code": "992",
     "iso2": "TJ",
     "states": [
@@ -142475,7 +142475,7 @@
     ]
   },
   {
-    "name": "THAILAND",
+    "name": "TAILANDIA",
     "dial_code": "66",
     "iso2": "TH",
     "states": [
@@ -144211,7 +144211,7 @@
     ]
   },
   {
-    "name": "TRINIDAD AND TOBAGO",
+    "name": "TRINIDAD Y TOBAGO",
     "dial_code": "1",
     "iso2": "TT",
     "states": [
@@ -144322,7 +144322,7 @@
     ]
   },
   {
-    "name": "TUNISIA",
+    "name": "TUNEZ",
     "dial_code": "216",
     "iso2": "TN",
     "states": [
@@ -144614,7 +144614,7 @@
     ]
   },
   {
-    "name": "TURKEY",
+    "name": "TURQUIA",
     "dial_code": "90",
     "iso2": "TR",
     "states": [
@@ -146073,7 +146073,7 @@
     ]
   },
   {
-    "name": "TURKS AND CAICOS ISLANDS",
+    "name": "ISLAS TURCAS Y CAICOS",
     "dial_code": "1",
     "iso2": "TC",
     "states": []
@@ -146735,7 +146735,7 @@
     ]
   },
   {
-    "name": "UKRAINE",
+    "name": "UCRANIA",
     "dial_code": "380",
     "iso2": "UA",
     "states": [
@@ -148826,7 +148826,7 @@
     ]
   },
   {
-    "name": "UNITED ARAB EMIRATES",
+    "name": "EMIRATOS ARABES UNIDOS",
     "dial_code": "971",
     "iso2": "AE",
     "states": [
@@ -148907,7 +148907,7 @@
     ]
   },
   {
-    "name": "UNITED KINGDOM",
+    "name": "REINO UNIDO",
     "dial_code": "44",
     "iso2": "GB",
     "states": [
@@ -153791,7 +153791,7 @@
     ]
   },
   {
-    "name": "UNITED STATES",
+    "name": "ESTADOS UNIDOS",
     "dial_code": "1",
     "iso2": "US",
     "states": [
@@ -154280,7 +154280,7 @@
         ]
       },
       {
-        "name": "AMERICAN SAMOA",
+        "name": "SAMOA AMERICANA",
         "cities": []
       },
       {
@@ -171860,7 +171860,7 @@
         ]
       },
       {
-        "name": "UNITED STATES MINOR OUTLYING ISLANDS",
+        "name": "ISLAS MENORES ALEJADAS DE ESTADOS UNIDOS",
         "cities": []
       },
       {
@@ -173388,7 +173388,7 @@
           "BAYFIELD COUNTY",
           "BAYSIDE",
           "BEAVER DAM",
-          "BELGIUM",
+          "Belgium",
           "BELLE PLAINE",
           "BELLEVILLE",
           "BELLEVUE",
@@ -174524,7 +174524,7 @@
     ]
   },
   {
-    "name": "VATICAN CITY STATE (HOLY SEE)",
+    "name": "CIUDAD DEL VATICANO",
     "dial_code": "379",
     "iso2": "VA",
     "states": []
@@ -175610,13 +175610,13 @@
     ]
   },
   {
-    "name": "VIRGIN ISLANDS (BRITISH)",
+    "name": "ISLAS VIRGENES (BRITANICAS)",
     "dial_code": "1",
     "iso2": "VG",
     "states": []
   },
   {
-    "name": "VIRGIN ISLANDS (US)",
+    "name": "ISLAS VIRGENES (ESTADOUNIDENSES)",
     "dial_code": "1",
     "iso2": "VI",
     "states": [
@@ -175658,13 +175658,13 @@
     ]
   },
   {
-    "name": "WALLIS AND FUTUNA ISLANDS",
+    "name": "ISLAS WALLIS Y FUTUNA",
     "dial_code": "681",
     "iso2": "WF",
     "states": []
   },
   {
-    "name": "WESTERN SAHARA",
+    "name": "SAHARA OCCIDENTAL",
     "dial_code": "212",
     "iso2": "EH",
     "states": []
@@ -176251,7 +176251,7 @@
     ]
   },
   {
-    "name": "ZIMBABWE",
+    "name": "ZIMBABUE",
     "dial_code": "263",
     "iso2": "ZW",
     "states": [
@@ -176452,13 +176452,13 @@
     ]
   },
   {
-    "name": "CURAÇAO",
+    "name": "CURAZAO",
     "dial_code": "599",
     "iso2": "CW",
     "states": []
   },
   {
-    "name": "SINT MAARTEN (DUTCH PART)",
+    "name": "SAN MARTIN (PARTE HOLANDESA)",
     "dial_code": "1721",
     "iso2": "SX",
     "states": []
