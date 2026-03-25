@@ -155,7 +155,8 @@ CORREO NUEVO
 
   <label>PRIMER NOMBRE</label>
 <input id="primer_nombre" required
-       oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')">
+       oninput="this.value = aMayus(this.value)">
+
   
   <label>SEGUNDO NOMBRE</label>
 
@@ -175,14 +176,16 @@ CORREO NUEVO
   type="text"
   value="N/A"
   style="display:none"
-  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z]/g,'')">
+  oninput="this.value = aMayus(this.value)">
+
 
   <label>APELLIDOS COMPLETOS</label>
-  <input
+<input
   id="apellidos"
   required
-  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')"
+  oninput="this.value = aMayus(this.value)"
 >
+
   
 <label>GENERO</label>
 <select id="genero" required>
@@ -433,7 +436,8 @@ CORREO NUEVO
   type="text"
   value="N/A"
   style="display:none"
-  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')">
+  oninput="this.value = this.value.replace(/[^A-Za-z\u00D1\u00F1 ]/g,'').toUpperCase()">
+
 
   <label>BENEFICIARIO 1 - TIPO DOCUMENTO</label>
 <select id="ben1_tipo_doc">
@@ -507,7 +511,8 @@ CORREO NUEVO
   type="text"
   value="N/A"
   style="display:none"
-  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')">
+  oninput="this.value = aMayus(this.value)">
+  
 
   <label>BENEFICIARIO 2 - TIPO DOCUMENTO</label>
 <select id="ben2_tipo_doc">
@@ -582,7 +587,8 @@ CORREO NUEVO
   type="text"
   value="N/A"
   style="display:none"
-  oninput="this.value = this.value.toUpperCase().replace(/[^A-Z ]/g,'')">
+  oninput="this.value = aMayus(this.value)">
+  
 
   <label>BENEFICIARIO 3 - TIPO DOCUMENTO</label>
 <select id="ben3_tipo_doc">
@@ -748,8 +754,10 @@ document.addEventListener("DOMContentLoaded",()=>{
    FUNCIONES
 ========================= */
 const aMayus = v =>
-  v.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-const aMinus = v => v.toLowerCase();
+  v.toUpperCase()
+   .normalize("NFD")
+   .replace(/[\u0300-\u0302\u0304-\u036f]/g, "");
+   
 
 /* =========================
    NORMALIZACIONES GENERALES
